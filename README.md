@@ -25,7 +25,7 @@ https://git.fh-aachen.de/cortex/kohlekompass
 
 # Interessante Quellen
 
-[![Awesome Andorid Badge]()](https://github.com/JStumpp/awesome-android)
+[Awesome Android](https://github.com/JStumpp/awesome-android)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 ## Kotlin Cheat Sheets
