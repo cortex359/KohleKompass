@@ -32,3 +32,7 @@ https://git.fh-aachen.de/cortex/kohlekompass
  - ekito [PDF](https://files.speakerdeck.com/presentations/d99116461caa4bfdb706cdd1ccc0a6c7/Kotlin_Cheat_Sheet_1p_-_by_ekito_1.2.pdf)
 - Kt. Academy [PDF](https://kt.academy/Kotlin_Cheat_Sheet.pdf)
 [Kotlin Coroutines](https://kt.academy/Kotlin_Coroutines_Cheat_Sheet.pdf)
+
+# Lizenzhinweise
+
+- Projektavatar: CC BY 3.0 by Laura Reen aus dem _aami flat: New Year Resolutions! icon pack_.
