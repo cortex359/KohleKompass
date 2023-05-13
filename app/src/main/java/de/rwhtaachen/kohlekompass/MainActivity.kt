@@ -13,22 +13,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 
 data class ListItem(val description: String, val user: String, val amount: String)
@@ -51,12 +62,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KohleKompassTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    TopNavBar()
+                val textState = remember { mutableStateOf(TextFieldValue("")) }
+                Column {
+                    TopNavBar(state = textState)
+                    ContentList(state = textState)
                 }
             }
         }
@@ -65,43 +74,53 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun ContentView() {
-    val columnScrollState = rememberScrollState()
+fun ContentList(state: MutableState<TextFieldValue>) {
     LazyColumn() {
         items(listItems.size) { index ->
             val item = listItems[index]
-            val shape = MaterialTheme.shapes.medium
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-                    .background(MaterialTheme.colorScheme.primaryContainer, shape)
-                    .border(1.dp, MaterialTheme.colorScheme.background, shape)
-                    .padding(10.dp)
+            if (state.value.text.isEmpty() || item.description.contains(state.value.text) || item.user.contains(
+                    state.value.text
+                )
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text(item.description, style = MaterialTheme.typography.titleMedium)
-                        Text(item.user, style = MaterialTheme.typography.titleSmall)
-                    }
-                    Text(item.amount)
-                }
+                ContentItem(item)
             }
+        }
+    }
+}
+
+@Composable
+fun ContentItem(item: ListItem) {
+    val shape = MaterialTheme.shapes.medium
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
+            .background(MaterialTheme.colorScheme.primaryContainer, shape)
+            .border(1.dp, MaterialTheme.colorScheme.background, shape)
+            .padding(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(item.description, style = MaterialTheme.typography.titleMedium)
+                Text(item.user, style = MaterialTheme.typography.titleSmall)
+            }
+            Text(item.amount)
         }
     }
 }
 
 
 @Composable
-fun TopNavBar() {
+fun TopNavBar(state: MutableState<TextFieldValue>) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        // Menu
         Box(
             modifier = Modifier
                 .width(50.dp)
@@ -112,19 +131,23 @@ fun TopNavBar() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp),
-                imageVector = androidx.compose.material.icons.Icons.Default.Menu,
+                imageVector = Icons.Default.Menu,
                 contentDescription = "Menu",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
 
+        // Search Bar
         Box(
             modifier = Modifier
                 .weight(3f, true)
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.secondary)
-        )
+        ) {
+            SearchView(state = state)
+        }
 
+        // Add Element
         Box(
             modifier = Modifier
                 .width(50.dp)
@@ -135,7 +158,7 @@ fun TopNavBar() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp),
-                imageVector = androidx.compose.material.icons.Icons.Default.Add,
+                imageVector = Icons.Default.Add,
                 contentDescription = "Add",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -143,13 +166,65 @@ fun TopNavBar() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchView(state: MutableState<TextFieldValue>) {
+    TextField(
+        value = state.value,
+        onValueChange = { value ->
+            state.value = value
+        },
+        modifier = Modifier
+            .fillMaxWidth(),
+        textStyle = MaterialTheme.typography.labelMedium,
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (state.value != TextFieldValue("")) {
+                IconButton(
+                    onClick = {
+                        state.value =
+                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.White,
+            cursorColor = Color.White,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     KohleKompassTheme {
+        val textState = remember { mutableStateOf(TextFieldValue("")) }
         Column() {
-            TopNavBar()
-            ContentView()
+            TopNavBar(state = textState)
+            ContentList(state = textState)
         }
     }
 }
