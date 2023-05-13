@@ -9,26 +9,32 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -40,16 +46,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.EmptyCoroutineContext
 
 data class ListItem(val description: String, val user: String, val amount: String)
 
+// example data
 val listItems = listOf(
     ListItem("Lidl", "Max", "12,34€"),
     ListItem("Aldi", "Laura", "5,60€"),
@@ -74,36 +84,119 @@ val listItems = listOf(
 )
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             KohleKompassTheme {
-                val textState = remember { mutableStateOf(TextFieldValue("")) }
-                val focusManager = LocalFocusManager.current
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = { focusManager.clearFocus() })
-                        }) {
-                    TopNavBar(state = textState, focusManager = focusManager)
-                    ContentList(state = textState, focusManager = focusManager)
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                ModalNavigationDrawer(
+                    drawerState = drawerState,
+                    drawerContent = {
+                        ModalDrawerSheet { Text("Drawer Content") }
+                    },
+                    gesturesEnabled = true
+                ) {
+                    val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+                    val focusManager = LocalFocusManager.current
+                    Scaffold(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onTap = { focusManager.clearFocus() })
+                            },
+                        topBar = {
+                            TopNavBar(
+                                searchBarState = searchBarState,
+                                drawerState = drawerState,
+                                focusManager = focusManager
+                            )
+                        },
+                        content = { padding ->
+                            ContentList(
+                                state = searchBarState,
+                                focusManager = focusManager,
+                                padding = padding
+                            )
+                        }
+                    )
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopNavBar(
+    searchBarState: MutableState<TextFieldValue>,
+    drawerState: DrawerState,
+    focusManager: FocusManager
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // Menu
+        IconButton(
+            onClick = {
+                MainScope().launch { // todo app crashes
+                    drawerState.open()
+                }
+            }
+        ) {
+            Icon(
+                Icons.Default.Menu,
+                contentDescription = "open menu",
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(24.dp)
+            )
+        }
+
+        // Search Bar
+        Box(
+            modifier = Modifier
+                .weight(3f, true)
+                .height(50.dp)
+                .background(MaterialTheme.colorScheme.secondary)
+        ) {
+            SearchView(state = searchBarState, focusManager = focusManager)
+        }
+
+        // Add Element
+        IconButton(
+            onClick = {
+            }
+        ) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = "add Entry",
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(24.dp)
+            )
+        }
+    }
+}
+
 
 @Composable
-fun ContentList(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
+fun ContentList(
+    state: MutableState<TextFieldValue>,
+    focusManager: FocusManager,
+    padding: PaddingValues
+) {
     LazyColumn(
-        modifier = Modifier.pointerInput(Unit) {
-            detectTapGestures(onTap = {
-                focusManager.clearFocus()
-            })
-        }) {
+        modifier = Modifier
+            .padding(padding)
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            }) {
         items(listItems.size) { index ->
             val item = listItems[index]
             if (state.value.text.isEmpty()
@@ -142,58 +235,6 @@ fun ContentItem(item: ListItem) {
 }
 
 
-@Composable
-fun TopNavBar(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Menu
-        Box(
-            modifier = Modifier
-                .width(50.dp)
-                .height(50.dp)
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                imageVector = Icons.Default.Menu,
-                contentDescription = "Menu",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-
-        // Search Bar
-        Box(
-            modifier = Modifier
-                .weight(3f, true)
-                .height(50.dp)
-                .background(MaterialTheme.colorScheme.secondary)
-        ) {
-            SearchView(state = state, focusManager = focusManager)
-        }
-
-        // Add Element
-        Box(
-            modifier = Modifier
-                .width(50.dp)
-                .height(50.dp)
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
@@ -210,7 +251,7 @@ fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) 
                 Icons.Default.Search,
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(5.dp)
                     .size(24.dp)
             )
         },
@@ -226,7 +267,7 @@ fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) 
                         Icons.Default.Close,
                         contentDescription = "",
                         modifier = Modifier
-                            .padding(15.dp)
+                            .padding(5.dp)
                             .size(24.dp)
                     )
                 }
@@ -245,15 +286,37 @@ fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) 
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     KohleKompassTheme {
-        val textState = remember { mutableStateOf(TextFieldValue("")) }
-        val focusManager = LocalFocusManager.current
-        Column() {
-            TopNavBar(state = textState, focusManager = focusManager)
-            ContentList(state = textState, focusManager = focusManager)
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet { Text("Drawer Content") }
+            },
+            gesturesEnabled = true
+        ) {
+            val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+            val focusManager = LocalFocusManager.current
+            Scaffold(
+                topBar = {
+                    TopNavBar(
+                        searchBarState = searchBarState,
+                        drawerState = drawerState,
+                        focusManager = focusManager
+                    )
+                },
+                content = { padding ->
+                    ContentList(
+                        state = searchBarState,
+                        focusManager = focusManager,
+                        padding = padding
+                    )
+                }
+            )
         }
     }
 }
