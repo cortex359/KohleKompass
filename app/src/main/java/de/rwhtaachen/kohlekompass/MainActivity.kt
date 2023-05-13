@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,9 +35,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -45,6 +51,16 @@ import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 data class ListItem(val description: String, val user: String, val amount: String)
 
 val listItems = listOf(
+    ListItem("Lidl", "Max", "12,34€"),
+    ListItem("Aldi", "Laura", "5,60€"),
+    ListItem("DM", "Max", "8,56€"),
+    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
+    ListItem("Aldi", "Laura", "23,45€"),
+    ListItem("Lidl", "Max", "12,34€"),
+    ListItem("Aldi", "Laura", "5,60€"),
+    ListItem("DM", "Max", "8,56€"),
+    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
+    ListItem("Aldi", "Laura", "23,45€"),
     ListItem("Lidl", "Max", "12,34€"),
     ListItem("Aldi", "Laura", "5,60€"),
     ListItem("DM", "Max", "8,56€"),
@@ -63,9 +79,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             KohleKompassTheme {
                 val textState = remember { mutableStateOf(TextFieldValue("")) }
-                Column {
-                    TopNavBar(state = textState)
-                    ContentList(state = textState)
+                val focusManager = LocalFocusManager.current
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { focusManager.clearFocus() })
+                        }) {
+                    TopNavBar(state = textState, focusManager = focusManager)
+                    ContentList(state = textState, focusManager = focusManager)
                 }
             }
         }
@@ -74,13 +97,18 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun ContentList(state: MutableState<TextFieldValue>) {
-    LazyColumn() {
+fun ContentList(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
+    LazyColumn(
+        modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        }) {
         items(listItems.size) { index ->
             val item = listItems[index]
-            if (state.value.text.isEmpty() || item.description.contains(state.value.text) || item.user.contains(
-                    state.value.text
-                )
+            if (state.value.text.isEmpty()
+                || item.description.lowercase().contains(state.value.text.lowercase())
+                || item.user.lowercase().contains(state.value.text.lowercase())
             ) {
                 ContentItem(item)
             }
@@ -115,7 +143,7 @@ fun ContentItem(item: ListItem) {
 
 
 @Composable
-fun TopNavBar(state: MutableState<TextFieldValue>) {
+fun TopNavBar(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -144,7 +172,7 @@ fun TopNavBar(state: MutableState<TextFieldValue>) {
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.secondary)
         ) {
-            SearchView(state = state)
+            SearchView(state = state, focusManager = focusManager)
         }
 
         // Add Element
@@ -168,7 +196,7 @@ fun TopNavBar(state: MutableState<TextFieldValue>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchView(state: MutableState<TextFieldValue>) {
+fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
     TextField(
         value = state.value,
         onValueChange = { value ->
@@ -190,8 +218,8 @@ fun SearchView(state: MutableState<TextFieldValue>) {
             if (state.value != TextFieldValue("")) {
                 IconButton(
                     onClick = {
-                        state.value =
-                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                        focusManager.clearFocus()
+                        state.value = TextFieldValue("")
                     }
                 ) {
                     Icon(
@@ -222,9 +250,10 @@ fun SearchView(state: MutableState<TextFieldValue>) {
 fun GreetingPreview() {
     KohleKompassTheme {
         val textState = remember { mutableStateOf(TextFieldValue("")) }
+        val focusManager = LocalFocusManager.current
         Column() {
-            TopNavBar(state = textState)
-            ContentList(state = textState)
+            TopNavBar(state = textState, focusManager = focusManager)
+            ContentList(state = textState, focusManager = focusManager)
         }
     }
 }
