@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,18 +63,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Composable
 fun ContentView() {
     val columnScrollState = rememberScrollState()
-    LazyColumn () {
+    LazyColumn() {
         items(listItems.size) { index ->
             val item = listItems[index]
             val shape = MaterialTheme.shapes.medium
@@ -113,7 +107,16 @@ fun TopNavBar() {
                 .width(50.dp)
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.primary)
-        )
+        ) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
+                imageVector = androidx.compose.material.icons.Icons.Default.Menu,
+                contentDescription = "Menu",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -127,7 +130,16 @@ fun TopNavBar() {
                 .width(50.dp)
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.primary)
-        )
+        ) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
+                imageVector = androidx.compose.material.icons.Icons.Default.Add,
+                contentDescription = "Add",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
