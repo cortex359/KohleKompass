@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -51,11 +52,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.EmptyCoroutineContext
 
 data class ListItem(val description: String, val user: String, val amount: String)
 
@@ -90,6 +88,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KohleKompassTheme {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
                 ModalNavigationDrawer(
                     drawerState = drawerState,
                     drawerContent = {
@@ -110,6 +109,7 @@ class MainActivity : ComponentActivity() {
                             TopNavBar(
                                 searchBarState = searchBarState,
                                 drawerState = drawerState,
+                                scope = scope,
                                 focusManager = focusManager
                             )
                         },
@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
                                 focusManager = focusManager,
                                 padding = padding
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -132,6 +132,7 @@ class MainActivity : ComponentActivity() {
 fun TopNavBar(
     searchBarState: MutableState<TextFieldValue>,
     drawerState: DrawerState,
+    scope: CoroutineScope,
     focusManager: FocusManager
 ) {
     Row(
@@ -142,7 +143,7 @@ fun TopNavBar(
         // Menu
         IconButton(
             onClick = {
-                MainScope().launch { // todo app crashes
+                scope.launch { // todo app crashes
                     drawerState.open()
                 }
             }
