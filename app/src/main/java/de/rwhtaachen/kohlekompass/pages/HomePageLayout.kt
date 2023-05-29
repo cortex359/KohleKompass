@@ -92,7 +92,7 @@ fun TopNavBar(
         // Menu
         IconButton(
             onClick = {
-                scope.launch { // todo app crashes
+                scope.launch {
                     drawerState.open()
                 }
             }
