@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">kohlekompass</string>
+    <string name="home_page">Home</string>
+    <string name="add_item">Add Item</string>
+    <string name="advanced_search">Advanced Search</string>
+    <string name="open_menu">Open Menu</string>
+    <string name="start_date">From</string>
+    <string name="end_date">To</string>
 </resources>

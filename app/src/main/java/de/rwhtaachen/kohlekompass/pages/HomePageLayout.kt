@@ -1,5 +1,6 @@
 package de.rwhtaachen.kohlekompass.pages
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -42,13 +43,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.ListItem
 import de.rwhtaachen.kohlekompass.listItems
+import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(focusManager: FocusManager, drawerState: DrawerState, scope: CoroutineScope) {
+fun HomePage(focusManager: FocusManager, drawerState: DrawerState, scope: CoroutineScope, context: Context) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         modifier = Modifier
@@ -62,7 +64,8 @@ fun HomePage(focusManager: FocusManager, drawerState: DrawerState, scope: Corout
                 searchBarState = searchBarState,
                 drawerState = drawerState,
                 scope = scope,
-                focusManager = focusManager
+                focusManager = focusManager,
+                context = context
             )
         },
         content = { padding ->
@@ -82,7 +85,8 @@ fun TopNavBar(
     searchBarState: MutableState<TextFieldValue>,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    context: Context
 ) {
     Row(
         modifier = Modifier
@@ -99,7 +103,7 @@ fun TopNavBar(
         ) {
             Icon(
                 Icons.Default.Menu,
-                contentDescription = "open menu",
+                contentDescription = context.getString(R.string.open_menu),
                 modifier = Modifier
                     .padding(5.dp)
                     .size(24.dp)
@@ -116,14 +120,14 @@ fun TopNavBar(
             SearchView(state = searchBarState, focusManager = focusManager)
         }
 
-        // Add Element
+        // Add Item
         IconButton(
             onClick = {
             }
         ) {
             Icon(
                 Icons.Default.Add,
-                contentDescription = "add Entry",
+                contentDescription = context.getString(R.string.add_item),
                 modifier = Modifier
                     .padding(5.dp)
                     .size(24.dp)
@@ -145,7 +149,8 @@ fun ContentList(
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            }) {
+            }
+    ) {
         items(listItems.size) { index ->
             val item = listItems[index]
             if (state.value.text.isEmpty()
