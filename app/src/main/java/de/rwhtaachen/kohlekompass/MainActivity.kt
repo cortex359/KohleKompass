@@ -37,7 +37,6 @@ import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.launch
 
-data class ListItem(val description: String, val user: String, val amount: String)
 
 data class Page @OptIn(ExperimentalMaterial3Api::class) constructor(
     val title: String,
@@ -45,30 +44,6 @@ data class Page @OptIn(ExperimentalMaterial3Api::class) constructor(
     val content: @Composable () -> Unit
 )
 
-
-// example data
-val listItems = listOf(
-    ListItem("Lidl", "Max", "12,34€"),
-    ListItem("Aldi", "Laura", "5,60€"),
-    ListItem("DM", "Max", "8,56€"),
-    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
-    ListItem("Aldi", "Laura", "23,45€"),
-    ListItem("Lidl", "Max", "12,34€"),
-    ListItem("Aldi", "Laura", "5,60€"),
-    ListItem("DM", "Max", "8,56€"),
-    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
-    ListItem("Aldi", "Laura", "23,45€"),
-    ListItem("Lidl", "Max", "12,34€"),
-    ListItem("Aldi", "Laura", "5,60€"),
-    ListItem("DM", "Max", "8,56€"),
-    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
-    ListItem("Aldi", "Laura", "23,45€"),
-    ListItem("Lidl", "Max", "12,34€"),
-    ListItem("Aldi", "Laura", "5,60€"),
-    ListItem("DM", "Max", "8,56€"),
-    ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
-    ListItem("Aldi", "Laura", "23,45€")
-)
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)

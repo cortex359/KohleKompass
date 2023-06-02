@@ -41,8 +41,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.ListItem
-import de.rwhtaachen.kohlekompass.listItems
+import de.rwhtaachen.kohlekompass.home.ListItem
+import de.rwhtaachen.kohlekompass.home.listItems
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
