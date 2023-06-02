@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.pages
+package de.rwhtaachen.kohlekompass.addItem
 
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api

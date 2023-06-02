@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.pages
+package de.rwhtaachen.kohlekompass.home
 
 import android.content.Context
 import androidx.compose.foundation.background
