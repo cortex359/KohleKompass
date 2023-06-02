@@ -41,8 +41,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.home.ListItem
-import de.rwhtaachen.kohlekompass.home.listItems
+import de.rwhtaachen.kohlekompass.data.examples.itemList
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -151,8 +150,8 @@ fun ContentList(
                 })
             }
     ) {
-        items(listItems.size) { index ->
-            val item = listItems[index]
+        items(itemList.size) { index ->
+            val item = itemList[index]
             if (state.value.text.isEmpty()
                 || item.description.lowercase().contains(state.value.text.lowercase())
                 || item.user.lowercase().contains(state.value.text.lowercase())
