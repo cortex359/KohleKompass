@@ -117,7 +117,7 @@ fun TopNavBar(
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.secondary)
         ) {
-            SearchView(state = searchBarState, focusManager = focusManager)
+            SearchView(searchBarState = searchBarState, focusManager = focusManager)
         }
 
         // Add Item
@@ -191,11 +191,11 @@ fun ContentItem(item: ListItem) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) {
+fun SearchView(searchBarState: MutableState<TextFieldValue>, focusManager: FocusManager) {
     TextField(
-        value = state.value,
+        value = searchBarState.value,
         onValueChange = { value ->
-            state.value = value
+            searchBarState.value = value
         },
         modifier = Modifier
             .fillMaxWidth(),
@@ -210,11 +210,11 @@ fun SearchView(state: MutableState<TextFieldValue>, focusManager: FocusManager) 
             )
         },
         trailingIcon = {
-            if (state.value != TextFieldValue("")) {
+            if (searchBarState.value != TextFieldValue("")) {
                 IconButton(
                     onClick = {
                         focusManager.clearFocus()
-                        state.value = TextFieldValue("")
+                        searchBarState.value = TextFieldValue("")
                     }
                 ) {
                     Icon(
