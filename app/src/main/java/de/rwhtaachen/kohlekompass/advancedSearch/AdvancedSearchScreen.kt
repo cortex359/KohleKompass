@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.pages
+package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -29,6 +29,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import de.rwhtaachen.kohlekompass.home.TopNavBar
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import java.util.Calendar

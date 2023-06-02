@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.pages.AddItem
-import de.rwhtaachen.kohlekompass.pages.AdvancedSearch
-import de.rwhtaachen.kohlekompass.pages.HomePage
+import de.rwhtaachen.kohlekompass.addItem.AddItem
+import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
+import de.rwhtaachen.kohlekompass.home.HomePage
 
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
