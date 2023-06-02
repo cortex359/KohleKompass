@@ -72,32 +72,39 @@ fun AdvancedSearch(
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceAround,
                 ) {
-                    Card(modifier = Modifier.padding(5.dp)) {
-                        Column(Modifier.padding(5.dp)) {
-                            Text(context.getString(R.string.start_date) + " ")
-                            Row {
-                                Text(if (fromDate.value == "") "no date selected" else fromDate.value)
-                                DatePickerButton(fromDate)
-                            }
-                        }
-                    }
-                    Card(
-                        modifier = Modifier.padding(5.dp)
-                    ) {
-                        Column(Modifier.padding(5.dp)) {
-                            Text(context.getString(R.string.end_date) + " ")
-                            Row {
-                                Text(if (toDate.value == "") "no date selected" else toDate.value)
-                                DatePickerButton(toDate)
-                            }
-                        }
-                    }
+                    DatePickerCard(
+                        dateDescription = context.getString(R.string.start_date),
+                        defaultText = context.getString(R.string.empty_date_format),
+                        date = fromDate,
+                        context = context
+                    )
+                    DatePickerCard(
+                        dateDescription = context.getString(R.string.end_date),
+                        defaultText = context.getString(R.string.today),
+                        date = toDate,
+                        context = context
+                    )
                 }
             }
         }
     )
+}
+
+@Composable
+fun DatePickerCard(dateDescription: String, defaultText: String, date: MutableState<String>, context: Context) {
+    Card(modifier = Modifier.padding(5.dp)) {
+        Row() {
+            Column(Modifier.padding(5.dp)) {
+                Text("$dateDescription ")
+                Text(if (date.value == "") defaultText else date.value)
+            }
+            Column {
+                DatePickerButton(date)
+            }
+        }
+    }
 }
 
 @Composable
@@ -125,5 +132,4 @@ fun DatePickerButton(date: MutableState<String>) {
                 .size(24.dp)
         )
     }
-
 }
