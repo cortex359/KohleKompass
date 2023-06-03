@@ -19,21 +19,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.data.examples.itemList
@@ -44,7 +50,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(focusManager: FocusManager, drawerState: DrawerState, scope: CoroutineScope, context: Context) {
+fun HomePage(
+    focusManager: FocusManager,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    context: Context
+) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         modifier = Modifier
@@ -85,7 +96,8 @@ fun TopNavBar(
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         // Menu
         IconButton(
@@ -98,9 +110,6 @@ fun TopNavBar(
             Icon(
                 Icons.Default.Menu,
                 contentDescription = context.getString(R.string.open_menu),
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(24.dp)
             )
         }
 
@@ -108,7 +117,6 @@ fun TopNavBar(
         Box(
             modifier = Modifier
                 .weight(3f, true)
-                .height(50.dp)
                 .background(MaterialTheme.colorScheme.secondary)
         ) {
             SearchField(searchBarState = searchBarState, focusManager = focusManager)
@@ -121,10 +129,7 @@ fun TopNavBar(
         ) {
             Icon(
                 Icons.Default.Add,
-                contentDescription = context.getString(R.string.add_item),
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(24.dp)
+                contentDescription = context.getString(R.string.add_item)
             )
         }
     }
@@ -180,4 +185,17 @@ fun ContentItem(item: ListItem) {
             Text(item.amount)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun TopNavBarPreview() {
+    TopNavBar(
+        searchBarState = remember { mutableStateOf(TextFieldValue("")) },
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+        scope = rememberCoroutineScope(),
+        focusManager = LocalFocusManager.current,
+        context = LocalContext.current
+    )
 }
