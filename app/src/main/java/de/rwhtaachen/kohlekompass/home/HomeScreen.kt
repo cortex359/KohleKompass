@@ -35,7 +35,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.SearchView
+import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.data.examples.itemList
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -111,7 +111,7 @@ fun TopNavBar(
                 .height(50.dp)
                 .background(MaterialTheme.colorScheme.secondary)
         ) {
-            SearchView(searchBarState = searchBarState, focusManager = focusManager)
+            SearchField(searchBarState = searchBarState, focusManager = focusManager)
         }
 
         // Add Item

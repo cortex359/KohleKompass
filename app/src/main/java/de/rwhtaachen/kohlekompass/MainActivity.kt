@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.addItem.AddItem
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
@@ -149,7 +150,7 @@ fun DrawerItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchView(searchBarState: MutableState<TextFieldValue>, focusManager: FocusManager) {
+fun SearchField(searchBarState: MutableState<TextFieldValue>, focusManager: FocusManager) {
     TextField(
         value = searchBarState.value,
         onValueChange = { value ->
@@ -195,4 +196,11 @@ fun SearchView(searchBarState: MutableState<TextFieldValue>, focusManager: Focus
             disabledIndicatorColor = Color.Transparent
         )
     )
+}
+
+@Preview
+@Composable
+fun SearchFieldPreview() {
+    val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+    SearchField(searchBarState, LocalFocusManager.current)
 }

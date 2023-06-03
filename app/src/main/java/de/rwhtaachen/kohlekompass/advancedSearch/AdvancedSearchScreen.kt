@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.home.TopNavBar
 import de.rwthaachen.kohlekompass.R
@@ -139,4 +140,16 @@ fun DatePickerButton(date: MutableState<String>) {
                 .size(24.dp)
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun AdvancedSearchPreview() {
+    AdvancedSearch(
+        focusManager = LocalFocusManager.current,
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+        scope = rememberCoroutineScope(),
+        context = LocalContext.current
+    )
 }
