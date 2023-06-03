@@ -96,16 +96,20 @@ fun AdvancedSearch(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
-                    DatePickerCard(
-                        dateDescription = context.getString(R.string.start_date),
-                        defaultText = context.getString(R.string.empty_date_format),
-                        date = fromDate,
-                    )
-                    DatePickerCard(
-                        dateDescription = context.getString(R.string.end_date),
-                        defaultText = context.getString(R.string.today),
-                        date = toDate,
-                    )
+                    Column(modifier = Modifier.weight(1f)) {// Date selection
+                        DatePickerCard(
+                            dateDescription = context.getString(R.string.start_date),
+                            defaultText = context.getString(R.string.empty_date_format),
+                            date = fromDate,
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {// Date selection
+                        DatePickerCard(
+                            dateDescription = context.getString(R.string.end_date),
+                            defaultText = context.getString(R.string.today),
+                            date = toDate,
+                        )
+                    }
                 }
                 Row {// Tag and user selection
                     Column(modifier = Modifier.weight(1f)) {// Tag selection
@@ -307,15 +311,19 @@ fun DatePickerCard(
     defaultText: String,
     date: MutableState<String>
 ) {
-    Card(modifier = Modifier.padding(5.dp)) {
-        Row() {
-            Column(Modifier.padding(5.dp)) {
-                Text("$dateDescription ")
-                Text(if (date.value == "") defaultText else date.value)
-            }
-            Column {
-                DatePickerButton(date)
-            }
+    Card(
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier= Modifier.fillMaxWidth().padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("$dateDescription ")
+            Text(if (date.value == "") defaultText else date.value)
+            DatePickerButton(date)
         }
     }
 }
