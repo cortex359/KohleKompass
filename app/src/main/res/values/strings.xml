@@ -12,4 +12,8 @@
     <string name="user_icon_description">User icon</string>
     <string name="select_all_tags">Select all</string>
     <string name="unselect_all_tags">Unselect all</string>
+    <string name="save_search_config_icon_description">Save icon</string>
+    <string name="save_search_config_text">Save search</string>
+    <string name="create_distribution_icon_description">Group icon</string>
+    <string name="create_distribution_text">Create Distribution</string>
 </resources>

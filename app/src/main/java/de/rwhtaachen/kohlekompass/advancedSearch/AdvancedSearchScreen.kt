@@ -92,6 +92,7 @@ fun AdvancedSearch(
                         UserSelection(focusManager, context)
                     }
                 }
+                BottomActionBar(context)
             }
         }
     )
