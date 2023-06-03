@@ -7,9 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -47,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.addItem.AddItem
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
 import de.rwhtaachen.kohlekompass.home.HomePage
-
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.launch
@@ -171,14 +168,10 @@ fun SearchField(
             searchBarState.value = value
         },
         modifier = Modifier.fillMaxWidth(),
-        textStyle = MaterialTheme.typography.labelMedium,
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
                 contentDescription = "",
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(24.dp)
             )
         },
         trailingIcon = {
@@ -191,10 +184,7 @@ fun SearchField(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .size(24.dp)
+                        contentDescription = ""
                     )
                 }
             }
