@@ -8,4 +8,5 @@
     <string name="end_date">To</string>
     <string name="today">today</string>
     <string name="empty_date_format">--/--/----</string>
+    <string name="tag_icon_description">Price tag icon</string>
 </resources>

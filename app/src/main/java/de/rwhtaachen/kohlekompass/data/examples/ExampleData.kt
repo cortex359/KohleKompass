@@ -1,14 +1,15 @@
 package de.rwhtaachen.kohlekompass.data.examples
 
+import androidx.compose.runtime.mutableStateListOf
 import de.rwhtaachen.kohlekompass.advancedSearch.Tag
 import de.rwhtaachen.kohlekompass.home.ListItem
 
-val tagList = listOf(
-    Tag("groceries"),
-    Tag("fuel"),
-    Tag("toileteries"),
-    Tag("bakery"),
-    Tag("party"),
+val tagList = mutableStateListOf(
+    Tag("Groceries"),
+    Tag("Fuel"),
+    Tag("Toileteries"),
+    Tag("Bakery"),
+    Tag("Party"),
 )
 
 val itemList = listOf(
