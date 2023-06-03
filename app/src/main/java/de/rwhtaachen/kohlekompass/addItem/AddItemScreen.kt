@@ -11,5 +11,5 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItem(focusManager: FocusManager, drawerState: DrawerState, scope: CoroutineScope) {
-    Text("Add Item coming soon")
+    Text("add item coming soon")
 }

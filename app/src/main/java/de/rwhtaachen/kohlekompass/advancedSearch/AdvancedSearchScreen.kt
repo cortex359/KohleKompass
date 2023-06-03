@@ -70,7 +70,7 @@ fun AdvancedSearch(
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                Row(
+                Row( // Date Picker
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
@@ -86,6 +86,13 @@ fun AdvancedSearch(
                         date = toDate,
                         context = context
                     )
+                }
+                Row() {// Tag and user selection
+                    Column() {// Tag selection
+
+                    }
+                    Column() {// User selection
+                    }
                 }
             }
         }
