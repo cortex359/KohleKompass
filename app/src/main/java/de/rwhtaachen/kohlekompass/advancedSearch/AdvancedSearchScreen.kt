@@ -117,7 +117,6 @@ fun AdvancedSearch(
                     }
                     Column(modifier = Modifier.weight(1f)) {// User selection
                         // empty space to align with tag selection
-                        Box(modifier = Modifier.size(40.dp))
                         UserSelection(focusManager, context)
                     }
                 }
@@ -160,7 +159,7 @@ fun UserItem(user: MutableState<User>, context: Context) {
     val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier
-            .padding(2.dp)
+            .padding(5.dp, 5.dp, 5.dp, 0.dp)
             .clickable { user.value = User(user.value.name, !user.value.selected) },
         colors = CardDefaults.cardColors(
             containerColor = if (user.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
@@ -198,7 +197,9 @@ private fun TagSelection(
     context: Context
 ) {
     val colors = MaterialTheme.colorScheme
-    Card(modifier = Modifier.height(40.dp).padding(2.dp)) {
+    Card(modifier = Modifier
+        .height(40.dp)
+        .padding(5.dp, 2.dp)) {
         SearchField(
             searchBarState = searchBarState, focusManager = focusManager,
             shape = RoundedCornerShape(15.dp),
@@ -215,7 +216,7 @@ private fun TagSelection(
     val allSelected = remember { mutableStateOf(false) }
     Card( // (un)select all tags
         modifier = Modifier
-            .padding(2.dp)
+            .padding(5.dp, 2.dp)
             .clickable {
                 allSelected.value = !allSelected.value; tagList.forEach { tag ->
                 tag.selected = allSelected.value
@@ -275,7 +276,7 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
     val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier
-            .padding(2.dp)
+            .padding(5.dp, 5.dp, 5.dp, 0.dp)
             .clickable { tag.value = Tag(tag.value.name, !tag.value.selected) },
         colors = CardDefaults.cardColors(
             containerColor = if (tag.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
@@ -317,12 +318,14 @@ fun DatePickerCard(
             .fillMaxWidth()
     ) {
         Row(
-            modifier= Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("$dateDescription ")
-            Text(if (date.value == "") defaultText else date.value)
+            Text("$dateDescription ", fontWeight = FontWeight.Bold)
+            Text(if (date.value == "") defaultText else date.value, fontWeight = FontWeight.Bold)
             DatePickerButton(date)
         }
     }
