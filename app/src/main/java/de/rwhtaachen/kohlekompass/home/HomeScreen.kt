@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import de.rwhtaachen.kohlekompass.SearchView
 import de.rwhtaachen.kohlekompass.data.examples.itemList
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -185,55 +186,4 @@ fun ContentItem(item: ListItem) {
             Text(item.amount)
         }
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchView(searchBarState: MutableState<TextFieldValue>, focusManager: FocusManager) {
-    TextField(
-        value = searchBarState.value,
-        onValueChange = { value ->
-            searchBarState.value = value
-        },
-        modifier = Modifier
-            .fillMaxWidth(),
-        textStyle = MaterialTheme.typography.labelMedium,
-        leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(24.dp)
-            )
-        },
-        trailingIcon = {
-            if (searchBarState.value != TextFieldValue("")) {
-                IconButton(
-                    onClick = {
-                        focusManager.clearFocus()
-                        searchBarState.value = TextFieldValue("")
-                    }
-                ) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .size(24.dp)
-                    )
-                }
-            }
-        },
-        singleLine = true,
-        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            cursorColor = Color.White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
 }
