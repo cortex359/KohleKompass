@@ -59,7 +59,8 @@ fun AdvancedSearch(
     scope: CoroutineScope,
     context: Context
 ) {
-    val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+    val mainSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
+    val tagSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val fromDate = remember { mutableStateOf("") }
     val toDate = remember { mutableStateOf("") }
 
@@ -72,7 +73,7 @@ fun AdvancedSearch(
             },
         topBar = {
             TopNavBar(
-                searchBarState = searchBarState,
+                searchBarState = mainSearchBarState,
                 drawerState = drawerState,
                 scope = scope,
                 focusManager = focusManager,
@@ -119,7 +120,53 @@ private fun TagSelection(
     focusManager: FocusManager,
     context: Context
 ) {
-    SearchField(searchBarState = searchBarState, focusManager = focusManager)
+    val colors = MaterialTheme.colorScheme
+    Card(modifier = Modifier.height(35.dp).padding(2.dp)) {
+        SearchField(
+            searchBarState = searchBarState, focusManager = focusManager,
+            shape = RoundedCornerShape(15.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                containerColor = colors.secondaryContainer
+            )
+        )
+    }
+    val allSelected = remember { mutableStateOf(false) }
+    Card( // (un)select all tags
+        modifier = Modifier
+            .padding(2.dp)
+            .clickable {
+                allSelected.value = !allSelected.value; tagList.forEach { tag ->
+                tag.selected = allSelected.value
+            }
+            },
+        colors = CardDefaults.cardColors(
+            containerColor = if (allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+        )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_checklist_24),
+                contentDescription = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(24.dp),
+                tint = if (!allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+            )
+            Text(
+                text = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
+                fontWeight = FontWeight.Bold,
+                color = if (!allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+            )
+        }
+    }
     LazyColumn(
         modifier = Modifier
             .pointerInput(Unit) {
@@ -143,6 +190,9 @@ private fun TagSelection(
     }
 }
 
+/**
+ * Selectable Card of a tag
+ */
 @Composable
 fun TagItem(tag: MutableState<Tag>, context: Context) {
     val colors = MaterialTheme.colorScheme
@@ -175,6 +225,9 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
     }
 }
 
+/**
+ * Card with a date and a button to open a date picker
+ */
 @Composable
 fun DatePickerCard(
     dateDescription: String,
@@ -194,6 +247,9 @@ fun DatePickerCard(
     }
 }
 
+/**
+ * Button to open a date picker
+ */
 @Composable
 fun DatePickerButton(date: MutableState<String>) {
     val context = LocalContext.current
