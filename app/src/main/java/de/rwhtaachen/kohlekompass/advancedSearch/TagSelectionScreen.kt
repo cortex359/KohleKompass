@@ -6,11 +6,9 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.data.examples.tagList
+import de.rwhtaachen.kohlekompass.ui.theme.cardSelectedColor
 import de.rwthaachen.kohlekompass.R
 
 
@@ -50,19 +49,23 @@ fun TagSelection(
     context: Context
 ) {
     val colors = MaterialTheme.colorScheme
-    Card(modifier = Modifier
-        //.height(40.dp)
-        .padding(5.dp, 2.dp)) {
+    Card(
+        modifier = Modifier
+            .padding(5.dp, 2.dp)
+    ) {
         SearchField(
             searchBarState = searchBarState, focusManager = focusManager,
-            //shape = RoundedCornerShape(15.dp),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.White,
                 cursorColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                containerColor = colors.secondaryContainer
+                containerColor = colors.primaryContainer,
+                focusedLeadingIconColor = colors.onPrimaryContainer,
+                unfocusedLeadingIconColor = colors.onPrimaryContainer,
+                focusedTrailingIconColor = colors.onPrimaryContainer,
+                unfocusedTrailingIconColor = colors.onPrimaryContainer
             )
         )
     }
@@ -80,7 +83,7 @@ fun TagSelection(
                 }
             },
         colors = CardDefaults.cardColors(
-            containerColor = if (allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+            containerColor = if (allSelected.value) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
     ) {
         Row(
@@ -93,12 +96,12 @@ fun TagSelection(
                 modifier = Modifier
                     .padding(5.dp)
                     .size(24.dp),
-                tint = if (!allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+                tint = colors.onPrimaryContainer
             )
             Text(
                 text = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
                 fontWeight = FontWeight.Bold,
-                color = if (!allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
+                color = colors.onPrimaryContainer
             )
         }
     } // end (un)select all tags
@@ -132,7 +135,7 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
             .padding(5.dp, 5.dp, 5.dp, 0.dp)
             .clickable { tag.value = tag.value.copy(selected = !tag.value.selected) },
         colors = CardDefaults.cardColors(
-            containerColor = if (tag.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+            containerColor = if (tag.value.selected) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
     ) {
         Row(
@@ -145,12 +148,12 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
                 modifier = Modifier
                     .padding(5.dp)
                     .size(24.dp),
-                tint = if (!tag.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+                tint = colors.onPrimaryContainer
             )
             Text(
                 text = tag.value.name,
                 fontWeight = FontWeight.Bold,
-                color = if (!tag.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+                color = colors.onPrimaryContainer
             )
         }
     }
