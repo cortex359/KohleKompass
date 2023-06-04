@@ -54,10 +54,14 @@ fun TagSelection(
     Card(
         modifier = Modifier
             .padding(5.dp, 2.dp)
-            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium)
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
     ) {
         SearchField(
             searchBarState = searchBarState, focusManager = focusManager,
+            modifier = Modifier
+                .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
+                .fillMaxWidth(),
+            shape = MaterialTheme.shapes.large,
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.White,
                 cursorColor = Color.White,
