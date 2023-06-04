@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.data.examples.userList
-import de.rwhtaachen.kohlekompass.ui.theme.cardSelectedColor
+import de.rwhtaachen.kohlekompass.cardSelectedColor
 import de.rwthaachen.kohlekompass.R
 
 

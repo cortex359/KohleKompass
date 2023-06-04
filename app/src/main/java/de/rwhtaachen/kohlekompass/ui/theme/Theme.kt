@@ -5,7 +5,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -71,20 +70,6 @@ private val DarkColors = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
-
-/**
- * Darkens the color by 35%
- * Used to change the color of a card when it is selected.
- */
-fun cardSelectedColor(color: Color): Color {
-    val rgbDelta = 0.65f
-    return color.copy(
-        color.alpha,
-        color.red * rgbDelta,
-        color.green * rgbDelta,
-        color.blue * rgbDelta
-    )
-}
 
 @Composable
 fun KohleKompassTheme(
