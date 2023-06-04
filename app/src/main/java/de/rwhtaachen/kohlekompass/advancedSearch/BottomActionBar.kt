@@ -62,13 +62,13 @@ fun SaveSearch(context: Context, showDialog: MutableState<Boolean>) {
             .padding(5.dp)
             .border(
                 1.dp,
-                MaterialTheme.colorScheme.onSecondaryContainer,
+                MaterialTheme.colorScheme.onSecondary,
                 MaterialTheme.shapes.medium
             )
             .clickable {
                 showDialog.value = true
             },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -103,13 +103,13 @@ fun LoadSearch(context: Context, showDialog: MutableState<Boolean>) {
             .padding(5.dp)
             .border(
                 1.dp,
-                MaterialTheme.colorScheme.onSecondaryContainer,
+                MaterialTheme.colorScheme.onSecondary,
                 MaterialTheme.shapes.medium
             )
             .clickable {
                 showDialog.value = true
             },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -144,13 +144,13 @@ fun CreateDistribution(context: Context, showDialog: MutableState<Boolean>) {
             .padding(5.dp)
             .border(
                 1.dp,
-                MaterialTheme.colorScheme.onSecondaryContainer,
+                MaterialTheme.colorScheme.onSecondary,
                 MaterialTheme.shapes.medium
             )
             .clickable {
                 showDialog.value = true
             },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -185,13 +185,13 @@ fun SubmitSearch(context: Context) {
             .padding(5.dp)
             .border(
                 1.dp,
-                MaterialTheme.colorScheme.onSecondaryContainer,
+                MaterialTheme.colorScheme.onSecondary,
                 MaterialTheme.shapes.medium
             )
             .clickable {
                 //todo
             },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
