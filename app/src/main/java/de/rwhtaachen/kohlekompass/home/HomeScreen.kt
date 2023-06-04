@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.data.examples.itemList
+import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -93,10 +94,12 @@ fun TopNavBar(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val colors = MaterialTheme.colorScheme
         // Menu
         IconButton(
             onClick = {
@@ -108,6 +111,7 @@ fun TopNavBar(
             Icon(
                 Icons.Default.Menu,
                 contentDescription = context.getString(R.string.open_menu),
+                tint = colors.primary
             )
         }
 
@@ -115,9 +119,16 @@ fun TopNavBar(
         Box(
             modifier = Modifier
                 .weight(3f, true)
-                .background(MaterialTheme.colorScheme.secondary)
         ) {
-            SearchField(searchBarState = searchBarState, focusManager = focusManager)
+            SearchField(
+                searchBarState = searchBarState,
+                focusManager = focusManager,
+                modifier = Modifier.border(
+                    width = 1.dp,
+                    color = colors.onPrimary,
+                    shape = MaterialTheme.shapes.extraLarge
+                ),
+            )
         }
 
         // Add Item
@@ -127,7 +138,8 @@ fun TopNavBar(
         ) {
             Icon(
                 Icons.Default.Add,
-                contentDescription = context.getString(R.string.add_item)
+                contentDescription = context.getString(R.string.add_item),
+                tint = colors.primary
             )
         }
     }
@@ -162,13 +174,14 @@ fun ContentList(
 
 @Composable
 fun ContentItem(item: ListItem) {
+    val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer, shape)
-            .border(1.dp, MaterialTheme.colorScheme.background, shape)
+            .background(colors.primaryContainer, shape)
+            .border(1.dp, colors.onPrimaryContainer, shape)
             .padding(10.dp)
     ) {
         Row(
@@ -177,10 +190,10 @@ fun ContentItem(item: ListItem) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(item.description, style = MaterialTheme.typography.titleMedium)
-                Text(item.user, style = MaterialTheme.typography.titleSmall)
+                Text(item.description, color = colors.onPrimaryContainer)
+                Text(item.user, color = colors.onPrimaryContainer)
             }
-            Text(item.amount)
+            Text(item.amount, color = colors.onPrimaryContainer)
         }
     }
 }
@@ -188,12 +201,28 @@ fun ContentItem(item: ListItem) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
+fun HomePageScreenPreview() {
+    KohleKompassTheme() {
+        HomePage(
+            focusManager = LocalFocusManager.current,
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+            scope = rememberCoroutineScope(),
+            context = LocalContext.current
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
 fun TopNavBarPreview() {
-    TopNavBar(
-        searchBarState = remember { mutableStateOf(TextFieldValue("")) },
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-        scope = rememberCoroutineScope(),
-        focusManager = LocalFocusManager.current,
-        context = LocalContext.current
-    )
+    KohleKompassTheme() {
+        TopNavBar(
+            searchBarState = remember { mutableStateOf(TextFieldValue("")) },
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+            scope = rememberCoroutineScope(),
+            focusManager = LocalFocusManager.current,
+            context = LocalContext.current
+        )
+    }
 }

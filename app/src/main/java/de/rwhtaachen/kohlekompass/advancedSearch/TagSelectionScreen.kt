@@ -1,6 +1,7 @@
 package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.content.Context
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -33,8 +34,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.data.examples.tagList
 import de.rwhtaachen.kohlekompass.cardSelectedColor
+import de.rwhtaachen.kohlekompass.data.examples.tagList
+import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
 
@@ -52,6 +54,7 @@ fun TagSelection(
     Card(
         modifier = Modifier
             .padding(5.dp, 2.dp)
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium)
     ) {
         SearchField(
             searchBarState = searchBarState, focusManager = focusManager,
@@ -81,7 +84,8 @@ fun TagSelection(
                     tagList.remove(tag)
                     tagList.add(i, mutableStateOf(newTag))
                 }
-            },
+            }
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
         colors = CardDefaults.cardColors(
             containerColor = if (allSelected.value) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
@@ -118,7 +122,7 @@ fun TagSelection(
             if (searchBarState.value.text.isEmpty()
                 || tag.value.name.lowercase().contains(searchBarState.value.text.lowercase())
             ) {
-                TagItem(tag,context)
+                TagItem(tag, context)
             }
         }
     }
@@ -133,7 +137,8 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
     Card(
         modifier = Modifier
             .padding(5.dp, 5.dp, 5.dp, 0.dp)
-            .clickable { tag.value = tag.value.copy(selected = !tag.value.selected) },
+            .clickable { tag.value = tag.value.copy(selected = !tag.value.selected) }
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
         colors = CardDefaults.cardColors(
             containerColor = if (tag.value.selected) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
@@ -163,10 +168,12 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
 @Preview
 @Composable
 fun TagSelectionPreview() {
-    val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
-    Column {
-        TagSelection(searchBarState, focusManager, context)
+    KohleKompassTheme() {
+        val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+        val focusManager = LocalFocusManager.current
+        val context = LocalContext.current
+        Column {
+            TagSelection(searchBarState, focusManager, context)
+        }
     }
 }

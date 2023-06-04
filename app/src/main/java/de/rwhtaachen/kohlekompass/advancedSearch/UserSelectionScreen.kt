@@ -1,6 +1,7 @@
 package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.content.Context
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
@@ -25,8 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.data.examples.userList
 import de.rwhtaachen.kohlekompass.cardSelectedColor
+import de.rwhtaachen.kohlekompass.data.examples.userList
+import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
 
@@ -65,7 +67,8 @@ fun UserItem(user: MutableState<User>, context: Context) {
     Card(
         modifier = Modifier
             .padding(5.dp, 5.dp, 5.dp, 0.dp)
-            .clickable { user.value = user.value.copy(selected = !user.value.selected) },
+            .clickable { user.value = user.value.copy(selected = !user.value.selected) }
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
         colors = CardDefaults.cardColors(
             containerColor = if (user.value.selected) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
@@ -94,5 +97,7 @@ fun UserItem(user: MutableState<User>, context: Context) {
 @Preview
 @Composable
 fun UserSelectionPreview() {
-    UserSelection(focusManager = LocalFocusManager.current, context = LocalContext.current)
+    KohleKompassTheme() {
+        UserSelection(focusManager = LocalFocusManager.current, context = LocalContext.current)
+    }
 }

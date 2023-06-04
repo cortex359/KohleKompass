@@ -51,11 +51,11 @@ fun AutoScalingText(
 }
 
 /**
- * Darkens the color by 35%
+ * Darkens the color by 15%
  * Used to change the color of a card when it is selected.
  */
 fun cardSelectedColor(color: Color): Color {
-    val rgbDelta = 0.65f
+    val rgbDelta = 0.85f
     return color.copy(
         color.alpha,
         color.red * rgbDelta,

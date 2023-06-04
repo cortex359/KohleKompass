@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -35,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -152,14 +150,20 @@ fun DrawerItem(
 @Composable
 fun SearchField(
     searchBarState: MutableState<TextFieldValue>,
+    modifier: Modifier = Modifier,
     focusManager: FocusManager,
-    shape: Shape = RectangleShape,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(
         textColor = Color.White,
         cursorColor = Color.White,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        disabledIndicatorColor = Color.Transparent
+        disabledIndicatorColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.primary,
+        focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+        focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
+        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary
     )
 ) {
     TextField(
@@ -167,7 +171,7 @@ fun SearchField(
         onValueChange = { value ->
             searchBarState.value = value
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
@@ -198,6 +202,8 @@ fun SearchField(
 @Preview
 @Composable
 fun SearchFieldPreview() {
-    val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
-    SearchField(searchBarState, LocalFocusManager.current)
+    KohleKompassTheme() {
+        val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+        SearchField(searchBarState, modifier = Modifier, LocalFocusManager.current)
+    }
 }
