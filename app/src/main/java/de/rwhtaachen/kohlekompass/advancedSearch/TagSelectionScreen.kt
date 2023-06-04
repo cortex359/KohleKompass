@@ -71,9 +71,13 @@ fun TagSelection(
         modifier = Modifier
             .padding(5.dp, 2.dp)
             .clickable {
-                allSelected.value = !allSelected.value; tagList.forEach { tag ->
-                tag.selected = allSelected.value
-            }
+                allSelected.value = !allSelected.value
+                for (i in 0 until tagList.size) {
+                    val tag = tagList[i]
+                    val newTag = tag.value.copy(selected = allSelected.value)
+                    tagList.remove(tag)
+                    tagList.add(i, mutableStateOf(newTag))
+                }
             },
         colors = CardDefaults.cardColors(
             containerColor = if (allSelected.value) colors.onSecondaryContainer else colors.secondaryContainer
@@ -109,13 +113,9 @@ fun TagSelection(
         items(tagList.size) { index ->
             val tag = tagList[index]
             if (searchBarState.value.text.isEmpty()
-                || tag.name.lowercase()
-                    .contains(searchBarState.value.text.lowercase())
+                || tag.value.name.lowercase().contains(searchBarState.value.text.lowercase())
             ) {
-                TagItem(
-                    remember { mutableStateOf(tag) },
-                    context
-                )
+                TagItem(tag,context)
             }
         }
     }
@@ -130,7 +130,7 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
     Card(
         modifier = Modifier
             .padding(5.dp, 5.dp, 5.dp, 0.dp)
-            .clickable { tag.value = Tag(tag.value.name, !tag.value.selected) },
+            .clickable { tag.value = tag.value.copy(selected = !tag.value.selected) },
         colors = CardDefaults.cardColors(
             containerColor = if (tag.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
         )

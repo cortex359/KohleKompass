@@ -15,8 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -28,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.data.examples.userList
+import de.rwhtaachen.kohlekompass.ui.theme.cardSelectedColor
 import de.rwthaachen.kohlekompass.R
 
 
@@ -50,7 +49,7 @@ fun UserSelection(
         items(userList.size) { index ->
             val user = userList[index]
             UserItem(
-                remember { mutableStateOf(user) },
+                user,
                 context
             )
         }
@@ -66,9 +65,9 @@ fun UserItem(user: MutableState<User>, context: Context) {
     Card(
         modifier = Modifier
             .padding(5.dp, 5.dp, 5.dp, 0.dp)
-            .clickable { user.value = User(user.value.name, !user.value.selected) },
+            .clickable { user.value = user.value.copy(selected = !user.value.selected) },
         colors = CardDefaults.cardColors(
-            containerColor = if (user.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+            containerColor = if (user.value.selected) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
         )
     ) {
         Row(
@@ -81,12 +80,12 @@ fun UserItem(user: MutableState<User>, context: Context) {
                 modifier = Modifier
                     .padding(5.dp)
                     .size(24.dp),
-                tint = if (!user.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+                tint = colors.onPrimaryContainer
             )
             Text(
                 text = user.value.name,
                 fontWeight = FontWeight.Bold,
-                color = if (!user.value.selected) colors.onSecondaryContainer else colors.secondaryContainer
+                color = colors.onPrimaryContainer
             )
         }
     }
