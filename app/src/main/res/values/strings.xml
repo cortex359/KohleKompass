@@ -14,6 +14,10 @@
     <string name="unselect_all_tags">Unselect all</string>
     <string name="save_search_config_icon_description">Save icon</string>
     <string name="save_search_config_text">Save search</string>
+    <string name="load_search_config_icon_description">Load icon</string>
+    <string name="load_search_config_text">Load search</string>
     <string name="create_distribution_icon_description">Group icon</string>
-    <string name="create_distribution_text">Create Distribution</string>
+    <string name="create_distribution_text">Distribute</string>
+    <string name="submit_search_icon_description">Search icon</string>
+    <string name="submit_search_text">Search</string>
 </resources>

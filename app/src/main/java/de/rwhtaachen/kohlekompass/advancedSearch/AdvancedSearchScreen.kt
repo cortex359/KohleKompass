@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import de.rwhtaachen.kohlekompass.home.TopNavBar
+import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 
@@ -83,7 +84,7 @@ fun AdvancedSearch(
                         )
                     }
                 }
-                Row {// Tag and user selection
+                Row(Modifier.weight(3f, true)) {// Tag and user selection
                     Column(modifier = Modifier.weight(1f)) {// Tag selection
                         TagSelection(tagSearchBarState, focusManager, context)
                     }
@@ -92,7 +93,9 @@ fun AdvancedSearch(
                         UserSelection(focusManager, context)
                     }
                 }
-                BottomActionBar(context)
+                Row() {
+                    BottomActionBar(context)
+                }
             }
         }
     )
@@ -102,10 +105,12 @@ fun AdvancedSearch(
 @Preview
 @Composable
 fun AdvancedSearchPreview() {
-    AdvancedSearch(
-        focusManager = LocalFocusManager.current,
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-        scope = rememberCoroutineScope(),
-        context = LocalContext.current
-    )
+    KohleKompassTheme() {
+        AdvancedSearch(
+            focusManager = LocalFocusManager.current,
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+            scope = rememberCoroutineScope(),
+            context = LocalContext.current
+        )
+    }
 }
