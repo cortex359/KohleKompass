@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +11,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -35,30 +37,7 @@ fun DatePickerCard(
     defaultText: String,
     date: MutableState<String>
 ) {
-    Card(
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("$dateDescription ", fontWeight = FontWeight.Bold)
-            Text(if (date.value == "") defaultText else date.value, fontWeight = FontWeight.Bold)
-            DatePickerButton(date)
-        }
-    }
-}
-
-/**
- * Button to open a date picker
- */
-@Composable
-fun DatePickerButton(date: MutableState<String>) {
+    val colors = MaterialTheme.colorScheme
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -72,15 +51,41 @@ fun DatePickerButton(date: MutableState<String>) {
             date.value = "$mDayOfMonth/${mMonth + 1}/$mYear"
         }, year, month, day
     )
-
-    IconButton(onClick = { datePickerDialog.show() }) {
-        Icon(
-            Icons.Default.DateRange,
-            contentDescription = "open menu",
-            modifier = Modifier
-                .padding(5.dp)
-                .size(24.dp)
+    Card(
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth()
+            .clickable(onClick = { datePickerDialog.show() }),
+        colors = CardDefaults.cardColors(
+            containerColor = colors.primaryContainer
         )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                "$dateDescription ",
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimaryContainer
+            )
+            Text(
+                if (date.value == "") defaultText else date.value,
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimaryContainer
+            )
+            Icon(
+                Icons.Default.DateRange,
+                contentDescription = "open menu",
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(24.dp),
+                tint = colors.onPrimaryContainer
+            )
+        }
     }
 }
 
