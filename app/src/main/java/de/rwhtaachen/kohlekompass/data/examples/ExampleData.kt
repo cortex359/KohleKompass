@@ -43,3 +43,10 @@ val itemList = listOf(
     ListItem("Lieferando Pizza Mittwoch", "Max", "33,67€"),
     ListItem("Aldi", "Laura", "23,45€")
 )
+
+val savedSearches = mutableListOf(
+    "Monatsabrechnung",
+    "Wochenabrechnung",
+    "Sprit",
+    "Laufende Kosten Quartal"
+)

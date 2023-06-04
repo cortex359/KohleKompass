@@ -20,4 +20,9 @@
     <string name="create_distribution_text">Distribute</string>
     <string name="submit_search_icon_description">Search icon</string>
     <string name="submit_search_text">Search</string>
+    <string name="save_search_dialog_title">Save search as</string>
+    <string name="save_search_dialog_submit_button_text">Save</string>
+    <string name="load_saved_search_dialog_title">Select saved search to load</string>
+    <string name="create_distribution_dialog_title">Select users to distribute to</string>
+    <string name="submit_distribution_text">Distribute</string>
 </resources>

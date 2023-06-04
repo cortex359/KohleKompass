@@ -1,5 +1,6 @@
 package de.rwhtaachen.kohlekompass.advancedSearch
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,20 +33,20 @@ import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
 @Composable
-fun BottomActionBar(context: Context) {
+fun BottomActionBar(context: Context, showDialogs: List<MutableState<Boolean>>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
     ) {// ActionRow
         Column(modifier = Modifier.weight(1f)) {
-            SaveSearch(context = context)
+            SaveSearch(context = context, showDialogs[0])
         }
         Column(modifier = Modifier.weight(1f)) {
-            LoadSearch(context = context)
+            LoadSearch(context = context, showDialogs[1])
         }
         Column(modifier = Modifier.weight(1f)) {
-            CreateDistribution(context = context)
+            CreateDistribution(context = context, showDialogs[2])
         }
         Column(modifier = Modifier.weight(1f)) {
             SubmitSearch(context = context)
@@ -52,7 +55,7 @@ fun BottomActionBar(context: Context) {
 }
 
 @Composable
-fun SaveSearch(context: Context) {
+fun SaveSearch(context: Context, showDialog: MutableState<Boolean>) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +66,7 @@ fun SaveSearch(context: Context) {
                 MaterialTheme.shapes.medium
             )
             .clickable {
-
+                showDialog.value = true
             },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -93,7 +96,7 @@ fun SaveSearch(context: Context) {
 }
 
 @Composable
-fun LoadSearch(context: Context) {
+fun LoadSearch(context: Context, showDialog: MutableState<Boolean>) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -104,7 +107,7 @@ fun LoadSearch(context: Context) {
                 MaterialTheme.shapes.medium
             )
             .clickable {
-
+                showDialog.value = true
             },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -134,7 +137,7 @@ fun LoadSearch(context: Context) {
 }
 
 @Composable
-fun CreateDistribution(context: Context) {
+fun CreateDistribution(context: Context, showDialog: MutableState<Boolean>) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -145,7 +148,7 @@ fun CreateDistribution(context: Context) {
                 MaterialTheme.shapes.medium
             )
             .clickable {
-
+                showDialog.value = true
             },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -186,7 +189,7 @@ fun SubmitSearch(context: Context) {
                 MaterialTheme.shapes.medium
             )
             .clickable {
-
+                //todo
             },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
     ) {
@@ -217,10 +220,14 @@ fun SubmitSearch(context: Context) {
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun BottomActionBarPreview() {
     KohleKompassTheme() {
-        BottomActionBar(context = LocalContext.current)
+        BottomActionBar(
+            context = LocalContext.current,
+            listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false))
+        )
     }
 }

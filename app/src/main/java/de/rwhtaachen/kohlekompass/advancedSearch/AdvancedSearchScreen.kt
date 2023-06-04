@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import de.rwhtaachen.kohlekompass.data.examples.savedSearches
 import de.rwhtaachen.kohlekompass.home.TopNavBar
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -42,6 +43,38 @@ fun AdvancedSearch(
     val tagSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val fromDate = remember { mutableStateOf("") }
     val toDate = remember { mutableStateOf("") }
+
+    val showSaveSearchDialog = remember { mutableStateOf(false) }
+    if (showSaveSearchDialog.value) {
+        InputFieldsDialog(
+            title = context.getString(R.string.save_search_dialog_title),
+            submitButtonText = context.getString(R.string.save_search_dialog_submit_button_text),
+            fields = listOf("Name"),
+            setShowDialog = { showSaveSearchDialog.value = it }) {
+            showSaveSearchDialog.value = false
+            savedSearches.add(it["Name"]!!)
+        }
+    }
+
+    val showLoadSearchDialog = remember { mutableStateOf(false) }
+    if (showLoadSearchDialog.value) {
+        LoadSearchDialog(context = context, setShowDialog = { showLoadSearchDialog.value = it }) {
+            showLoadSearchDialog.value = false
+            // TODO: Load search
+        }
+    }
+
+    val showDistributeDialog = remember { mutableStateOf(false) }
+    if (showDistributeDialog.value) {
+        DistributeDialog(
+            context = context,
+            focusManager = focusManager,
+            setShowDialog = { showDistributeDialog.value = it }) {
+            showDistributeDialog.value = false
+            // TODO: Create Distribution with users
+        }
+    }
+
 
     Scaffold(
         modifier = Modifier
@@ -93,8 +126,11 @@ fun AdvancedSearch(
                         UserSelection(focusManager, context)
                     }
                 }
-                Row() {
-                    BottomActionBar(context)
+                Row {
+                    BottomActionBar(
+                        context,
+                        listOf(showSaveSearchDialog, showLoadSearchDialog, showDistributeDialog)
+                    )
                 }
             }
         }
