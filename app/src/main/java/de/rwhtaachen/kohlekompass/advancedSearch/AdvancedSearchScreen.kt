@@ -1,6 +1,8 @@
 package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvancedSearch(
@@ -137,6 +140,7 @@ fun AdvancedSearch(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable

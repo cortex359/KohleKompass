@@ -21,6 +21,9 @@ val userList = mutableStateListOf(
     mutableStateOf(User("Laura")),
 )
 
+// currently loggid in user
+val meUser = User("Max")
+
 val itemList = listOf(
     ListItem("Lidl", "Max", "12,34€"),
     ListItem("Aldi", "Laura", "5,60€"),

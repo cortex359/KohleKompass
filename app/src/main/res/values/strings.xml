@@ -25,4 +25,5 @@
     <string name="load_saved_search_dialog_title">Select saved search to load</string>
     <string name="create_distribution_dialog_title">Select users to distribute to</string>
     <string name="submit_distribution_text">Distribute</string>
+    <string name="select_user_dialog_title">Select user</string>
 </resources>
