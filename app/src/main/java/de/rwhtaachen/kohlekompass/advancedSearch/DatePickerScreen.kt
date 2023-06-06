@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import java.util.Calendar
 import java.util.Date
 
@@ -92,8 +93,10 @@ fun DatePickerCard(
 @Preview
 @Composable
 fun DatePickerCardPreview() {
-    DatePickerCard(
-        dateDescription = "From",
-        defaultText = "DD/MM/YYYY",
-        date = remember { mutableStateOf("") })
+    KohleKompassTheme() {
+        DatePickerCard(
+            dateDescription = "From",
+            defaultText = "DD/MM/YYYY",
+            date = remember { mutableStateOf("") })
+    }
 }
