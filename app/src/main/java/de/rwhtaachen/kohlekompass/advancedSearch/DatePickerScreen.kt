@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -56,6 +57,7 @@ fun DatePickerCard(
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium)
             .clickable(onClick = { datePickerDialog.show() }),
         colors = CardDefaults.cardColors(
             containerColor = colors.primaryContainer
