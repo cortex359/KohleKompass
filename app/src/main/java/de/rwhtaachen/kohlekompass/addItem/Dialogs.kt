@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import de.rwhtaachen.kohlekompass.advancedSearch.Tag
 import de.rwhtaachen.kohlekompass.advancedSearch.User
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -65,7 +67,7 @@ fun SelectUserDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = context.getString(R.string.create_distribution_dialog_title),
+                            text = context.getString(R.string.select_user_dialog_title),
                             color = colors.onSurface,
                         )
                         Icon(
@@ -122,6 +124,102 @@ fun SelectUserDialog(
                                     )
                                     Text(
                                         text = user.value.name,
+                                        fontWeight = FontWeight.Bold,
+                                        color = colors.onPrimaryContainer
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun AddTagDialog(
+    focusManager: FocusManager,
+    context: Context,
+    tags: MutableList<MutableState<Tag>>,
+    setShowDialog: (Boolean) -> Unit,
+    setValue: (MutableState<Tag>) -> Unit
+) {
+    val colors = MaterialTheme.colorScheme
+
+    Dialog(onDismissRequest = { setShowDialog(false) }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colors.surface
+        ) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = context.getString(R.string.select_tag_dialog_title),
+                            color = colors.onSurface,
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "",
+                            tint = colors.onSurface,
+                            modifier = Modifier
+                                .width(30.dp)
+                                .height(30.dp)
+                                .clickable { setShowDialog(false) }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    val unselectedTags = tags.filter { !it.value.selected }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .pointerInput(Unit) {
+                                detectTapGestures(onTap = {
+                                    focusManager.clearFocus()
+                                })
+                            }
+                    ) {
+                        items(unselectedTags.size) { index ->
+                            val tag = unselectedTags[index]
+                            Card(
+                                modifier = Modifier
+                                    .padding(5.dp, 5.dp, 5.dp, 0.dp)
+                                    .clickable {
+                                        setValue(tag)
+                                    }
+                                    .border(
+                                        1.dp,
+                                        colors.onPrimaryContainer,
+                                        MaterialTheme.shapes.medium
+                                    ),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = colors.primaryContainer
+                                )
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.outline_sell_24),
+                                        contentDescription = context.getString(R.string.tag_icon_description),
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .size(24.dp),
+                                        tint = colors.onPrimaryContainer
+                                    )
+                                    Text(
+                                        text = tag.value.name,
                                         fontWeight = FontWeight.Bold,
                                         color = colors.onPrimaryContainer
                                     )

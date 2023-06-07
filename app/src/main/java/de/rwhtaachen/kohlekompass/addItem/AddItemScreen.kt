@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
@@ -41,8 +42,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -88,6 +93,22 @@ fun AddItem(
             {
                 selectedUser.value = it
                 showSelectUserDialog.value = false
+            }
+        )
+    }
+
+    val showAddTagDialog = remember { mutableStateOf(false) }
+    val tags = remember { TagManager.getTagList() }
+
+    if (showAddTagDialog.value) {
+        AddTagDialog(
+            focusManager = focusManager,
+            context = context,
+            tags = tags,
+            { showAddTagDialog.value = it },
+            { tag ->
+                tags[tags.indexOf(tag)].value = tag.value.copy(selected = true)
+                showAddTagDialog.value = false
             }
         )
     }
@@ -247,7 +268,9 @@ fun AddItem(
                     TagSelection(
                         context = context,
                         searchFieldState = textFieldState,
-                        focusManager = focusManager
+                        focusManager = focusManager,
+                        tags = tags,
+                        showAddTagDialog = showAddTagDialog
                     )
                 }
             }
@@ -260,10 +283,11 @@ fun AddItem(
 fun TagSelection(
     context: Context,
     searchFieldState: MutableState<TextFieldValue>,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    tags: MutableList<MutableState<Tag>>,
+    showAddTagDialog: MutableState<Boolean>
 ) {
     val colors = MaterialTheme.colorScheme
-    val tags = remember { TagManager.getTagList() }
     Card(
         modifier = Modifier
             .padding(5.dp, 0.dp, 5.dp)
@@ -284,6 +308,46 @@ fun TagSelection(
                 )
             }
             Row {
+                Card( // add tag card
+                    modifier = Modifier
+                        .padding(5.dp, 5.dp, 0.dp, 5.dp)
+                        .clickable(onClick = {
+                             showAddTagDialog.value = true
+                        })
+                        .drawBehind {
+                            drawRoundRect(
+                                color = colors.onSecondaryContainer,
+                                style = Stroke(
+                                    width = 3f,
+                                    pathEffect = PathEffect.dashPathEffect(
+                                        floatArrayOf(10f, 10f),
+                                        0f
+                                    )
+                                ),
+                                cornerRadius = CornerRadius(10.dp.toPx())
+                            )
+                        },
+                    colors = CardDefaults.cardColors(
+                        containerColor = colors.secondaryContainer
+                    )
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = context.getString(R.string.tag_icon_description),
+                            modifier = Modifier
+                                .padding(5.dp, 5.dp, 0.dp, 5.dp)
+                                .size(20.dp),
+                            tint = colors.onSecondaryContainer
+                        )
+                        Text(
+                            context.getString(R.string.add_tag_card_title),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(5.dp),
+                            color = colors.onSecondaryContainer
+                        )
+                    }
+                }
                 LazyRow(content = {
                     items(tags.size) {
                         if (tags[it].value.selected) {
@@ -312,8 +376,7 @@ fun TagSelection(
                                     Text(
                                         tags[it].value.name,
                                         textAlign = TextAlign.Center,
-                                        modifier = Modifier
-                                            .padding(5.dp)
+                                        modifier = Modifier.padding(5.dp)
                                     )
                                 }
                             }
@@ -399,6 +462,7 @@ fun TagSuggestions(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

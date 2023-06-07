@@ -26,8 +26,10 @@
     <string name="create_distribution_dialog_title">Select users to distribute to</string>
     <string name="submit_distribution_text">Distribute</string>
     <string name="select_user_dialog_title">Select user</string>
+    <string name="select_tag_dialog_title">Select tag</string>
     <string name="tag_suggestions_card_title">Suggested Tags:</string>
     <string name="selected_tags_card_title">Selected Tags:</string>
     <string name="item_description_text_field">Enter description</string>
     <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
+    <string name="add_tag_card_title">Add tag</string>
 </resources>
