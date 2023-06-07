@@ -53,8 +53,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
-import de.rwhtaachen.kohlekompass.data.examples.meUser
-import de.rwhtaachen.kohlekompass.data.examples.tagList
+import de.rwhtaachen.kohlekompass.advancedSearch.Tag
+import de.rwhtaachen.kohlekompass.advancedSearch.TagManager
+import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +77,7 @@ fun AddItem(
             LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         )
     }
-    val selectedUser = remember { mutableStateOf(meUser) }
+    val selectedUser = remember { mutableStateOf(UserManager.getCurrentUser()) }
     val showSelectUserDialog = remember { mutableStateOf(false) }
 
     if (showSelectUserDialog.value) {
@@ -243,7 +244,11 @@ fun AddItem(
                     }
                 }
                 Row {
-                    TagSelection(context = context, searchFieldState = textFieldState)
+                    TagSelection(
+                        context = context,
+                        searchFieldState = textFieldState,
+                        focusManager = focusManager
+                    )
                 }
             }
         }
@@ -252,8 +257,13 @@ fun AddItem(
 
 
 @Composable
-fun TagSelection(context: Context, searchFieldState: MutableState<TextFieldValue>) {
+fun TagSelection(
+    context: Context,
+    searchFieldState: MutableState<TextFieldValue>,
+    focusManager: FocusManager
+) {
     val colors = MaterialTheme.colorScheme
+    val tags = remember { TagManager.getTagList() }
     Card(
         modifier = Modifier
             .padding(5.dp, 0.dp, 5.dp)
@@ -275,13 +285,15 @@ fun TagSelection(context: Context, searchFieldState: MutableState<TextFieldValue
             }
             Row {
                 LazyRow(content = {
-                    items(tagList.size) {
-                        if (tagList[it].value.selected) {
+                    items(tags.size) {
+                        if (tags[it].value.selected) {
                             Card(
                                 modifier = Modifier
                                     .padding(5.dp, 5.dp, 0.dp, 5.dp)
                                     .clickable(onClick = {
-                                        tagList[it].value.selected = false
+                                        tags[it] =
+                                            mutableStateOf(tags[it].value.copy(selected = false))
+                                        focusManager.clearFocus()
                                     }),
                                 border = BorderStroke(1.dp, colors.onSecondaryContainer),
                                 colors = CardDefaults.cardColors(
@@ -298,7 +310,7 @@ fun TagSelection(context: Context, searchFieldState: MutableState<TextFieldValue
                                         tint = colors.onSecondaryContainer
                                     )
                                     Text(
-                                        tagList[it].value.name,
+                                        tags[it].value.name,
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier
                                             .padding(5.dp)
@@ -319,7 +331,12 @@ fun TagSelection(context: Context, searchFieldState: MutableState<TextFieldValue
                 )
             }
             Row {
-                TagSuggestions(context = context, textFieldState = searchFieldState)
+                TagSuggestions(
+                    context = context,
+                    textFieldState = searchFieldState,
+                    tags = tags,
+                    focusManager = focusManager
+                )
             }
         }
     }
@@ -327,25 +344,32 @@ fun TagSelection(context: Context, searchFieldState: MutableState<TextFieldValue
 
 
 @Composable
-fun TagSuggestions(context: Context, textFieldState: MutableState<TextFieldValue>) {
+fun TagSuggestions(
+    context: Context,
+    textFieldState: MutableState<TextFieldValue>,
+    tags: MutableList<MutableState<Tag>>,
+    focusManager: FocusManager
+) {
     val colors = MaterialTheme.colorScheme
 
     LazyRow(content = {
         val suggestedTags =
-            if (textFieldState.value.text == "") mutableStateListOf()
-            else tagList.filter { tag ->
+            (if (textFieldState.value.text == "") mutableStateListOf()
+            else tags.filter { tag ->
                 !tag.value.selected && (
                         tag.value.keywords.any { k -> k.contains(textFieldState.value.text.lowercase()) }
                                 || tag.value.keywords.any { k ->
                             textFieldState.value.text.lowercase().contains(k)
                         })
-            }
+            }).toMutableList()
         items(suggestedTags.size) {
             Card(
                 modifier = Modifier
                     .padding(5.dp, 5.dp, 0.dp, 5.dp)
                     .clickable(onClick = {
-                        tagList[tagList.indexOf(suggestedTags[it])].value.selected = true
+                        tags[tags.indexOf(suggestedTags[it])] =
+                            mutableStateOf(suggestedTags[it].value.copy(selected = true))
+                        focusManager.clearFocus()
                     }),
                 border = BorderStroke(1.dp, colors.onSecondaryContainer),
                 colors = CardDefaults.cardColors(

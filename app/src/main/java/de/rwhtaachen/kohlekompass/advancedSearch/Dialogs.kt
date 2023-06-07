@@ -230,8 +230,9 @@ fun LoadSearchDialog(
 fun DistributeDialog(
     focusManager: FocusManager,
     context: Context,
+    users: List<User>,
     setShowDialog: (Boolean) -> Unit,
-    setValue: (List<String>) -> Unit
+    setValue: (List<User>) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -250,7 +251,7 @@ fun DistributeDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = context.getString(R.string.create_distribution_dialog_title),
+                            text = context.getString(if (users.isEmpty()) R.string.no_users_selected_error else R.string.create_distribution_dialog_title),
                             color = colors.onSurface,
                         )
                         Icon(
@@ -265,9 +266,6 @@ fun DistributeDialog(
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
-
-                    val users = mutableListOf<User>()
-                    users.addAll(userList.map { it.value.copy(selected = true) })
 
                     LazyColumn(
                         modifier = Modifier
@@ -319,19 +317,20 @@ fun DistributeDialog(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    if (users.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(20.dp))
 
-                    Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
-                        Button(
-                            onClick = {
-                                setValue(userList.filter { it.value.selected }
-                                    .map { it.value.name })
-                                setShowDialog(false)
-                            },
-                            shape = RoundedCornerShape(50.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = context.getString(R.string.submit_distribution_text))
+                        Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+                            Button(
+                                onClick = {
+                                    setValue(users.filter { it.selected })
+                                    setShowDialog(false)
+                                },
+                                shape = RoundedCornerShape(50.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = context.getString(R.string.submit_distribution_text))
+                            }
                         }
                     }
                 }
@@ -372,6 +371,7 @@ fun DistributeDialogPreview() {
         DistributeDialog(
             focusManager = LocalFocusManager.current,
             context = LocalContext.current,
+            users = userList,
             setShowDialog = {},
             setValue = {})
     }

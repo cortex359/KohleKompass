@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.cardSelectedColor
-import de.rwhtaachen.kohlekompass.data.examples.tagList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
@@ -77,16 +76,17 @@ fun TagSelection(
         )
     }
     val allSelected = remember { mutableStateOf(false) }
+    val tags = remember {TagManager.getTagList()}
     Card( // (un)select all tags
         modifier = Modifier
             .padding(5.dp, 2.dp)
             .clickable {
                 allSelected.value = !allSelected.value
-                for (i in 0 until tagList.size) {
-                    val tag = tagList[i]
+                for (i in 0 until tags.size) {
+                    val tag = tags[i]
                     val newTag = tag.value.copy(selected = allSelected.value)
-                    tagList.remove(tag)
-                    tagList.add(i, mutableStateOf(newTag))
+                    tags.remove(tag)
+                    tags.add(i, mutableStateOf(newTag))
                 }
             }
             .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
@@ -121,8 +121,8 @@ fun TagSelection(
                 })
             }
     ) {// todo: make it so selected tags are on top
-        items(tagList.size) { index ->
-            val tag = tagList[index]
+        items(tags.size) { index ->
+            val tag = tags[index]
             if (searchBarState.value.text.isEmpty()
                 || tag.value.name.lowercase().contains(searchBarState.value.text.lowercase())
             ) {

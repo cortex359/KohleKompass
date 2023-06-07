@@ -46,6 +46,7 @@ fun AdvancedSearch(
     val tagSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val fromDate = remember { mutableStateOf("") }
     val toDate = remember { mutableStateOf("") }
+    val users = remember { UserManager.getUserList() }
 
     val showSaveSearchDialog = remember { mutableStateOf(false) }
     if (showSaveSearchDialog.value) {
@@ -72,6 +73,7 @@ fun AdvancedSearch(
         DistributeDialog(
             context = context,
             focusManager = focusManager,
+            users = users.map { it.value }.filter { it.selected },
             setShowDialog = { showDistributeDialog.value = it }) {
             showDistributeDialog.value = false
             // TODO: Create Distribution with users
@@ -125,8 +127,7 @@ fun AdvancedSearch(
                         TagSelection(tagSearchBarState, focusManager, context)
                     }
                     Column(modifier = Modifier.weight(1f)) {// User selection
-                        // empty space to align with tag selection
-                        UserSelection(focusManager, context)
+                        UserSelection(focusManager, context, users)
                     }
                 }
                 Row {

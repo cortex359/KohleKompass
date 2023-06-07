@@ -16,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -38,7 +40,8 @@ import de.rwthaachen.kohlekompass.R
 @Composable
 fun UserSelection(
     focusManager: FocusManager,
-    context: Context
+    context: Context,
+    users: List<MutableState<User>>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -48,8 +51,8 @@ fun UserSelection(
                 })
             }
     ) {
-        items(userList.size) { index ->
-            val user = userList[index]
+        items(users.size) { index ->
+            val user = users[index]
             UserItem(
                 user,
                 context
@@ -93,11 +96,12 @@ fun UserItem(user: MutableState<User>, context: Context) {
         }
     }
 }
-
+/*
 @Preview
 @Composable
 fun UserSelectionPreview() {
     KohleKompassTheme() {
-        UserSelection(focusManager = LocalFocusManager.current, context = LocalContext.current)
+        UserSelection(focusManager = LocalFocusManager.current, context = LocalContext.current, users = userList)
     }
 }
+*/

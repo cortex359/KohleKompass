@@ -25,8 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -39,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.advancedSearch.User
-import de.rwhtaachen.kohlekompass.data.examples.userList
+import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
@@ -83,8 +81,7 @@ fun SelectUserDialog(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    val users = mutableListOf<User>()
-                    users.addAll(userList.map { it.value.copy(selected = true) })
+                    val users = UserManager.getUserList()
 
                     LazyColumn(
                         modifier = Modifier
@@ -95,7 +92,7 @@ fun SelectUserDialog(
                             }
                     ) {
                         items(users.size) { index ->
-                            val user = remember { mutableStateOf(users[index]) }
+                            val user = users[index]
                             Card(
                                 modifier = Modifier
                                     .padding(5.dp, 5.dp, 5.dp, 0.dp)

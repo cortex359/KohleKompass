@@ -29,4 +29,5 @@
     <string name="tag_suggestions_card_title">Suggested Tags:</string>
     <string name="selected_tags_card_title">Selected Tags:</string>
     <string name="item_description_text_field">Enter description</string>
+    <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
 </resources>
