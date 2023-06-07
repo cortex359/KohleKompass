@@ -7,11 +7,64 @@ import de.rwhtaachen.kohlekompass.advancedSearch.User
 import de.rwhtaachen.kohlekompass.home.ListItem
 
 val tagList = mutableStateListOf(
-    mutableStateOf(Tag("Groceries")),
-    mutableStateOf(Tag("Fuel")),
-    mutableStateOf(Tag("Toileteries")),
-    mutableStateOf(Tag("Bakery")),
-    mutableStateOf(Tag("Party")),
+    mutableStateOf(
+        Tag(
+            "Groceries",
+            keywords = setOf(
+                "einkaufen",
+                "lebensmittel",
+                "lidl",
+                "aldi",
+                "rewe",
+                "edeka",
+                "kaufland",
+                "netto",
+                "penny"
+            )
+        )
+    ),
+    mutableStateOf(
+        Tag(
+            "Fuel",
+            keywords = setOf(
+                "tanken",
+                "benzin",
+                "sprit",
+                "aral",
+                "shell",
+                "esso",
+                "total",
+                "jet",
+                "omv",
+                "agip"
+            )
+        )
+    ),
+    mutableStateOf(
+        Tag(
+            "Toileteries",
+            keywords = setOf(
+                "dm",
+                "rossmann",
+                "putzmittel",
+                "drogerie",
+                "drogeriemarkt",
+                "apotheke"
+            )
+        )
+    ),
+    mutableStateOf(
+        Tag(
+            "Bakery",
+            keywords = setOf("backwerk", "bäckerei", "bakery", "bäcker", "brötchen", "brot")
+        )
+    ),
+    mutableStateOf(
+        Tag(
+            "Party",
+            keywords = setOf("party", "feier", "snacks", "geburtstag", "geschenk", "geschenke")
+        )
+    ),
 )
 
 val userList = mutableStateListOf(

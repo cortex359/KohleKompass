@@ -69,7 +69,8 @@ class MainActivity : ComponentActivity() {
                         AddItem(
                             focusManager = focusManager,
                             drawerState = drawerState,
-                            context = this
+                            context = this,
+                            scope = scope
                         )
                     },
                     Page(getString(R.string.advanced_search), Icons.Default.Search) {
