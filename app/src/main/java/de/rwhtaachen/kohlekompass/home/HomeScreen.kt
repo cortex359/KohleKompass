@@ -64,7 +64,7 @@ fun HomePage(
                     onTap = { focusManager.clearFocus() })
             },
         topBar = {
-            TopNavBar(
+            TopNavBarWithSearchBar(
                 searchBarState = searchBarState,
                 drawerState = drawerState,
                 scope = scope,
@@ -85,7 +85,7 @@ fun HomePage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopNavBar(
+fun TopNavBarWithSearchBar(
     searchBarState: MutableState<TextFieldValue>,
     drawerState: DrawerState,
     scope: CoroutineScope,
@@ -217,7 +217,7 @@ fun HomePageScreenPreview() {
 @Composable
 fun TopNavBarPreview() {
     KohleKompassTheme() {
-        TopNavBar(
+        TopNavBarWithSearchBar(
             searchBarState = remember { mutableStateOf(TextFieldValue("")) },
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             scope = rememberCoroutineScope(),

@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import de.rwhtaachen.kohlekompass.data.examples.savedSearches
-import de.rwhtaachen.kohlekompass.home.TopNavBar
+import de.rwhtaachen.kohlekompass.home.TopNavBarWithSearchBar
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -87,7 +87,7 @@ fun AdvancedSearch(
                     onTap = { focusManager.clearFocus() })
             },
         topBar = {
-            TopNavBar(
+            TopNavBarWithSearchBar(
                 searchBarState = mainSearchBarState,
                 drawerState = drawerState,
                 scope = scope,
