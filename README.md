@@ -9,9 +9,9 @@ https://git.fh-aachen.de/cortex/kohlekompass
 ---
 
 # Fahrplan
-- Abgabe "Projektskizze" bis zum Fr. 5.5.23
-- Abnahme "Release-Tag" bis zum Fr. 16.6.23 (in der Übung)
-- Abgabe "Präsentation" bis zum Fr. 23.6.23 (Präsentation Fr. 23.6.23/30.6.23)
+- Abgabe "Projektskizze" bis zum Fr. 05.05.23
+- Abnahme "Release-Tag" bis zum Fr. 23.06.23 (vor der Präsentation)
+- Abgabe "Präsentation" bis zum Fr. 23.06.23 (Präsentation Fr. 23.6.23/30.6.23)
 
 # Projektskizze
 - Thema, Zielsetzung, Ausblick und Aufteilung der Schwerpunkte
