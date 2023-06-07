@@ -94,7 +94,8 @@ fun AdvancedSearch(
                 drawerState = drawerState,
                 scope = scope,
                 focusManager = focusManager,
-                context = context
+                context = context,
+                selectedPage = remember { mutableStateOf(2) }
             )
         },
         content = { padding ->

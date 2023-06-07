@@ -22,11 +22,9 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -39,7 +37,7 @@ import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.launch
 
 
-data class Page @OptIn(ExperimentalMaterial3Api::class) constructor(
+data class Page constructor(
     val title: String,
     val icon: ImageVector,
     val content: @Composable () -> Unit
@@ -56,13 +54,16 @@ class MainActivity : ComponentActivity() {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
                 val focusManager = LocalFocusManager.current
+
+                val selectedPage = remember{ mutableStateOf(0) }
                 val pages = listOf(
                     Page(getString(R.string.home_page), Icons.Default.Home) {
                         HomePage(
                             drawerState = drawerState,
                             scope = scope,
                             focusManager = focusManager,
-                            context = this
+                            context = this,
+                            selectedPage = selectedPage
                         )
                     },
                     Page(getString(R.string.add_item), Icons.Default.Add) {
@@ -82,7 +83,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 )
-                var selectedPage by remember { mutableStateOf(pages[0]) }
 
                 ModalNavigationDrawer(
                     drawerState = drawerState,
@@ -93,9 +93,9 @@ class MainActivity : ComponentActivity() {
                                     DrawerItem(
                                         text = page.title,
                                         icon = page.icon,
-                                        isSelected = (page == selectedPage),
+                                        isSelected = (page == pages[selectedPage.value]),
                                         onClick = {
-                                            selectedPage = page
+                                            selectedPage.value = pages.indexOf(page)
                                             scope.launch { drawerState.close() }
                                         }
                                     )
@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                     },
                     gesturesEnabled = true
                 ) {
-                    selectedPage.content()
+                    pages[selectedPage.value].content()
                 }
             }
         }

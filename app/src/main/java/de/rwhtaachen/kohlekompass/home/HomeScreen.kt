@@ -53,7 +53,8 @@ fun HomePage(
     focusManager: FocusManager,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    context: Context
+    context: Context,
+    selectedPage: MutableState<Int>
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
@@ -69,7 +70,8 @@ fun HomePage(
                 drawerState = drawerState,
                 scope = scope,
                 focusManager = focusManager,
-                context = context
+                context = context,
+                selectedPage = selectedPage
             )
         },
         content = { padding ->
@@ -90,7 +92,8 @@ fun TopNavBarWithSearchBar(
     drawerState: DrawerState,
     scope: CoroutineScope,
     focusManager: FocusManager,
-    context: Context
+    context: Context,
+    selectedPage: MutableState<Int>
 ) {
     Row(
         modifier = Modifier
@@ -134,6 +137,8 @@ fun TopNavBarWithSearchBar(
         // Add Item
         IconButton(
             onClick = {
+                scope.launch { drawerState.close() }
+                selectedPage.value = 1
             }
         ) {
             Icon(
@@ -207,7 +212,8 @@ fun HomePageScreenPreview() {
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             scope = rememberCoroutineScope(),
-            context = LocalContext.current
+            context = LocalContext.current,
+            selectedPage = remember { mutableStateOf(0) }
         )
     }
 }
@@ -222,7 +228,8 @@ fun TopNavBarPreview() {
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             scope = rememberCoroutineScope(),
             focusManager = LocalFocusManager.current,
-            context = LocalContext.current
+            context = LocalContext.current,
+            selectedPage = remember { mutableStateOf(0) }
         )
     }
 }
