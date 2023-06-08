@@ -1,6 +1,8 @@
 package de.rwhtaachen.kohlekompass.home
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -47,6 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(
@@ -150,6 +153,7 @@ fun TopNavBarWithSearchBar(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentList(
     state: MutableState<TextFieldValue>,
@@ -168,8 +172,8 @@ fun ContentList(
         items(itemList.size) { index ->
             val item = itemList[index]
             if (state.value.text.isEmpty()
-                || item.description.lowercase().contains(state.value.text.lowercase())
-                || item.user.lowercase().contains(state.value.text.lowercase())
+                || item.title.lowercase().contains(state.value.text.lowercase())
+                || item.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
                 ContentItem(item)
             }
@@ -178,7 +182,7 @@ fun ContentList(
 }
 
 @Composable
-fun ContentItem(item: ListItem) {
+fun ContentItem(item: Item) {
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     Box(
@@ -195,14 +199,15 @@ fun ContentItem(item: ListItem) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(item.description, color = colors.onPrimaryContainer)
-                Text(item.user, color = colors.onPrimaryContainer)
+                Text(item.title, color = colors.onPrimaryContainer)
+                Text(item.user.name, color = colors.onPrimaryContainer)
             }
             Text(item.amount, color = colors.onPrimaryContainer)
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
