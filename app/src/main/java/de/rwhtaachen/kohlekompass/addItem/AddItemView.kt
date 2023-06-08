@@ -66,7 +66,6 @@ import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -77,11 +76,7 @@ fun AddItem(
 ) {
     val colors = MaterialTheme.colorScheme
     val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
-    val date = remember {
-        mutableStateOf(
-            LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-        )
-    }
+    val date = remember { mutableStateOf(LocalDate.now()) }
     val selectedUser = remember { mutableStateOf(UserManager.getCurrentUser()) }
     val showSelectUserDialog = remember { mutableStateOf(false) }
 
@@ -220,6 +215,7 @@ fun AddItem(
                         DatePickerCard(
                             dateDescription = "",
                             defaultText = context.getString(R.string.today),
+                            context = context,
                             date = date
                         )
                     }
@@ -312,7 +308,7 @@ fun TagSelection(
                     modifier = Modifier
                         .padding(5.dp, 5.dp, 0.dp, 5.dp)
                         .clickable(onClick = {
-                             showAddTagDialog.value = true
+                            showAddTagDialog.value = true
                         })
                         .drawBehind {
                             drawRoundRect(

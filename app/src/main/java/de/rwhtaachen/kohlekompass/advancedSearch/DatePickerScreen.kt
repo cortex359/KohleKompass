@@ -1,7 +1,10 @@
 package de.rwhtaachen.kohlekompass.advancedSearch
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.os.Build
 import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,31 +30,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
+import java.time.LocalDate
 import java.util.Calendar
-import java.util.Date
 
 /**
  * Card with a date and a button to open a date picker
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DatePickerCard(
     dateDescription: String,
     defaultText: String,
-    date: MutableState<String>
+    context: Context,
+    date: MutableState<LocalDate?>
 ) {
     val colors = MaterialTheme.colorScheme
-    val context = LocalContext.current
     val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-    calendar.time = Date()
 
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            date.value = "$mDayOfMonth/${mMonth + 1}/$mYear"
-        }, year, month, day
+            date.value = LocalDate.of(mYear, mMonth, mDayOfMonth)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
     )
     Card(
         modifier = Modifier
@@ -76,7 +76,7 @@ fun DatePickerCard(
                 color = colors.onPrimaryContainer
             )
             Text(
-                if (date.value == "") defaultText else date.value,
+                if (date.value == null) defaultText else date.value.toString(),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimaryContainer
             )
@@ -92,6 +92,7 @@ fun DatePickerCard(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun DatePickerCardPreview() {
@@ -99,6 +100,7 @@ fun DatePickerCardPreview() {
         DatePickerCard(
             dateDescription = "From",
             defaultText = "DD/MM/YYYY",
-            date = remember { mutableStateOf("") })
+            context = LocalContext.current,
+            date = remember { mutableStateOf(null) })
     }
 }

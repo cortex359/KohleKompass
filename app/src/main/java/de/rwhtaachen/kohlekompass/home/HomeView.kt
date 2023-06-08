@@ -42,7 +42,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.data.examples.itemList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -169,8 +168,9 @@ fun ContentList(
                 })
             }
     ) {
-        items(itemList.size) { index ->
-            val item = itemList[index]
+        val items = getItems()
+        items(items.size) { index ->
+            val item = items[index]
             if (state.value.text.isEmpty()
                 || item.title.lowercase().contains(state.value.text.lowercase())
                 || item.user.name.lowercase().contains(state.value.text.lowercase())

@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.cardSelectedColor
+import de.rwhtaachen.kohlekompass.data.examples.tags
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
@@ -47,6 +48,7 @@ import de.rwthaachen.kohlekompass.R
 fun TagSelection(
     searchBarState: MutableState<TextFieldValue>,
     focusManager: FocusManager,
+    tags: MutableList<MutableState<Tag>>,
     context: Context
 ) {
     val colors = MaterialTheme.colorScheme
@@ -76,7 +78,6 @@ fun TagSelection(
         )
     }
     val allSelected = remember { mutableStateOf(false) }
-    val tags = remember {TagManager.getTagList()}
     Card( // (un)select all tags
         modifier = Modifier
             .padding(5.dp, 2.dp)
@@ -172,12 +173,12 @@ fun TagItem(tag: MutableState<Tag>, context: Context) {
 @Preview
 @Composable
 fun TagSelectionPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
         val focusManager = LocalFocusManager.current
         val context = LocalContext.current
         Column {
-            TagSelection(searchBarState, focusManager, context)
+            TagSelection(searchBarState, focusManager, tags.values.map { mutableStateOf(it) }.toMutableList(), context)
         }
     }
 }

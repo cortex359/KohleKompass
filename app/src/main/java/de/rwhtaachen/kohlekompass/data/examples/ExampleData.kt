@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass.data.examples
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearch
 import de.rwhtaachen.kohlekompass.advancedSearch.Tag
 import de.rwhtaachen.kohlekompass.advancedSearch.User
 import de.rwhtaachen.kohlekompass.home.Item
@@ -759,5 +760,8 @@ val itemList = listOf(
 
 
 val savedSearches = mutableListOf(
-    "Monatsabrechnung", "Wochenabrechnung", "Sprit", "Laufende Kosten Quartal"
+    SavedAdvancedSearch("Monatsabrechnung"),
+    SavedAdvancedSearch("Wochenabrechnung"),
+    SavedAdvancedSearch("Sprit"),
+    SavedAdvancedSearch("Laufende Kosten Quartal")
 )

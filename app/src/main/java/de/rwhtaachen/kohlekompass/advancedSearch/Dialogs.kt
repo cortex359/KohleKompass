@@ -44,8 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.getSavedSearches
 import de.rwhtaachen.kohlekompass.cardSelectedColor
-import de.rwhtaachen.kohlekompass.data.examples.savedSearches
 import de.rwhtaachen.kohlekompass.data.examples.userList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -159,7 +159,7 @@ fun InputFieldsDialog(
 fun LoadSearchDialog(
     context: Context,
     setShowDialog: (Boolean) -> Unit,
-    setValue: (String) -> Unit
+    setValue: (SavedAdvancedSearch) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -194,13 +194,15 @@ fun LoadSearchDialog(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val searches = getSavedSearches()
+
                     LazyColumn(content = {
-                        items(savedSearches.size) { index ->
+                        items(searches.size) { index ->
                             Card(
                                 modifier = Modifier
                                     .padding(5.dp)
                                     .fillMaxWidth()
-                                    .clickable { setValue(savedSearches[index]) }
+                                    .clickable { setValue(searches[index]) }
                                     .border(
                                         1.dp,
                                         colors.onPrimaryContainer,
@@ -211,7 +213,7 @@ fun LoadSearchDialog(
                                 )
                             ) {
                                 Text(
-                                    text = savedSearches[index],
+                                    text = searches[index].title,
                                     fontWeight = FontWeight.Bold,
                                     color = colors.onPrimaryContainer,
                                     modifier = Modifier.padding(10.dp)
