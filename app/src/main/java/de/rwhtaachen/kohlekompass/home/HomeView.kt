@@ -3,6 +3,7 @@ package de.rwhtaachen.kohlekompass.home
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -18,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +44,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -77,11 +81,16 @@ fun HomePage(
             )
         },
         content = { padding ->
-            ContentList(
-                state = searchBarState,
-                focusManager = focusManager,
-                padding = padding
-            )
+            Column {
+                Row(Modifier.weight(1f, true)) {
+                    ContentList(
+                        state = searchBarState,
+                        focusManager = focusManager,
+                        padding = padding
+                    )
+                }
+                BottomBar(context = context)
+            }
         }
     )
 }
@@ -123,7 +132,7 @@ fun TopNavBarWithSearchBar(
         // Search Bar
         Box(
             modifier = Modifier
-                .weight(3f, true)
+                .weight(1f, true)
         ) {
             SearchField(
                 searchBarState = searchBarState,
@@ -150,6 +159,48 @@ fun TopNavBarWithSearchBar(
             )
         }
     }
+}
+
+@Composable
+fun BottomBar(context: Context) {
+    val colors = MaterialTheme.colorScheme
+    Box(
+        modifier = Modifier
+            .background(colors.secondary)
+            .fillMaxWidth(),
+
+        ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = context.getString(R.string.home_bottom_text),
+                color = colors.onSecondary,
+                fontSize = 30.sp,
+                modifier = Modifier.padding(5.dp)
+
+            )
+            Card(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = colors.onSecondaryContainer
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = colors.secondaryContainer
+                ),
+                modifier = Modifier.padding(5.dp)
+            ) {
+                Text(
+                    getAmountDue(), color = colors.onSecondaryContainer,
+                    fontSize = 30.sp,
+                    modifier = Modifier.padding(5.dp)
+                )
+            }
+        }
+    }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

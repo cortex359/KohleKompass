@@ -32,4 +32,5 @@
     <string name="item_description_text_field">Enter description</string>
     <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
     <string name="add_tag_card_title">Add tag</string>
+    <string name="home_bottom_text">Amount due:</string>
 </resources>
