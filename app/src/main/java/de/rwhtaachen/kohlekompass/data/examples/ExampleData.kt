@@ -3,7 +3,7 @@ package de.rwhtaachen.kohlekompass.data.examples
 import android.os.Build
 import androidx.annotation.RequiresApi
 import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearch
-import de.rwhtaachen.kohlekompass.advancedSearch.Tag
+import de.rwhtaachen.kohlekompass.manageTags.Tag
 import de.rwhtaachen.kohlekompass.advancedSearch.User
 import de.rwhtaachen.kohlekompass.home.Item
 import java.time.LocalDate

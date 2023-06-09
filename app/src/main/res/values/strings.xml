@@ -33,4 +33,8 @@
     <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
     <string name="add_tag_card_title">Add tag</string>
     <string name="home_bottom_text">Amount due:</string>
+    <string name="tags_page_title">Manage tags</string>
+    <string name="home_icon_description">home icon</string>
+    <string name="add_icon_description">plus icon</string>
+    <string name="search_icon_description">magnifiying glass icon</string>
 </resources>

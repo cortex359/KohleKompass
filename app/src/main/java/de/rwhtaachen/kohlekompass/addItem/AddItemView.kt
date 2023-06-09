@@ -58,8 +58,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
-import de.rwhtaachen.kohlekompass.advancedSearch.Tag
-import de.rwhtaachen.kohlekompass.advancedSearch.TagManager
+import de.rwhtaachen.kohlekompass.manageTags.Tag
+import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R

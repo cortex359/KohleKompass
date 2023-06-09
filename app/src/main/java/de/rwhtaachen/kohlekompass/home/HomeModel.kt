@@ -1,6 +1,6 @@
 package de.rwhtaachen.kohlekompass.home
 
-import de.rwhtaachen.kohlekompass.advancedSearch.Tag
+import de.rwhtaachen.kohlekompass.manageTags.Tag
 import de.rwhtaachen.kohlekompass.advancedSearch.User
 import java.time.LocalDate
 

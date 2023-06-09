@@ -27,8 +27,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.addItem.AddItem
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
@@ -38,9 +40,9 @@ import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.launch
 
 
-data class Page constructor(
+data class Page(
     val title: String,
-    val icon: ImageVector,
+    val icon: Painter,
     val content: @Composable () -> Unit
 )
 
@@ -52,13 +54,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KohleKompassTheme {
+                val colors = MaterialTheme.colorScheme
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
                 val focusManager = LocalFocusManager.current
 
-                val selectedPage = remember{ mutableStateOf(0) }
+                val selectedPage = remember { mutableStateOf(0) }
                 val pages = listOf(
-                    Page(getString(R.string.home_page), Icons.Default.Home) {
+                    Page(
+                        getString(R.string.home_page), rememberVectorPainter(Icons.Default.Home)
+                    ) {
                         HomePage(
                             drawerState = drawerState,
                             scope = scope,
@@ -67,7 +72,7 @@ class MainActivity : ComponentActivity() {
                             selectedPage = selectedPage
                         )
                     },
-                    Page(getString(R.string.add_item), Icons.Default.Add) {
+                    Page(getString(R.string.add_item), rememberVectorPainter(Icons.Default.Add)) {
                         AddItem(
                             focusManager = focusManager,
                             drawerState = drawerState,
@@ -75,13 +80,22 @@ class MainActivity : ComponentActivity() {
                             scope = scope
                         )
                     },
-                    Page(getString(R.string.advanced_search), Icons.Default.Search) {
+                    Page(
+                        getString(R.string.advanced_search),
+                        rememberVectorPainter(Icons.Default.Search)
+                    ) {
                         AdvancedSearch(
                             focusManager = focusManager,
                             drawerState = drawerState,
                             scope = scope,
                             context = this
                         )
+                    },
+                    Page(
+                        title = getString(R.string.tags_page_title),
+                        icon = painterResource(R.drawable.outline_sell_24)
+                    ) {
+
                     }
                 )
 
@@ -116,7 +130,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DrawerItem(
     text: String,
-    icon: ImageVector,
+    icon: Painter,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -129,7 +143,7 @@ fun DrawerItem(
             .fillMaxWidth()
     ) {
         Icon(
-            imageVector = icon,
+            painter = icon,
             contentDescription = null,
             modifier = Modifier.padding(end = 16.dp)
         )
