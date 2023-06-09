@@ -5,4 +5,4 @@ package de.rwhtaachen.kohlekompass.manageTags
  * The selected attribute is used in the UI. It is not to be used by the Model.
  * the keywords must all be lowercase!
  */
-data class Tag(val name: String, val keywords: Set<String>, var selected: Boolean = false)
+data class Tag(val name: String, val keywords: MutableSet<String>, var selected: Boolean = false)

@@ -18,5 +18,27 @@ class TagManager() {
             return tags.values.map { tag -> mutableStateOf(tag.copy(selected = false)) }
                 .toMutableStateList()
         }
+
+        fun deleteTag(tag: Tag) {
+            tags.remove(tag.name)
+        }
+
+        fun addTag(tag: Tag) {
+            tags[tag.name] = tag
+        }
+
+        fun addKeyword(tag: Tag, keyword: String) {
+            tag.keywords.add(keyword)
+        }
+
+        fun removeKeyword(tag: Tag, keyword: String) {
+            tag.keywords.remove(keyword)
+        }
+
+        fun updateTagName(tag: Tag, newName: String) {
+            val newTag = tag.copy(name = newName)
+            tags.remove(tag.name)
+            tags[newName] = newTag
+        }
     }
 }

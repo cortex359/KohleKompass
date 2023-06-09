@@ -14,7 +14,7 @@ val tags = mutableMapOf(
         "bills",
         Tag(
             name = "bills",
-            keywords = setOf(
+            keywords = mutableSetOf(
                 "bill",
                 "payment",
                 "utilities",
@@ -27,34 +27,34 @@ val tags = mutableMapOf(
     ),
     Pair(
         "dining",
-        Tag(name = "dining", keywords = setOf("restaurant", "café", "dinner", "lunch", "meal"))
+        Tag(name = "dining", keywords = mutableSetOf("restaurant", "café", "dinner", "lunch", "meal"))
     ),
     Pair(
         "entertainment",
         Tag(
             name = "entertainment",
-            keywords = setOf("movie", "tickets", "cinema", "weekend", "event")
+            keywords = mutableSetOf("movie", "tickets", "cinema", "weekend", "event")
         )
     ),
     Pair(
         "fitness",
         Tag(
             name = "fitness",
-            keywords = setOf("gym", "membership", "workout", "exercise", "fitness")
+            keywords = mutableSetOf("gym", "membership", "workout", "exercise", "fitness")
         )
     ),
     Pair(
         "gas",
         Tag(
             name = "gas",
-            keywords = setOf("gasoline", "fuel", "refill", "petrol", "aral", "shell", "agip", "gas")
+            keywords = mutableSetOf("gasoline", "fuel", "refill", "petrol", "aral", "shell", "agip", "gas")
         )
     ),
     Pair(
         "groceries",
         Tag(
             name = "groceries",
-            keywords = setOf(
+            keywords = mutableSetOf(
                 "grocery",
                 "supermarket",
                 "store",
@@ -72,18 +72,18 @@ val tags = mutableMapOf(
         "personal care",
         Tag(
             name = "personal care",
-            keywords = setOf("haircut", "haircare", "salon", "beauty", "grooming")
+            keywords = mutableSetOf("haircut", "haircare", "salon", "beauty", "grooming")
         )
     ),
     Pair(
         "rent",
-        Tag(name = "rent", keywords = setOf("rent", "housing", "accommodation", "apartment"))
+        Tag(name = "rent", keywords = mutableSetOf("rent", "housing", "accommodation", "apartment"))
     ),
     Pair(
         "toiletries",
         Tag(
             name = "toiletries",
-            keywords = setOf(
+            keywords = mutableSetOf(
                 "toiletries",
                 "personal hygiene",
                 "bathroom",
@@ -102,7 +102,7 @@ val tags = mutableMapOf(
         "travel",
         Tag(
             name = "travel",
-            keywords = setOf(
+            keywords = mutableSetOf(
                 "travel",
                 "trip",
                 "vacation",

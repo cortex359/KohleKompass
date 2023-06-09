@@ -37,4 +37,9 @@
     <string name="home_icon_description">home icon</string>
     <string name="add_icon_description">plus icon</string>
     <string name="search_icon_description">magnifiying glass icon</string>
+    <string name="delete_icon_description">trash can icon</string>
+    <string name="submit_tag_edit_button_text">Save changes</string>
+    <string name="add_keyword_placeholder">Add Keyword</string>
+    <string name="edit_tag_dialog_title">Edit tag</string>
+    <string name="close_icon_description">cross icon</string>
 </resources>

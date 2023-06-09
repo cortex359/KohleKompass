@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.addItem.AddItem
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
 import de.rwhtaachen.kohlekompass.home.HomePage
+import de.rwhtaachen.kohlekompass.manageTags.ManageTags
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.launch
@@ -95,7 +96,12 @@ class MainActivity : ComponentActivity() {
                         title = getString(R.string.tags_page_title),
                         icon = painterResource(R.drawable.outline_sell_24)
                     ) {
-
+                        ManageTags(
+                            context = this,
+                            drawerState = drawerState,
+                            scope = scope,
+                            focusManager = focusManager
+                        )
                     }
                 )
 
