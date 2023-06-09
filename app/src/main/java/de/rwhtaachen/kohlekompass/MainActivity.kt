@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -125,6 +126,7 @@ fun DrawerItem(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .clickable(onClick = onClick)
+            .fillMaxWidth()
     ) {
         Icon(
             imageVector = icon,
