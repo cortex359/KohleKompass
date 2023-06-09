@@ -5,6 +5,7 @@ data class Transaction(
     val title: String = "",
     val description: String = "",
     val user: Int,
+    val group: Int,
     val amount: Double = 0.0,
     val recipient: String,
 ) {
