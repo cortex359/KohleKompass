@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">kohlekompass</string>
+    <string name="home_page">Home</string>
+    <string name="add_item">Add Item</string>
+    <string name="advanced_search">Advanced Search</string>
+    <string name="open_menu">Open Menu</string>
+    <string name="start_date">From</string>
+    <string name="end_date">To</string>
+    <string name="today">today</string>
+    <string name="empty_date_format">--/--/----</string>
+    <string name="tag_icon_description">Price tag icon</string>
+    <string name="user_icon_description">User icon</string>
+    <string name="select_all_tags">Select all</string>
+    <string name="unselect_all_tags">Unselect all</string>
+    <string name="save_search_config_icon_description">Save icon</string>
+    <string name="save_search_config_text">Save search</string>
+    <string name="load_search_config_icon_description">Load icon</string>
+    <string name="load_search_config_text">Load search</string>
+    <string name="create_distribution_icon_description">Group icon</string>
+    <string name="create_distribution_text">Distribute</string>
+    <string name="submit_search_icon_description">Search icon</string>
+    <string name="submit_search_text">Search</string>
+    <string name="save_search_dialog_title">Save search as</string>
+    <string name="save_search_dialog_submit_button_text">Save</string>
+    <string name="load_saved_search_dialog_title">Select saved search to load</string>
+    <string name="create_distribution_dialog_title">Select users to distribute to</string>
+    <string name="submit_distribution_text">Distribute</string>
+    <string name="select_user_dialog_title">Select user</string>
+    <string name="select_tag_dialog_title">Select tag</string>
+    <string name="tag_suggestions_card_title">Suggested Tags:</string>
+    <string name="selected_tags_card_title">Selected Tags:</string>
+    <string name="item_description_text_field">Enter description</string>
+    <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
+    <string name="add_tag_card_title">Add tag</string>
 </resources>
