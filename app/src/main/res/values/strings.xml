@@ -42,4 +42,5 @@
     <string name="add_keyword_placeholder">Add Keyword</string>
     <string name="edit_tag_dialog_title">Edit tag</string>
     <string name="close_icon_description">cross icon</string>
+    <string name="add_tag_placeholder">Create tag</string>
 </resources>

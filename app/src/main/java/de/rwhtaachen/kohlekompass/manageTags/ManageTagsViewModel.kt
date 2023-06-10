@@ -28,8 +28,9 @@ class TagManager() {
             tags.remove(tag.name)
         }
 
-        fun addTag(tag: Tag) {
-            tags[tag.name] = tag
+        fun addTag(name: String) {
+            tags[name] = Tag(name, mutableSetOf())
+            // todo generate keywords automatically
         }
 
         fun addKeyword(tag: Tag, keyword: String) {

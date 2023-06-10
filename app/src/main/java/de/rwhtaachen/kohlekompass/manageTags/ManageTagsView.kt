@@ -45,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -76,17 +77,20 @@ fun ManageTags(
     scope: CoroutineScope,
     focusManager: FocusManager
 ) {
-    val tags = TagManager.getTagList()
+    val tags = remember { mutableStateOf(TagManager.getTagList()) }
     val colors = MaterialTheme.colorScheme
     val showEditTagDialog = remember { mutableStateOf(false) }
     val currentTag = remember { mutableStateOf<Tag?>(null) }
+    val addTagTextField = remember { mutableStateOf(TextFieldValue("")) }
 
     if (showEditTagDialog.value) {
         EditTagDialog(
-            setShowDialog = { showEditTagDialog.value = it },
+            setShowDialog = {
+                showEditTagDialog.value = it
+                tags.value = TagManager.getTagList()
+            },
             tag = currentTag.value!!,
             context = context,
-            focusManager = focusManager
         )
     }
 
@@ -131,55 +135,109 @@ fun ManageTags(
             )
         },
         content = { padding ->
-            LazyColumn(Modifier.padding(20.dp)) {
-                items(tags.size) {
-                    val tag = tags[it]
-                    Card(
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .fillMaxWidth()
-                            .clickable() {
-                                currentTag.value = tag.value
-                                showEditTagDialog.value = true
-                            },
-                        colors = CardDefaults.cardColors(containerColor = colors.primaryContainer),
-                        border = BorderStroke(width = 1.dp, color = colors.onPrimaryContainer)
-                    ) {
-                        Row {
-                            Icon(
-                                painter = painterResource(id = R.drawable.outline_sell_24),
-                                contentDescription = context.getString(R.string.tag_icon_description),
-                                modifier = Modifier.padding(5.dp),
-                            )
-                            Text(
-                                tag.value.name.replaceFirstChar { it.titlecase(Locale.getDefault()) },
-                                modifier = Modifier.padding(5.dp),
-                                fontWeight = FontWeight.Bold
-                            )
-                            LazyRow(
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .weight(1f, true)
-                            ) {
-                                items(tag.value.keywords.size) {
-                                    val keyword = tag.value.keywords.toList()[it]
-                                    Text(keyword + if (it < tag.value.keywords.size - 1) ", " else "")
+            Column {
+                LazyColumn(
+                    Modifier
+                        .padding(20.dp)
+                        .weight(1f, true)
+                ) {
+                    items(tags.value.size) {
+                        val tag = tags.value[it]
+                        Card(
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .fillMaxWidth()
+                                .clickable() {
+                                    currentTag.value = tag.value
+                                    showEditTagDialog.value = true
+                                },
+                            colors = CardDefaults.cardColors(containerColor = colors.primaryContainer),
+                            border = BorderStroke(width = 1.dp, color = colors.onPrimaryContainer)
+                        ) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.outline_sell_24),
+                                    contentDescription = context.getString(R.string.tag_icon_description),
+                                    modifier = Modifier.padding(5.dp),
+                                )
+                                Text(
+                                    tag.value.name.replaceFirstChar { it.titlecase(Locale.getDefault()) },
+                                    modifier = Modifier.padding(5.dp),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                LazyRow(
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .weight(1f, true)
+                                ) {
+                                    items(tag.value.keywords.size) {
+                                        val keyword = tag.value.keywords.toList()[it]
+                                        Text(keyword + if (it < tag.value.keywords.size - 1) ", " else "")
+                                    }
                                 }
+                                Icon(
+                                    Icons.Default.Delete,
+                                    context.getString(R.string.delete_icon_description),
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .clickable {
+                                            TagManager.deleteTag(tag.value)
+                                            tags.value = TagManager.getTagList()
+                                        },
+                                    tint = colors.error,
+                                )
                             }
-                            Icon(
-                                Icons.Default.Delete,
-                                context.getString(R.string.delete_icon_description),
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .clickable {
-                                        TagManager.deleteTag(tag.value)
-                                        tags.remove(tag)
-                                    },
-                                tint = colors.error,
-                            )
                         }
                     }
                 }
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(40.dp, 0.dp, 40.dp, 10.dp)
+                        .border(
+                            BorderStroke(
+                                width = 1.dp,
+                                color = colors.onSecondaryContainer
+                            ),
+                            shape = RoundedCornerShape(50)
+                        ),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = colors.secondaryContainer,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    value = addTagTextField.value,
+                    onValueChange = { value ->
+                        addTagTextField.value = value
+                    },
+                    trailingIcon = {
+                        Icon(
+                            Icons.Default.Add,
+                            context.getString(R.string.add_icon_description),
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .clickable {
+                                    TagManager.addTag(addTagTextField.value.text)
+                                    tags.value = TagManager.getTagList()
+                                    addTagTextField.value = TextFieldValue("")
+                                    focusManager.clearFocus()
+                                },
+                            tint = colors.onSecondaryContainer,
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            context.getString(R.string.add_tag_placeholder),
+                            color = colors.onSecondaryContainer
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                )
+
             }
         })
 }
@@ -190,11 +248,11 @@ fun EditTagDialog(
     setShowDialog: (Boolean) -> Unit,
     tag: Tag,
     context: Context,
-    focusManager: FocusManager
 ) {
     val colors = MaterialTheme.colorScheme
     val tagNameField = remember { mutableStateOf(TextFieldValue(tag.name)) }
     val addKeywordField = remember { mutableStateOf(TextFieldValue("")) }
+    val keywords = remember { tag.keywords.toMutableStateList() }
 
     Dialog(onDismissRequest = { setShowDialog(false) }) {
         Surface(
@@ -257,7 +315,7 @@ fun EditTagDialog(
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(modifier = Modifier.height(200.dp)) {
                         LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
-                            items(tag.keywords.size) {
+                            items(keywords.size) {
                                 Card(
                                     modifier = Modifier.padding(5.dp),
                                     border = BorderStroke(1.dp, colors.onSecondaryContainer),
@@ -267,7 +325,7 @@ fun EditTagDialog(
                                         Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        val keyword = tag.keywords.toList()[it]
+                                        val keyword = keywords[it]
                                         AutoScalingText(
                                             text = keyword,
                                             color = colors.onSecondaryContainer,
@@ -282,7 +340,7 @@ fun EditTagDialog(
                                                 .padding(5.dp)
                                                 .clickable {
                                                     TagManager.removeKeyword(tag, keyword)
-                                                    tag.keywords.remove(keyword)
+                                                    keywords.remove(keyword)
                                                 },
                                             tint = colors.onSecondaryContainer,
                                         )
@@ -322,6 +380,7 @@ fun EditTagDialog(
                                         .padding(5.dp)
                                         .clickable {
                                             TagManager.addKeyword(tag, addKeywordField.value.text)
+                                            keywords.add(addKeywordField.value.text)
                                             addKeywordField.value = TextFieldValue("")
                                         },
                                     tint = colors.onSecondaryContainer,
@@ -411,7 +470,6 @@ fun EditTagDialogPreview() {
                 )
             ),
             context = LocalContext.current,
-            focusManager = LocalFocusManager.current
         )
     }
 }
