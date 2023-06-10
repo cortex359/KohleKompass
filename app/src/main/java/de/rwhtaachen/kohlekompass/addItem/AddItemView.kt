@@ -93,7 +93,7 @@ fun AddItem(
     }
 
     val showAddTagDialog = remember { mutableStateOf(false) }
-    val tags = remember { TagManager.getTagList() }
+    val tags = remember { TagManager.getMutableTagList() }
 
     if (showAddTagDialog.value) {
         AddTagDialog(

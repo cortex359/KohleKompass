@@ -14,9 +14,14 @@ class TagManager() {
         // todo In testing the list from example Data is used
         // private val tagList = mutableListOf<Tag>()
 
-        fun getTagList(): MutableList<MutableState<Tag>> {
+        fun getMutableTagList(): MutableList<MutableState<Tag>> {
             return tags.values.map { tag -> mutableStateOf(tag.copy(selected = false)) }
                 .toMutableStateList()
+        }
+
+        fun getTagList(): List<MutableState<Tag>> {
+            return tags.values.map { tag -> mutableStateOf(tag.copy(selected = false)) }
+                .toList()
         }
 
         fun deleteTag(tag: Tag) {

@@ -49,7 +49,7 @@ fun AdvancedSearch(
     val startDate = remember { mutableStateOf<LocalDate?>(null) }
     val endDate = remember { mutableStateOf<LocalDate?>(null) }
     val users = remember { UserManager.getUserList() }
-    val tags = remember { TagManager.getTagList() }
+    val tags = remember { TagManager.getMutableTagList() }
 
 
     val showSaveSearchDialog = remember { mutableStateOf(false) }
