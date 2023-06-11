@@ -44,8 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.getSavedSearches
 import de.rwhtaachen.kohlekompass.cardSelectedColor
-import de.rwhtaachen.kohlekompass.data.examples.savedSearches
 import de.rwhtaachen.kohlekompass.data.examples.userList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -159,7 +159,7 @@ fun InputFieldsDialog(
 fun LoadSearchDialog(
     context: Context,
     setShowDialog: (Boolean) -> Unit,
-    setValue: (String) -> Unit
+    setValue: (SavedAdvancedSearch) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -194,13 +194,15 @@ fun LoadSearchDialog(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val searches = getSavedSearches()
+
                     LazyColumn(content = {
-                        items(savedSearches.size) { index ->
+                        items(searches.size) { index ->
                             Card(
                                 modifier = Modifier
                                     .padding(5.dp)
                                     .fillMaxWidth()
-                                    .clickable { setValue(savedSearches[index]) }
+                                    .clickable { setValue(searches[index]) }
                                     .border(
                                         1.dp,
                                         colors.onPrimaryContainer,
@@ -211,7 +213,7 @@ fun LoadSearchDialog(
                                 )
                             ) {
                                 Text(
-                                    text = savedSearches[index],
+                                    text = searches[index].title,
                                     fontWeight = FontWeight.Bold,
                                     color = colors.onPrimaryContainer,
                                     modifier = Modifier.padding(10.dp)
@@ -230,8 +232,9 @@ fun LoadSearchDialog(
 fun DistributeDialog(
     focusManager: FocusManager,
     context: Context,
+    users: List<User>,
     setShowDialog: (Boolean) -> Unit,
-    setValue: (List<String>) -> Unit
+    setValue: (List<User>) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -250,7 +253,7 @@ fun DistributeDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = context.getString(R.string.create_distribution_dialog_title),
+                            text = context.getString(if (users.isEmpty()) R.string.no_users_selected_error else R.string.create_distribution_dialog_title),
                             color = colors.onSurface,
                         )
                         Icon(
@@ -265,9 +268,6 @@ fun DistributeDialog(
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
-
-                    val users = mutableListOf<User>()
-                    users.addAll(userList.map { it.value.copy(selected = true) })
 
                     LazyColumn(
                         modifier = Modifier
@@ -319,19 +319,20 @@ fun DistributeDialog(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    if (users.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(20.dp))
 
-                    Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
-                        Button(
-                            onClick = {
-                                setValue(userList.filter { it.value.selected }
-                                    .map { it.value.name })
-                                setShowDialog(false)
-                            },
-                            shape = RoundedCornerShape(50.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = context.getString(R.string.submit_distribution_text))
+                        Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+                            Button(
+                                onClick = {
+                                    setValue(users.filter { it.selected })
+                                    setShowDialog(false)
+                                },
+                                shape = RoundedCornerShape(50.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = context.getString(R.string.submit_distribution_text))
+                            }
                         }
                     }
                 }
@@ -372,6 +373,7 @@ fun DistributeDialogPreview() {
         DistributeDialog(
             focusManager = LocalFocusManager.current,
             context = LocalContext.current,
+            users = userList,
             setShowDialog = {},
             setValue = {})
     }

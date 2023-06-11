@@ -26,4 +26,21 @@
     <string name="create_distribution_dialog_title">Select users to distribute to</string>
     <string name="submit_distribution_text">Distribute</string>
     <string name="select_user_dialog_title">Select user</string>
+    <string name="select_tag_dialog_title">Select tag</string>
+    <string name="tag_suggestions_card_title">Suggested Tags:</string>
+    <string name="selected_tags_card_title">Selected Tags:</string>
+    <string name="item_description_text_field">Enter description</string>
+    <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
+    <string name="add_tag_card_title">Add tag</string>
+    <string name="home_bottom_text">Amount due:</string>
+    <string name="tags_page_title">Manage tags</string>
+    <string name="home_icon_description">home icon</string>
+    <string name="add_icon_description">plus icon</string>
+    <string name="search_icon_description">magnifiying glass icon</string>
+    <string name="delete_icon_description">trash can icon</string>
+    <string name="submit_tag_edit_button_text">Save changes</string>
+    <string name="add_keyword_placeholder">Add Keyword</string>
+    <string name="edit_tag_dialog_title">Edit tag</string>
+    <string name="close_icon_description">cross icon</string>
+    <string name="add_tag_placeholder">Create tag</string>
 </resources>

@@ -26,11 +26,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import de.rwhtaachen.kohlekompass.data.examples.savedSearches
-import de.rwhtaachen.kohlekompass.home.TopNavBar
+import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.addSavedSearch
+import de.rwhtaachen.kohlekompass.home.TopNavBarWithSearchBar
+import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
+import java.time.LocalDate
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,26 +46,54 @@ fun AdvancedSearch(
 ) {
     val mainSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val tagSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
-    val fromDate = remember { mutableStateOf("") }
-    val toDate = remember { mutableStateOf("") }
+    val startDate = remember { mutableStateOf<LocalDate?>(null) }
+    val endDate = remember { mutableStateOf<LocalDate?>(null) }
+    val users = remember { UserManager.getUserList() }
+    val tags = remember { TagManager.getMutableTagList() }
+
 
     val showSaveSearchDialog = remember { mutableStateOf(false) }
     if (showSaveSearchDialog.value) {
         InputFieldsDialog(
             title = context.getString(R.string.save_search_dialog_title),
             submitButtonText = context.getString(R.string.save_search_dialog_submit_button_text),
-            fields = listOf("Name"),
-            setShowDialog = { showSaveSearchDialog.value = it }) {
+            fields = listOf("Title"),
+            setShowDialog = { showSaveSearchDialog.value = it }) { it ->
             showSaveSearchDialog.value = false
-            savedSearches.add(it["Name"]!!)
+            addSavedSearch(
+                SavedAdvancedSearch(
+                    title = it["Title"]!!,
+                    query = mainSearchBarState.value.text,
+                    startDelta = if (startDate.value == null) null else (LocalDate.now()
+                        .toEpochDay() - (startDate.value as LocalDate).toEpochDay()).toInt(),
+                    endDelta = if (endDate.value == null) null else (LocalDate.now()
+                        .toEpochDay() - (endDate.value as LocalDate).toEpochDay()).toInt(),
+                    tags = if (tags.all { tag -> tag.value.selected }) null
+                    else tags.filter { tag -> tag.value.selected }.map { it.value }.toSet(),
+                    users = if (users.all { user -> user.value.selected }) null
+                    else users.filter { user -> user.value.selected }.map { it.value }.toSet(),
+                )
+            )
         }
     }
 
     val showLoadSearchDialog = remember { mutableStateOf(false) }
     if (showLoadSearchDialog.value) {
-        LoadSearchDialog(context = context, setShowDialog = { showLoadSearchDialog.value = it }) {
+        LoadSearchDialog(
+            context = context,
+            setShowDialog = { showLoadSearchDialog.value = it }) { search ->
             showLoadSearchDialog.value = false
-            // TODO: Load search
+            mainSearchBarState.value = TextFieldValue(search.query ?: "")
+            startDate.value = if (search.startDelta != null) LocalDate.now()
+                .plusDays(search.startDelta.toLong()) else null
+            endDate.value = if (search.endDelta != null) LocalDate.now()
+                .plusDays(search.endDelta.toLong()) else null
+            if (search.tags != null) tags.forEach { tag ->
+                tag.value = tag.value.copy(selected = search.tags.any{it.name == tag.value.name})
+            }
+            if (search.users != null) users.forEach { user ->
+                user.value = user.value.copy(selected = search.users.any{it.name == user.value.name})
+            }
         }
     }
 
@@ -72,6 +102,7 @@ fun AdvancedSearch(
         DistributeDialog(
             context = context,
             focusManager = focusManager,
+            users = users.map { it.value }.filter { it.selected },
             setShowDialog = { showDistributeDialog.value = it }) {
             showDistributeDialog.value = false
             // TODO: Create Distribution with users
@@ -87,12 +118,13 @@ fun AdvancedSearch(
                     onTap = { focusManager.clearFocus() })
             },
         topBar = {
-            TopNavBar(
+            TopNavBarWithSearchBar(
                 searchBarState = mainSearchBarState,
                 drawerState = drawerState,
                 scope = scope,
                 focusManager = focusManager,
-                context = context
+                context = context,
+                selectedPage = remember { mutableStateOf(2) }
             )
         },
         content = { padding ->
@@ -109,24 +141,25 @@ fun AdvancedSearch(
                         DatePickerCard(
                             dateDescription = context.getString(R.string.start_date),
                             defaultText = context.getString(R.string.empty_date_format),
-                            date = fromDate,
+                            context = context,
+                            date = startDate,
                         )
                     }
                     Column(modifier = Modifier.weight(1f)) {// Date selection
                         DatePickerCard(
                             dateDescription = context.getString(R.string.end_date),
                             defaultText = context.getString(R.string.today),
-                            date = toDate,
+                            context = context,
+                            date = endDate,
                         )
                     }
                 }
                 Row(Modifier.weight(3f, true)) {// Tag and user selection
                     Column(modifier = Modifier.weight(1f)) {// Tag selection
-                        TagSelection(tagSearchBarState, focusManager, context)
+                        TagSelection(tagSearchBarState, focusManager, tags, context)
                     }
                     Column(modifier = Modifier.weight(1f)) {// User selection
-                        // empty space to align with tag selection
-                        UserSelection(focusManager, context)
+                        UserSelection(focusManager, context, users)
                     }
                 }
                 Row {
