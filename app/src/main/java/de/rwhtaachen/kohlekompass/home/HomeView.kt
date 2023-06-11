@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -12,10 +13,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -41,15 +47,20 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.SearchField
+import de.rwhtaachen.kohlekompass.advancedSearch.User
+import de.rwhtaachen.kohlekompass.data.examples.tags
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -86,7 +97,8 @@ fun HomePage(
                     ContentList(
                         state = searchBarState,
                         focusManager = focusManager,
-                        padding = padding
+                        padding = padding,
+                        context = context
                     )
                 }
                 BottomBar(context = context)
@@ -208,7 +220,8 @@ fun BottomBar(context: Context) {
 fun ContentList(
     state: MutableState<TextFieldValue>,
     focusManager: FocusManager,
-    padding: PaddingValues
+    padding: PaddingValues,
+    context: Context
 ) {
     LazyColumn(
         modifier = Modifier
@@ -226,16 +239,18 @@ fun ContentList(
                 || item.title.lowercase().contains(state.value.text.lowercase())
                 || item.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
-                ContentItem(item)
+                ContentItem(item, context = context)
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentItem(item: Item) {
+fun ContentItem(item: Item, context: Context) {
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
+    val tags = item.tags.toList()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,16 +260,109 @@ fun ContentItem(item: Item) {
             .padding(10.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(item.title, color = colors.onPrimaryContainer)
+                Text(item.title, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
                 Text(item.user.name, color = colors.onPrimaryContainer)
+                Text(item.date.toString(), color = colors.onPrimaryContainer)
             }
-            Text(item.amount, color = colors.onPrimaryContainer)
+            Column(
+                Modifier
+                    .weight(1f, true)
+                    .fillMaxHeight()
+                    .padding(10.dp, 0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                if (tags.size == 1) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Card(
+                            modifier = Modifier.padding(2.dp),
+                            colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
+                            border = BorderStroke(1.dp, colors.onSecondaryContainer),
+                            shape = MaterialTheme.shapes.extraSmall
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(2.dp)
+                                        .size(20.dp),
+                                    painter = painterResource(id = R.drawable.outline_sell_24),
+                                    contentDescription = context.getString(R.string.tag_icon_description)
+                                )
+                                Text(
+                                    tags[0].name.replaceFirstChar { it.uppercase() },
+                                    modifier = Modifier.padding(2.dp)
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Adaptive(30.dp)) {
+                        items(tags.size) {
+                            Card(
+                                modifier = Modifier.padding(2.dp),
+                                colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
+                                border = BorderStroke(1.dp, colors.onSecondaryContainer),
+                                shape = MaterialTheme.shapes.extraSmall
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(2.dp)
+                                            .size(20.dp),
+                                        painter = painterResource(id = R.drawable.outline_sell_24),
+                                        contentDescription = context.getString(R.string.tag_icon_description)
+                                    )
+                                    Text(
+                                        tags[it].name.replaceFirstChar { it.uppercase() },
+                                        modifier = Modifier.padding(2.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Text(item.amount, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun ContentItemPreview() {
+    KohleKompassTheme {
+        ContentItem(
+            Item(
+                "Test item",
+                User("Paul"),
+                "42.42",
+                LocalDate.now(),
+                mutableSetOf(
+                    tags["groceries"]!!,
+                    tags["travel"]!!,
+                    tags["toiletries"]!!,
+                    tags["bills"]!!,
+                    tags["dining"]!!,
+                    tags["entertainment"]!!
+                )
+            ),
+            context = LocalContext.current
+        )
     }
 }
 
