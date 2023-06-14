@@ -135,7 +135,7 @@ fun ManageTags(
                 },
             )
         },
-        content = { padding ->
+        content = { _ ->
             Column {
                 LazyColumn(
                     Modifier

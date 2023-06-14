@@ -60,15 +60,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.data.source.example.tags
-import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.addItem.AddItemPageContent
 import de.rwhtaachen.kohlekompass.addItem.AddTagDialog
 import de.rwhtaachen.kohlekompass.addItem.SelectUserDialog
-import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.itemList
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -88,7 +86,7 @@ fun HomePage(
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val showEditItemDialog = remember { mutableStateOf(false) }
-    val currentItem = remember { mutableStateOf<Item?>(null) }
+    val currentItem = remember { mutableStateOf<Transaction?>(null) }
 
     if (showEditItemDialog.value) {
         EditItemDialog(
@@ -400,7 +398,7 @@ fun EditItemDialog(
     setValue: (Transaction) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    val date = remember { mutableStateOf(item.date) }
+    val date = remember { mutableStateOf(item.value_date) }
     val selectedUser = remember { mutableStateOf(item.user) }
     val textFieldState = remember { mutableStateOf(TextFieldValue(item.title)) }
     val amountTextFieldState = remember {

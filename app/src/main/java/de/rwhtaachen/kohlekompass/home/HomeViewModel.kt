@@ -2,16 +2,14 @@ package de.rwhtaachen.kohlekompass.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import de.rwhtaachen.kohlekompass.data.Item
+import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.itemList
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 
-class ItemManager() {
-
+class ItemManager {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
         fun addItem(item: Transaction) {
@@ -31,8 +29,8 @@ class ItemManager() {
             item.title = newItem.title
             item.user = newItem.user
             item.amount = newItem.amount
-            item.date = newItem.date
-            TagManager.getTagList().forEach() { tag ->
+            item.value_date = newItem.value_date
+            TagManager.getTagList().forEach { tag ->
                 if (newItem.tags.any { tag.value.name == it.name }) {
                     item.tags.add(tag.value)
                 } else {
