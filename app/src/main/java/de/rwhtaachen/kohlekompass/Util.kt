@@ -67,6 +67,9 @@ fun AutoScalingText(
     )
 }
 
+class ItemNotEditableException(message: String) : Exception(message)
+
+
 /**
  * Darkens the color by 15%
  * Used to change the color of a card when it is selected.

@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,8 @@ fun DatePickerCard(
     dateDescription: String,
     defaultText: String,
     context: Context,
-    date: MutableState<LocalDate?>
+    date: MutableState<LocalDate?>,
+    padding: PaddingValues = PaddingValues(5.dp)
 ) {
     val colors = MaterialTheme.colorScheme
     val calendar = Calendar.getInstance()
@@ -55,7 +57,7 @@ fun DatePickerCard(
     )
     Card(
         modifier = Modifier
-            .padding(5.dp)
+            .padding(padding)
             .fillMaxWidth()
             .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium)
             .clickable(onClick = { datePickerDialog.show() }),
@@ -77,6 +79,63 @@ fun DatePickerCard(
             )
             Text(
                 if (date.value == null) defaultText else date.value.toString(),
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimaryContainer
+            )
+            Icon(
+                Icons.Default.DateRange,
+                contentDescription = "open menu",
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(24.dp),
+                tint = colors.onPrimaryContainer
+            )
+        }
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun DatePickerCard(
+    dateDescription: String,
+    context: Context,
+    padding: PaddingValues = PaddingValues(5.dp),
+    date: MutableState<LocalDate>
+) {
+    val colors = MaterialTheme.colorScheme
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            date.value = LocalDate.of(mYear, mMonth, mDayOfMonth)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+    )
+    Card(
+        modifier = Modifier
+            .padding(padding)
+            .fillMaxWidth()
+            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium)
+            .clickable(onClick = { datePickerDialog.show() }),
+        colors = CardDefaults.cardColors(
+            containerColor = colors.primaryContainer
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                "$dateDescription ",
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimaryContainer
+            )
+            Text(
+                date.value.toString(),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimaryContainer
             )

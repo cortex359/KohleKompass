@@ -1,5 +1,8 @@
 package de.rwhtaachen.kohlekompass.data
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import de.rwhtaachen.kohlekompass.ItemNotEditableException
 import java.time.LocalDate
 
 /**
@@ -17,4 +20,53 @@ data class Transaction(
     val local_date: LocalDate,
     val sync_date: LocalDate,
     val tags: MutableSet<Tag>
-)
+) {
+    var title: String = title
+        set(value) {
+            if(this.isEditable.value) {
+                field = value
+            } else {
+                throw ItemNotEditableException("Item is not editable")
+            }
+        }
+    var user: User = user
+        set(value) {
+            if(this.isEditable.value) {
+                field = value
+            } else {
+                throw ItemNotEditableException("Item is not editable")
+            }
+        }
+    var amount: Int = amount
+        set(value) {
+            if(this.isEditable.value) {
+                field = value
+            } else {
+                throw ItemNotEditableException("Item is not editable")
+            }
+        }
+    var date: LocalDate = date
+        set(value) {
+            if(isEditable.value) {
+                field = value
+            } else {
+                throw ItemNotEditableException("Item is not editable")
+            }
+        }
+    val tags: MutableSet<Tag>
+    var isEditable : MutableState<Boolean> = mutableStateOf(true)
+        get() {
+            // todo implement business logic that controls if a tag is editable or not
+            // currently all items are editable
+            return mutableStateOf(true)
+        }
+        private set
+
+    init {
+        this.title = title
+        this.user = user
+        this.amount = amount
+        this.date = date
+        this.tags = tags
+    }
+}

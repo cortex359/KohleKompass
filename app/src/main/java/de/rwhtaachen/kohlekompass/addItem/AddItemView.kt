@@ -9,17 +9,24 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
@@ -27,6 +34,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,14 +61,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
+import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
+import de.rwhtaachen.kohlekompass.data.Transaction
+import de.rwhtaachen.kohlekompass.home.ItemManager
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
-import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -72,13 +86,18 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItem(
-    focusManager: FocusManager, context: Context, drawerState: DrawerState, scope: CoroutineScope
+    focusManager: FocusManager,
+    context: Context,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    selectedPage: MutableState<Int>
 ) {
     val colors = MaterialTheme.colorScheme
-    val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
-    val date = remember { mutableStateOf(LocalDate.now()) }
+    val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val selectedUser = remember { mutableStateOf(UserManager.getCurrentUser()) }
     val showSelectUserDialog = remember { mutableStateOf(false) }
+    val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
+    val amountTextFieldState = remember { mutableStateOf(TextFieldValue("")) }
 
     if (showSelectUserDialog.value) {
         SelectUserDialog(
@@ -104,7 +123,7 @@ fun AddItem(
             { tag ->
                 tags[tags.indexOf(tag)].value = tag.value.copy(selected = true)
                 showAddTagDialog.value = false
-            }
+            },
         )
     }
     Scaffold(
@@ -125,12 +144,19 @@ fun AddItem(
                             modifier = Modifier.weight(weight = 1f, fill = true),
                             textAlign = TextAlign.Center
                         )
-                        Icon(
-                            Icons.Default.Menu,
-                            contentDescription = context.getString(R.string.open_menu),
-                            tint = Color.Transparent,
-                            modifier = Modifier.padding(5.dp)
-                        )
+                        // go to home page
+                        IconButton(
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                selectedPage.value = 0
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Home,
+                                contentDescription = context.getString(R.string.home_page),
+                                tint = colors.primary
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -154,124 +180,199 @@ fun AddItem(
                 )
         },
         content = { padding ->
-            Column(
+            AddItemPageContent(
+                padding = padding,
+                focusManager = focusManager,
+                context = context,
+                date = selectedDate,
+                selectedUser = selectedUser,
+                showSelectUserDialog = showSelectUserDialog,
+                showAddTagDialog = showAddTagDialog,
+                tags = tags,
+                textFieldState = textFieldState,
+                amountTextFieldState = amountTextFieldState
+            )
+        }
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddItemPageContent(
+    padding: PaddingValues,
+    focusManager: FocusManager,
+    context: Context,
+    date: MutableState<LocalDate>,
+    selectedUser: MutableState<User>,
+    showSelectUserDialog: MutableState<Boolean>,
+    showAddTagDialog: MutableState<Boolean>,
+    tags: MutableList<MutableState<Tag>>,
+    submitItem: (Transaction) -> Unit = { ItemManager.addItem(it) },
+    submitButtonText: String = context.getString(R.string.add_item_submit_button_text),
+    textFieldState: MutableState<TextFieldValue>,
+    amountTextFieldState: MutableState<TextFieldValue>
+) {
+    val colors = MaterialTheme.colorScheme
+    Column(
+        modifier = Modifier
+            .padding(padding)
+            .padding(20.dp)
+    ) {
+        Row {
+            TextField(
                 modifier = Modifier
-                    .padding(padding)
-                    .padding(20.dp)
-            ) {
-                Row {
-                    TextField(
+                    .fillMaxWidth()
+                    .border(
+                        BorderStroke(
+                            width = 1.dp,
+                            color = colors.onPrimary
+                        ),
+                        shape = RoundedCornerShape(50)
+                    ),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.White,
+                    cursorColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                trailingIcon = {
+                    if (textFieldState.value != TextFieldValue("")) {
+                        IconButton(
+                            onClick = {
+                                focusManager.clearFocus()
+                                textFieldState.value = TextFieldValue("")
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = context.getString(R.string.close_icon_description)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                shape = RoundedCornerShape(50),
+                placeholder = {
+                    Text(
+                        context.getString(R.string.item_description_text_field),
+                        color = colors.onPrimary
+                    )
+                },
+                value = textFieldState.value,
+                onValueChange = {
+                    textFieldState.value = it
+                }
+            )
+        }
+        Row(modifier = Modifier.height(100.dp)) {
+            Column(Modifier.weight(1f)) {
+                DatePickerCard(
+                    dateDescription = "",
+                    context = context,
+                    date = date,
+                    padding = PaddingValues(5.dp, 5.dp, 2.5.dp, 2.5.dp)
+                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showSelectUserDialog.value = true }
+                        .padding(5.dp, 2.5.dp, 2.5.dp, 5.dp)
+                        .border(
+                            1.dp,
+                            colors.onPrimaryContainer,
+                            MaterialTheme.shapes.medium
+                        ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colors.primaryContainer
+                    )
+                ) {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(
-                                BorderStroke(
-                                    width = 1.dp,
-                                    color = colors.onPrimary
-                                ),
-                                shape = RoundedCornerShape(50)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color.White,
-                            cursorColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
-                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
-                            focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
-                            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        trailingIcon = {
-                            if (textFieldState.value != TextFieldValue("")) {
-                                IconButton(
-                                    onClick = {
-                                        focusManager.clearFocus()
-                                        textFieldState.value = TextFieldValue("")
-                                    }
-                                ) {
-                                    Icon(
-                                        Icons.Default.Close,
-                                        contentDescription = ""
-                                    )
-                                }
-                            }
-                        },
-                        shape = RoundedCornerShape(50),
-                        placeholder = {
-                            Text(
-                                context.getString(R.string.item_description_text_field),
-                                color = colors.onPrimary
-                            )
-                        },
-                        value = textFieldState.value,
-                        onValueChange = {
-                            textFieldState.value = it
-                        }
-                    )
-                }
-                Row {
-                    Column(Modifier.weight(1f)) {
-                        DatePickerCard(
-                            dateDescription = "",
-                            defaultText = context.getString(R.string.today),
-                            context = context,
-                            date = date
+                            .padding(5.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = selectedUser.value.name,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onPrimaryContainer,
+                            modifier = Modifier.padding(5.dp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_person_outline_24),
+                            contentDescription = context.getString(R.string.user_icon_description),
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .size(24.dp),
+                            tint = colors.onPrimaryContainer
                         )
                     }
-                    Column(Modifier.weight(1f)) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { showSelectUserDialog.value = true }
-                                .padding(5.dp)
-                                .border(
-                                    1.dp,
-                                    colors.onPrimaryContainer,
-                                    MaterialTheme.shapes.medium
-                                ),
-                            colors = CardDefaults.cardColors(
-                                containerColor = colors.primaryContainer
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(5.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = selectedUser.value.name,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.onPrimaryContainer,
-                                    modifier = Modifier.padding(5.dp)
-                                )
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_person_outline_24),
-                                    contentDescription = context.getString(R.string.user_icon_description),
-                                    modifier = Modifier
-                                        .padding(5.dp)
-                                        .size(24.dp),
-                                    tint = colors.onPrimaryContainer
-                                )
-                            }
-                        }
-
-                    }
                 }
-                Row {
-                    TagSelection(
-                        context = context,
-                        searchFieldState = textFieldState,
-                        focusManager = focusManager,
-                        tags = tags,
-                        showAddTagDialog = showAddTagDialog
+            }
+            Column(Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AmountTextField(
+                        amountTextFieldState = amountTextFieldState,
+                        context = context
                     )
                 }
             }
         }
-    )
+        Row {
+            TagSelection(
+                context = context,
+                searchFieldState = textFieldState,
+                focusManager = focusManager,
+                tags = tags,
+                showAddTagDialog = showAddTagDialog
+            )
+        }
+        Row {// submit button
+            Button(
+                onClick = {
+                    if (textFieldState.value.text != "") {
+                        val item = Transaction(
+                            title = textFieldState.value.text,
+                            amount = amountTextFieldState.value.toString().toDouble(),
+                            value_date = date.value,
+                            local_date = LocalDate.now(),
+                            sync_date = LocalDate.now(),
+                            user = selectedUser.value,
+                            tags = tags.filter { it.value.selected }.map { it.value }
+                                .toMutableSet()
+                        )
+                        submitItem(item)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp, 5.dp, 5.dp, 0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colors.secondary,
+                    contentColor = colors.onSecondaryContainer
+                )
+            ) {
+                Text(
+                    submitButtonText,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
 }
 
 
@@ -410,17 +511,17 @@ fun TagSuggestions(
     focusManager: FocusManager
 ) {
     val colors = MaterialTheme.colorScheme
+    val suggestedTags =
+        (if (textFieldState.value.text == "") remember { mutableStateListOf() }
+        else tags.filter { tag ->
+            !tag.value.selected && (
+                    tag.value.keywords.any { k -> k.contains(textFieldState.value.text.lowercase()) }
+                            || tag.value.keywords.any { k ->
+                        textFieldState.value.text.lowercase().contains(k)
+                    })
+        }).toMutableList()
 
     LazyRow(content = {
-        val suggestedTags =
-            (if (textFieldState.value.text == "") mutableStateListOf()
-            else tags.filter { tag ->
-                !tag.value.selected && (
-                        tag.value.keywords.any { k -> k.contains(textFieldState.value.text.lowercase()) }
-                                || tag.value.keywords.any { k ->
-                            textFieldState.value.text.lowercase().contains(k)
-                        })
-            }).toMutableList()
         items(suggestedTags.size) {
             Card(
                 modifier = Modifier
@@ -454,7 +555,59 @@ fun TagSuggestions(
             }
         }
     })
+    if (suggestedTags.isEmpty()) {
+        Spacer(modifier = Modifier.height(35.dp))
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AmountTextField(
+    context: Context,
+    amountTextFieldState: MutableState<TextFieldValue>,
+) {
+    val colors = MaterialTheme.colorScheme
+    Card(
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth(),
+        border = BorderStroke(1.dp, colors.onPrimaryContainer),
+        colors = CardDefaults.cardColors(
+            containerColor = colors.primaryContainer
+        )
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            TextField(
+                value = amountTextFieldState.value,
+                onValueChange = { amountTextFieldState.value = it },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                trailingIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.outline_kohlekompass),
+                        contentDescription = context.getString(R.string.kohlekompass_icon_description),
+                        modifier = Modifier.size(40.dp),
+                        tint = colors.onPrimaryContainer
+                    )
+                },
+                shape = RoundedCornerShape(5.dp),
+                textStyle = LocalTextStyle.current.copy(
+                    color = colors.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = colors.primaryContainer,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = colors.onPrimaryContainer,
+                    textColor = colors.onPrimaryContainer
+                )
+            )
+        }
+    }
 }
 
 
@@ -463,12 +616,13 @@ fun TagSuggestions(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItemPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         AddItem(
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             context = LocalContext.current,
             scope = rememberCoroutineScope(),
+            selectedPage = mutableStateOf(0)
         )
     }
 }

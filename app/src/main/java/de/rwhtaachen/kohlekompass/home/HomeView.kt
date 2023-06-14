@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,11 +20,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,6 +38,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -53,10 +58,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.tags
 import de.rwhtaachen.kohlekompass.data.source.example.userList
+import de.rwhtaachen.kohlekompass.addItem.AddItemPageContent
+import de.rwhtaachen.kohlekompass.addItem.AddTagDialog
+import de.rwhtaachen.kohlekompass.addItem.SelectUserDialog
+import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.data.source.example.itemList
+import de.rwhtaachen.kohlekompass.data.source.example.tags
+import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
@@ -74,6 +87,20 @@ fun HomePage(
     selectedPage: MutableState<Int>
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
+    val showEditItemDialog = remember { mutableStateOf(false) }
+    val currentItem = remember { mutableStateOf<Item?>(null) }
+
+    if (showEditItemDialog.value) {
+        EditItemDialog(
+            context = context,
+            focusManager = focusManager,
+            item = currentItem.value!!,
+            setShowDialog = { showEditItemDialog.value = it },
+            setValue = {
+                ItemManager.updateItem(currentItem.value!!, it)
+            })
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -98,7 +125,9 @@ fun HomePage(
                         state = searchBarState,
                         focusManager = focusManager,
                         padding = padding,
-                        context = context
+                        context = context,
+                        showEditItemDialog = showEditItemDialog,
+                        currentItem = currentItem
                     )
                 }
                 BottomBar(context = context)
@@ -221,7 +250,9 @@ fun ContentList(
     state: MutableState<TextFieldValue>,
     focusManager: FocusManager,
     padding: PaddingValues,
-    context: Context
+    context: Context,
+    showEditItemDialog: MutableState<Boolean>,
+    currentItem: MutableState<Transaction?>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -232,14 +263,19 @@ fun ContentList(
                 })
             }
     ) {
-        val items = getItems()
+        val items = ItemManager.getItemList()
         items(items.size) { index ->
             val item = items[index]
             if (state.value.text.isEmpty()
-                || item.title.lowercase().contains(state.value.text.lowercase())
-                || item.user.name.lowercase().contains(state.value.text.lowercase())
+                || item.value.title.lowercase().contains(state.value.text.lowercase())
+                || item.value.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
-                ContentItem(item, context = context)
+                ContentItem(
+                    item,
+                    context = context,
+                    showEditItemDialog = showEditItemDialog,
+                    currentItem = currentItem
+                )
             }
         }
     }
@@ -247,10 +283,15 @@ fun ContentList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentItem(item: Transaction, context: Context) {
+fun ContentItem(
+    item: MutableState<Transaction>,
+    context: Context,
+    showEditItemDialog: MutableState<Boolean>,
+    currentItem: MutableState<Transaction?>
+) {
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
-    val tags = item.tags.toList()
+    val tags = item.value.tags.toList()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -258,6 +299,10 @@ fun ContentItem(item: Transaction, context: Context) {
             .background(colors.primaryContainer, shape)
             .border(1.dp, colors.onPrimaryContainer, shape)
             .padding(10.dp)
+            .clickable {
+                currentItem.value = item.value
+                showEditItemDialog.value = true
+            }
     ) {
         Row(
             modifier = Modifier
@@ -266,9 +311,13 @@ fun ContentItem(item: Transaction, context: Context) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(item.title, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
-                Text(item.user.name, color = colors.onPrimaryContainer)
-                Text(item.value_date.toString(), color = colors.onPrimaryContainer)
+                Text(
+                    item.value.title,
+                    color = colors.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(item.value.user.name, color = colors.onPrimaryContainer)
+                Text(item.value.value_date.toString(), color = colors.onPrimaryContainer)
             }
             Column(
                 Modifier
@@ -336,8 +385,133 @@ fun ContentItem(item: Transaction, context: Context) {
                     }
                 }
             }
-            Text(item.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
+            Text(item.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun EditItemDialog(
+    item: Transaction,
+    focusManager: FocusManager,
+    context: Context,
+    setShowDialog: (Boolean) -> Unit,
+    setValue: (Transaction) -> Unit
+) {
+    val colors = MaterialTheme.colorScheme
+    val date = remember { mutableStateOf(item.date) }
+    val selectedUser = remember { mutableStateOf(item.user) }
+    val textFieldState = remember { mutableStateOf(TextFieldValue(item.title)) }
+    val amountTextFieldState = remember {
+        mutableStateOf(TextFieldValue(StringBuilder(item.amount.toString()).apply {
+            insert(
+                item.amount.toString().length - 2,
+                '.'
+            )
+        }.toString()))
+    }
+
+    val showSelectUserDialog = remember { mutableStateOf(false) }
+    val showAddTagDialog = remember { mutableStateOf(false) }
+
+    val itemTags = TagManager.getMutableTagList()
+    itemTags.forEach { tag -> tag.value.selected = item.tags.contains(tag.value) }
+    val tags = remember { itemTags }
+
+    if (showSelectUserDialog.value) {
+        SelectUserDialog(
+            focusManager = focusManager,
+            context = context,
+            { showSelectUserDialog.value = it },
+            {
+                selectedUser.value = it
+                showSelectUserDialog.value = false
+            }
+        )
+    }
+
+    if (showAddTagDialog.value) {
+        AddTagDialog(
+            focusManager = focusManager,
+            context = context,
+            tags = tags,
+            { showAddTagDialog.value = it },
+            { tag ->
+                tags[tags.indexOf(tag)].value = tag.value.copy(selected = true)
+                showAddTagDialog.value = false
+            }
+        )
+    }
+
+    Dialog(onDismissRequest = { setShowDialog(false) }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colors.surface
+        ) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .padding(25.dp, 25.dp, 25.dp, 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = context.getString(R.string.edit_item_dialog_title),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = colors.onPrimaryContainer,
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "",
+                            tint = colors.onPrimaryContainer,
+                            modifier = Modifier
+                                .width(30.dp)
+                                .height(30.dp)
+                                .clickable { setShowDialog(false) }
+                        )
+                    }
+                    AddItemPageContent(
+                        padding = PaddingValues(5.dp),
+                        focusManager = focusManager,
+                        context = context,
+                        date = date,
+                        selectedUser = selectedUser,
+                        showSelectUserDialog = showSelectUserDialog,
+                        showAddTagDialog = showAddTagDialog,
+                        tags = tags,
+                        submitButtonText = context.getString(R.string.edit_item_dialog_submit_button_text),
+                        submitItem = { editedItem ->
+                            setValue(editedItem)
+                            setShowDialog(false)
+                        },
+                        textFieldState = textFieldState,
+                        amountTextFieldState = amountTextFieldState,
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun EditItemDialogPreview() {
+    KohleKompassTheme {
+        EditItemDialog(
+            context = LocalContext.current,
+            focusManager = LocalFocusManager.current,
+            setShowDialog = {},
+            setValue = {},
+            item = itemList[0]
+        )
     }
 }
 
@@ -347,23 +521,29 @@ fun ContentItem(item: Transaction, context: Context) {
 fun ContentItemPreview() {
     KohleKompassTheme {
         ContentItem(
-            Transaction(
-                title = "Grocery shopping",
-                amount = 50.25,
-                user = userList[0],
-                value_date = LocalDate.now(),
-                local_date = LocalDate.now(),
-                sync_date = LocalDate.now(),
-                tags = mutableSetOf(
-                    tags["groceries"]!!,
-                    tags["travel"]!!,
-                    tags["toiletries"]!!,
-                    tags["bills"]!!,
-                    tags["dining"]!!,
-                    tags["entertainment"]!!
+            remember {
+                mutableStateOf(
+                    Transaction(
+                        title = "Grocery shopping",
+                        amount = 50.25,
+                        user = userList[0],
+                        value_date = LocalDate.now(),
+                        local_date = LocalDate.now(),
+                        sync_date = LocalDate.now(),
+                        tags = mutableSetOf(
+                            tags["groceries"]!!,
+                            tags["travel"]!!,
+                            tags["toiletries"]!!,
+                            tags["bills"]!!,
+                            tags["dining"]!!,
+                            tags["entertainment"]!!
+                        )
+                    )
                 )
-            ),
-            context = LocalContext.current
+            },
+            context = LocalContext.current,
+            showEditItemDialog = remember { mutableStateOf(false) },
+            currentItem = remember { mutableStateOf(null) }
         )
     }
 }

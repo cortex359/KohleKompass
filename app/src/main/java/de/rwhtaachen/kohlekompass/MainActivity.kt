@@ -78,7 +78,8 @@ class MainActivity : ComponentActivity() {
                             focusManager = focusManager,
                             drawerState = drawerState,
                             context = this,
-                            scope = scope
+                            scope = scope,
+                            selectedPage = selectedPage
                         )
                     },
                     Page(
