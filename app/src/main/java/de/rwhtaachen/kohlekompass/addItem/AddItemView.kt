@@ -66,6 +66,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
 import de.rwhtaachen.kohlekompass.advancedSearch.User
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
@@ -93,6 +94,8 @@ fun AddItem(
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val selectedUser = remember { mutableStateOf(UserManager.getCurrentUser()) }
     val showSelectUserDialog = remember { mutableStateOf(false) }
+    val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
+    val amountTextFieldState = remember { mutableStateOf(TextFieldValue("")) }
 
     if (showSelectUserDialog.value) {
         SelectUserDialog(
@@ -176,7 +179,9 @@ fun AddItem(
                 selectedUser = selectedUser,
                 showSelectUserDialog = showSelectUserDialog,
                 showAddTagDialog = showAddTagDialog,
-                tags = tags
+                tags = tags,
+                textFieldState = textFieldState,
+                amountTextFieldState = amountTextFieldState
             )
         }
     )
@@ -196,11 +201,10 @@ fun AddItemPageContent(
     tags: MutableList<MutableState<Tag>>,
     submitItem: (Item) -> Unit = { ItemManager.addItem(it) },
     submitButtonText: String = context.getString(R.string.add_item_submit_button_text),
+    textFieldState: MutableState<TextFieldValue>,
+    amountTextFieldState: MutableState<TextFieldValue>
 ) {
     val colors = MaterialTheme.colorScheme
-    val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
-    val amountTextFieldState = remember { mutableStateOf(TextFieldValue("")) }
-
     Column(
         modifier = Modifier
             .padding(padding)
@@ -308,10 +312,15 @@ fun AddItemPageContent(
                 }
             }
             Column(Modifier.weight(1f)) {
-                AmountTextField(
-                    amountTextFieldState = amountTextFieldState,
-                    context = context
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AmountTextField(
+                        amountTextFieldState = amountTextFieldState,
+                        context = context
+                    )
+                }
             }
         }
         Row {
@@ -322,9 +331,6 @@ fun AddItemPageContent(
                 tags = tags,
                 showAddTagDialog = showAddTagDialog
             )
-        }
-        Row(Modifier.weight(1f, true)) {
-
         }
         Row {// submit button
             Button(
@@ -553,19 +559,17 @@ fun AmountTextField(
     val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier
-            .padding(5.dp, 5.dp, 2.5.dp, 5.dp)
-            .fillMaxSize(),
+            .padding(5.dp)
+            .fillMaxWidth(),
         border = BorderStroke(1.dp, colors.onPrimaryContainer),
         colors = CardDefaults.cardColors(
             containerColor = colors.primaryContainer
         )
     ) {
-        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             TextField(
                 value = amountTextFieldState.value,
                 onValueChange = { amountTextFieldState.value = it },
-                modifier = Modifier
-                    .padding(5.dp, 5.dp, 0.dp, 5.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -574,13 +578,16 @@ fun AmountTextField(
                     Icon(
                         painterResource(id = R.drawable.outline_kohlekompass),
                         contentDescription = context.getString(R.string.kohlekompass_icon_description),
-                        modifier = Modifier
-                            .padding(0.dp, 5.dp),
+                        modifier = Modifier.size(40.dp),
                         tint = colors.onPrimaryContainer
                     )
                 },
                 shape = RoundedCornerShape(5.dp),
-                textStyle = LocalTextStyle.current.copy(color = colors.onPrimaryContainer),
+                textStyle = LocalTextStyle.current.copy(
+                    color = colors.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp
+                ),
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = colors.primaryContainer,
                     focusedIndicatorColor = Color.Transparent,
