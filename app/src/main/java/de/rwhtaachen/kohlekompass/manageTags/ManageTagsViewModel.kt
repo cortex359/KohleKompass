@@ -3,6 +3,7 @@ package de.rwhtaachen.kohlekompass.manageTags
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
+import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.examples.tags
 
 /**

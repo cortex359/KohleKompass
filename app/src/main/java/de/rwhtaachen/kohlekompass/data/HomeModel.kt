@@ -1,7 +1,5 @@
-package de.rwhtaachen.kohlekompass.home
+package de.rwhtaachen.kohlekompass.data
 
-import de.rwhtaachen.kohlekompass.manageTags.Tag
-import de.rwhtaachen.kohlekompass.data.User
 import java.time.LocalDate
 
 /**

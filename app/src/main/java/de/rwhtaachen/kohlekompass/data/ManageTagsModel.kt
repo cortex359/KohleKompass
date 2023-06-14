@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.manageTags
+package de.rwhtaachen.kohlekompass.data
 
 /**
  * Stores a tag with a name, a list of keywords

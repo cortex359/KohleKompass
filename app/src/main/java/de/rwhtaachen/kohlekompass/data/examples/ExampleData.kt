@@ -2,10 +2,10 @@ package de.rwhtaachen.kohlekompass.data.examples
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearch
-import de.rwhtaachen.kohlekompass.manageTags.Tag
-import de.rwhtaachen.kohlekompass.advancedSearch.User
-import de.rwhtaachen.kohlekompass.home.Item
+import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
+import de.rwhtaachen.kohlekompass.data.Tag
+import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.data.Item
 import java.time.LocalDate
 import java.time.Month
 

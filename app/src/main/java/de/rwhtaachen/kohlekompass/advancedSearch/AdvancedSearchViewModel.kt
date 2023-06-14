@@ -3,6 +3,8 @@ package de.rwhtaachen.kohlekompass.advancedSearch
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
+import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
+import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.examples.savedSearches
 import de.rwhtaachen.kohlekompass.data.examples.userList
 

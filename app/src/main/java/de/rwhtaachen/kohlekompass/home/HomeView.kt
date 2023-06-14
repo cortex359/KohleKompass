@@ -54,7 +54,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.advancedSearch.User
+import de.rwhtaachen.kohlekompass.data.Item
+import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.examples.tags
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R

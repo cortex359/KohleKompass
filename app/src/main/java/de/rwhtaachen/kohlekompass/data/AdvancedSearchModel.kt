@@ -1,7 +1,5 @@
 package de.rwhtaachen.kohlekompass.data
 
-import de.rwhtaachen.kohlekompass.manageTags.Tag
-
 
 /**
  * A user represents a person using the app. A user can perform actions on the

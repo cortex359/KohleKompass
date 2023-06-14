@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import de.rwhtaachen.kohlekompass.data.Item
 import de.rwhtaachen.kohlekompass.data.examples.itemList
 
 /**

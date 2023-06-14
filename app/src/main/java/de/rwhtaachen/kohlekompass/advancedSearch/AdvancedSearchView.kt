@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.addSavedSearch
+import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
 import de.rwhtaachen.kohlekompass.home.TopNavBarWithSearchBar
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme

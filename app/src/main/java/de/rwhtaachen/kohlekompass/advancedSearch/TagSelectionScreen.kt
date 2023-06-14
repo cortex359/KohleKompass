@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.cardSelectedColor
 import de.rwhtaachen.kohlekompass.data.examples.tags
-import de.rwhtaachen.kohlekompass.manageTags.Tag
+import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 

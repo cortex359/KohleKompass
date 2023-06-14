@@ -37,8 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import de.rwhtaachen.kohlekompass.manageTags.Tag
-import de.rwhtaachen.kohlekompass.advancedSearch.User
+import de.rwhtaachen.kohlekompass.data.Tag
+import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
