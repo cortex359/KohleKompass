@@ -23,6 +23,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -89,6 +90,7 @@ fun AddItem(
     context: Context,
     drawerState: DrawerState,
     scope: CoroutineScope,
+    selectedPage: MutableState<Int>
 ) {
     val colors = MaterialTheme.colorScheme
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
@@ -142,12 +144,19 @@ fun AddItem(
                             modifier = Modifier.weight(weight = 1f, fill = true),
                             textAlign = TextAlign.Center
                         )
-                        Icon(
-                            Icons.Default.Menu,
-                            contentDescription = context.getString(R.string.open_menu),
-                            tint = Color.Transparent,
-                            modifier = Modifier.padding(5.dp)
-                        )
+                        // go to home page
+                        IconButton(
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                selectedPage.value = 0
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Home,
+                                contentDescription = context.getString(R.string.home_page),
+                                tint = colors.primary
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -611,7 +620,8 @@ fun AddItemPreview() {
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             context = LocalContext.current,
-            scope = rememberCoroutineScope()
+            scope = rememberCoroutineScope(),
+            selectedPage = mutableStateOf(0)
         )
     }
 }
