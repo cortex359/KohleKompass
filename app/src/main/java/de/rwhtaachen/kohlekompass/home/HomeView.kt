@@ -54,15 +54,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.data.Item
-import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -248,7 +247,7 @@ fun ContentList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentItem(item: Item, context: Context) {
+fun ContentItem(item: Transaction, context: Context) {
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     val tags = item.tags.toList()
@@ -269,7 +268,7 @@ fun ContentItem(item: Item, context: Context) {
             Column {
                 Text(item.title, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
                 Text(item.user.name, color = colors.onPrimaryContainer)
-                Text(item.date.toString(), color = colors.onPrimaryContainer)
+                Text(item.value_date.toString(), color = colors.onPrimaryContainer)
             }
             Column(
                 Modifier
@@ -337,7 +336,7 @@ fun ContentItem(item: Item, context: Context) {
                     }
                 }
             }
-            Text(item.amount, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
+            Text(item.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -348,12 +347,14 @@ fun ContentItem(item: Item, context: Context) {
 fun ContentItemPreview() {
     KohleKompassTheme {
         ContentItem(
-            Item(
-                "Test item",
-                User("Paul"),
-                "42.42",
-                LocalDate.now(),
-                mutableSetOf(
+            Transaction(
+                title = "Grocery shopping",
+                amount = 50.25,
+                user = userList[0],
+                value_date = LocalDate.now(),
+                local_date = LocalDate.now(),
+                sync_date = LocalDate.now(),
+                tags = mutableSetOf(
                     tags["groceries"]!!,
                     tags["travel"]!!,
                     tags["toiletries"]!!,
@@ -372,7 +373,7 @@ fun ContentItemPreview() {
 @Preview
 @Composable
 fun HomePageScreenPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         HomePage(
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
@@ -387,7 +388,7 @@ fun HomePageScreenPreview() {
 @Preview
 @Composable
 fun TopNavBarPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         TopNavBarWithSearchBar(
             searchBarState = remember { mutableStateOf(TextFieldValue("")) },
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
