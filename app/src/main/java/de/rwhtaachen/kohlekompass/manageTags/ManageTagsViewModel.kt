@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import de.rwhtaachen.kohlekompass.data.Tag
-import de.rwhtaachen.kohlekompass.data.examples.tags
+import de.rwhtaachen.kohlekompass.data.source.example.tags
 
 /**
  * Manages the tag List. Hands out a fresh copy with all tags unselected to Views

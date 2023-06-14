@@ -3,10 +3,10 @@ package de.rwhtaachen.kohlekompass.advancedSearch
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
+import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.data.User
-import de.rwhtaachen.kohlekompass.data.examples.savedSearches
-import de.rwhtaachen.kohlekompass.data.examples.userList
+import de.rwhtaachen.kohlekompass.data.source.example.savedSearches
+import de.rwhtaachen.kohlekompass.data.source.example.userList
 
 
 /**
@@ -37,17 +37,17 @@ class SavedAdvancedSearchManager {
     companion object {
         //private val savedSearches = mutableSetOf<SavedAdvancedSearch>() todo
 
-        fun addSavedSearch(search: SavedAdvancedSearch) {
+        fun addSavedSearch(search: SavedSearch) {
             savedSearches.add(search)
             // todo
         }
 
-        fun removeSavedSearch(search: SavedAdvancedSearch) {
+        fun removeSavedSearch(search: SavedSearch) {
             savedSearches.remove(search)
             // todo
         }
 
-        fun getSavedSearches() : List<SavedAdvancedSearch> {
+        fun getSavedSearches() : List<SavedSearch> {
             // todo
             return savedSearches.toList()
         }

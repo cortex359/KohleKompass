@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.addSavedSearch
-import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
+import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.home.TopNavBarWithSearchBar
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -62,7 +62,7 @@ fun AdvancedSearch(
             setShowDialog = { showSaveSearchDialog.value = it }) { it ->
             showSaveSearchDialog.value = false
             addSavedSearch(
-                SavedAdvancedSearch(
+                SavedSearch(
                     title = it["Title"]!!,
                     query = mainSearchBarState.value.text,
                     startDelta = if (startDate.value == null) null else (LocalDate.now()

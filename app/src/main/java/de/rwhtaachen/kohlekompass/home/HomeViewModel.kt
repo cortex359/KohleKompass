@@ -3,7 +3,7 @@ package de.rwhtaachen.kohlekompass.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import de.rwhtaachen.kohlekompass.data.Item
-import de.rwhtaachen.kohlekompass.data.examples.itemList
+import de.rwhtaachen.kohlekompass.data.source.example.itemList
 
 /**
  * fetches the items from the database

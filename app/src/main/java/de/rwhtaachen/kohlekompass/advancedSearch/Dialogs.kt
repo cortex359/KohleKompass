@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.getSavedSearches
 import de.rwhtaachen.kohlekompass.cardSelectedColor
-import de.rwhtaachen.kohlekompass.data.SavedAdvancedSearch
+import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.data.User
-import de.rwhtaachen.kohlekompass.data.examples.userList
+import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
@@ -161,7 +161,7 @@ fun InputFieldsDialog(
 fun LoadSearchDialog(
     context: Context,
     setShowDialog: (Boolean) -> Unit,
-    setValue: (SavedAdvancedSearch) -> Unit
+    setValue: (SavedSearch) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
