@@ -336,7 +336,13 @@ fun ContentItem(item: Item, context: Context) {
                     }
                 }
             }
-            Text(item.amount, color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
+            Text(
+                "${item.value.amount / 100}${context.getString(R.string.number_divider)}" +
+                        item.value.amount.toString()
+                            .substring(item.value.amount.toString().length - 2) +
+                        context.getString(R.string.currency_symbol),
+                color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold
+            )
         }
     }
 }
