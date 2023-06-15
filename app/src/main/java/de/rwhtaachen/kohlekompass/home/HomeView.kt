@@ -63,6 +63,7 @@ import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.addItem.AddItemPageContent
 import de.rwhtaachen.kohlekompass.addItem.AddTagDialog
 import de.rwhtaachen.kohlekompass.addItem.SelectUserDialog
+import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.itemList
 import de.rwhtaachen.kohlekompass.data.source.example.tags
@@ -523,7 +524,7 @@ fun ContentItemPreview() {
                 mutableStateOf(
                     Transaction(
                         title = "Grocery shopping",
-                        amount = 50.25,
+                        amount = Money(50.25),
                         user = userList[0],
                         value_date = LocalDate.now(),
                         local_date = LocalDate.now(),

@@ -71,6 +71,7 @@ import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
 import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
+import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.home.ItemManager
 import de.rwhtaachen.kohlekompass.data.Tag
@@ -347,7 +348,7 @@ fun AddItemPageContent(
                     if (textFieldState.value.text != "") {
                         val item = Transaction(
                             title = textFieldState.value.text,
-                            amount = amountTextFieldState.value.toString().toDouble(),
+                            amount = Money(amountTextFieldState.value.toString()),
                             value_date = date.value,
                             local_date = LocalDate.now(),
                             sync_date = LocalDate.now(),

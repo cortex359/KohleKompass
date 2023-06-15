@@ -6,6 +6,7 @@ import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.Transaction
+import de.rwhtaachen.kohlekompass.data.Money
 import java.time.LocalDate
 import java.time.Month
 
@@ -135,7 +136,7 @@ val userList = mutableListOf(
 val itemList = mutableListOf(
     Transaction(
         title = "Grocery shopping",
-        amount = 50.25,
+        amount = Money(50.25),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 8),
         local_date = LocalDate.of(2023, Month.APRIL, 8),
@@ -143,7 +144,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Dinner with friends",
-        amount = 75.60,
+        amount = Money(75.60),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.APRIL, 14),
         local_date = LocalDate.of(2023, Month.APRIL, 14),
@@ -151,7 +152,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 1),
         local_date = LocalDate.of(2023, Month.MAY, 1),
@@ -159,7 +160,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 45.30,
+        amount = Money(45.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 5),
         local_date = LocalDate.of(2023, Month.MAY, 5),
@@ -167,7 +168,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 30.00,
+        amount = Money(30.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 12),
         local_date = LocalDate.of(2023, Month.MAY, 12),
@@ -175,7 +176,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 25.80,
+        amount = Money(25.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 18),
         local_date = LocalDate.of(2023, Month.MAY, 18),
@@ -183,7 +184,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 15.50,
+        amount = Money(15.50),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 22),
         local_date = LocalDate.of(2023, Month.MAY, 22),
@@ -191,7 +192,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 55.75,
+        amount = Money(55.75),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 4),
         local_date = LocalDate.of(2023, Month.JUNE, 4),
@@ -199,7 +200,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 90.00,
+        amount = Money(90.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 7),
         local_date = LocalDate.of(2023, Month.JUNE, 7),
@@ -207,7 +208,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend getaway",
-        amount = 300.00,
+        amount = Money(300.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.JUNE, 10),
         local_date = LocalDate.of(2023, Month.JUNE, 10),
@@ -215,7 +216,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["travel"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 80.25,
+        amount = Money(80.25),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 15),
         local_date = LocalDate.of(2023, Month.JUNE, 15),
@@ -223,7 +224,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 65.40,
+        amount = Money(65.40),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 20),
         local_date = LocalDate.of(2023, Month.JUNE, 20),
@@ -231,7 +232,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircut",
-        amount = 35.00,
+        amount = Money(35.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 24),
         local_date = LocalDate.of(2023, Month.JUNE, 24),
@@ -239,7 +240,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 1),
         local_date = LocalDate.of(2023, Month.APRIL, 1),
@@ -247,7 +248,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 40.10,
+        amount = Money(40.10),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.APRIL, 7),
         local_date = LocalDate.of(2023, Month.APRIL, 7),
@@ -255,7 +256,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.APRIL, 15),
         local_date = LocalDate.of(2023, Month.APRIL, 15),
@@ -263,7 +264,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 35.50,
+        amount = Money(35.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 18),
         local_date = LocalDate.of(2023, Month.APRIL, 18),
@@ -271,7 +272,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 22.80,
+        amount = Money(22.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 25),
         local_date = LocalDate.of(2023, Month.APRIL, 25),
@@ -279,7 +280,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 18.75,
+        amount = Money(18.75),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 2),
         local_date = LocalDate.of(2023, Month.MAY, 2),
@@ -287,7 +288,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 60.30,
+        amount = Money(60.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 8),
         local_date = LocalDate.of(2023, Month.MAY, 8),
@@ -295,7 +296,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 85.00,
+        amount = Money(85.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 13),
         local_date = LocalDate.of(2023, Month.MAY, 13),
@@ -303,7 +304,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend movie marathon",
-        amount = 20.00,
+        amount = Money(20.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 21),
         local_date = LocalDate.of(2023, Month.MAY, 21),
@@ -311,7 +312,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 75.80,
+        amount = Money(75.80),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 27),
         local_date = LocalDate.of(2023, Month.MAY, 27),
@@ -319,7 +320,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 70.15,
+        amount = Money(70.15),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 2),
         local_date = LocalDate.of(2023, Month.JUNE, 2),
@@ -327,7 +328,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircare products",
-        amount = 28.50,
+        amount = Money(28.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 9),
         local_date = LocalDate.of(2023, Month.JUNE, 9),
@@ -335,7 +336,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 1),
         local_date = LocalDate.of(2023, Month.MARCH, 1),
@@ -343,7 +344,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 38.90,
+        amount = Money(38.90),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MARCH, 3),
         local_date = LocalDate.of(2023, Month.MARCH, 3),
@@ -351,7 +352,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MARCH, 9),
         local_date = LocalDate.of(2023, Month.MARCH, 9),
@@ -359,7 +360,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 32.50,
+        amount = Money(32.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MARCH, 15),
         local_date = LocalDate.of(2023, Month.MARCH, 15),
@@ -367,7 +368,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 23.70,
+        amount = Money(23.70),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 21),
         local_date = LocalDate.of(2023, Month.MARCH, 21),
@@ -375,7 +376,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Dinner with friends",
-        amount = 65.50,
+        amount = Money(65.50),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 27),
         local_date = LocalDate.of(2023, Month.JUNE, 27),
@@ -383,7 +384,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 55.75,
+        amount = Money(55.75),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 4),
         local_date = LocalDate.of(2023, Month.JUNE, 4),
@@ -391,7 +392,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 95.00,
+        amount = Money(95.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 11),
         local_date = LocalDate.of(2023, Month.JUNE, 11),
@@ -399,7 +400,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend getaway",
-        amount = 350.00,
+        amount = Money(350.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.JUNE, 16),
         local_date = LocalDate.of(2023, Month.JUNE, 16),
@@ -407,7 +408,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["travel"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 85.25,
+        amount = Money(85.25),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 23),
         local_date = LocalDate.of(2023, Month.JUNE, 23),
@@ -415,7 +416,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 60.40,
+        amount = Money(60.40),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 29),
         local_date = LocalDate.of(2023, Month.JUNE, 29),
@@ -423,7 +424,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircut",
-        amount = 40.00,
+        amount = Money(40.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 3),
         local_date = LocalDate.of(2023, Month.APRIL, 3),
@@ -431,7 +432,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 1),
         local_date = LocalDate.of(2023, Month.MAY, 1),
@@ -439,7 +440,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 42.10,
+        amount = Money(42.10),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 7),
         local_date = LocalDate.of(2023, Month.MAY, 7),
@@ -447,7 +448,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 55.00,
+        amount = Money(55.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 15),
         local_date = LocalDate.of(2023, Month.MAY, 15),
@@ -455,7 +456,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 38.50,
+        amount = Money(38.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 18),
         local_date = LocalDate.of(2023, Month.MAY, 18),
@@ -463,7 +464,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 27.80,
+        amount = Money(27.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 25),
         local_date = LocalDate.of(2023, Month.MAY, 25),
@@ -471,7 +472,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 16.75,
+        amount = Money(16.75),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 2),
         local_date = LocalDate.of(2023, Month.JUNE, 2),
@@ -479,7 +480,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 65.30,
+        amount = Money(65.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 8),
         local_date = LocalDate.of(2023, Month.JUNE, 8),
@@ -487,7 +488,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 80.00,
+        amount = Money(80.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 13),
         local_date = LocalDate.of(2023, Month.JUNE, 13),
@@ -495,7 +496,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend getaway",
-        amount = 320.00,
+        amount = Money(320.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.JUNE, 20),
         local_date = LocalDate.of(2023, Month.JUNE, 20),
@@ -503,7 +504,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["travel"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 70.80,
+        amount = Money(70.80),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 27),
         local_date = LocalDate.of(2023, Month.JUNE, 27),
@@ -511,7 +512,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 70.15,
+        amount = Money(70.15),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JULY, 2),
         local_date = LocalDate.of(2023, Month.JULY, 2),
@@ -519,7 +520,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircare products",
-        amount = 25.50,
+        amount = Money(25.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JULY, 9),
         local_date = LocalDate.of(2023, Month.JULY, 9),
@@ -527,7 +528,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 1),
         local_date = LocalDate.of(2023, Month.APRIL, 1),
@@ -535,7 +536,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 40.10,
+        amount = Money(40.10),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.APRIL, 7),
         local_date = LocalDate.of(2023, Month.APRIL, 7),
@@ -543,7 +544,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.APRIL, 15),
         local_date = LocalDate.of(2023, Month.APRIL, 15),
@@ -551,7 +552,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 35.50,
+        amount = Money(35.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 18),
         local_date = LocalDate.of(2023, Month.APRIL, 18),
@@ -559,7 +560,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 22.80,
+        amount = Money(22.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 25),
         local_date = LocalDate.of(2023, Month.APRIL, 25),
@@ -567,7 +568,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 18.75,
+        amount = Money(18.75),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 2),
         local_date = LocalDate.of(2023, Month.MAY, 2),
@@ -575,7 +576,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 60.30,
+        amount = Money(60.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 8),
         local_date = LocalDate.of(2023, Month.MAY, 8),
@@ -583,7 +584,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 85.00,
+        amount = Money(85.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 13),
         local_date = LocalDate.of(2023, Month.MAY, 13),
@@ -591,7 +592,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend movie marathon",
-        amount = 20.00,
+        amount = Money(20.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 21),
         local_date = LocalDate.of(2023, Month.MAY, 21),
@@ -599,7 +600,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 75.80,
+        amount = Money(75.80),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 27),
         local_date = LocalDate.of(2023, Month.MAY, 27),
@@ -607,7 +608,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 70.15,
+        amount = Money(70.15),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 2),
         local_date = LocalDate.of(2023, Month.JUNE, 2),
@@ -615,7 +616,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircare products",
-        amount = 28.50,
+        amount = Money(28.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 9),
         local_date = LocalDate.of(2023, Month.JUNE, 9),
@@ -623,7 +624,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 1),
         local_date = LocalDate.of(2023, Month.MARCH, 1),
@@ -631,7 +632,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 38.90,
+        amount = Money(38.90),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MARCH, 3),
         local_date = LocalDate.of(2023, Month.MARCH, 3),
@@ -639,7 +640,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MARCH, 9),
         local_date = LocalDate.of(2023, Month.MARCH, 9),
@@ -647,7 +648,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 32.50,
+        amount = Money(32.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MARCH, 15),
         local_date = LocalDate.of(2023, Month.MARCH, 15),
@@ -655,7 +656,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 23.70,
+        amount = Money(23.70),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 21),
         local_date = LocalDate.of(2023, Month.MARCH, 21),
@@ -663,7 +664,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Dinner with friends",
-        amount = 65.50,
+        amount = Money(65.50),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 27),
         local_date = LocalDate.of(2023, Month.JUNE, 27),
@@ -671,7 +672,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 55.75,
+        amount = Money(55.75),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 4),
         local_date = LocalDate.of(2023, Month.JUNE, 4),
@@ -679,7 +680,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 95.00,
+        amount = Money(95.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 11),
         local_date = LocalDate.of(2023, Month.JUNE, 11),
@@ -687,7 +688,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend getaway",
-        amount = 350.00,
+        amount = Money(350.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.JUNE, 16),
         local_date = LocalDate.of(2023, Month.JUNE, 16),
@@ -695,7 +696,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["travel"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 85.25,
+        amount = Money(85.25),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 23),
         local_date = LocalDate.of(2023, Month.JUNE, 23),
@@ -703,7 +704,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 60.40,
+        amount = Money(60.40),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 29),
         local_date = LocalDate.of(2023, Month.JUNE, 29),
@@ -711,7 +712,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircut",
-        amount = 40.00,
+        amount = Money(40.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 3),
         local_date = LocalDate.of(2023, Month.APRIL, 3),
@@ -719,7 +720,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 1),
         local_date = LocalDate.of(2023, Month.MAY, 1),
@@ -727,7 +728,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 42.10,
+        amount = Money(42.10),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 7),
         local_date = LocalDate.of(2023, Month.MAY, 7),
@@ -735,7 +736,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 55.00,
+        amount = Money(55.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 15),
         local_date = LocalDate.of(2023, Month.MAY, 15),
@@ -743,7 +744,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 38.50,
+        amount = Money(38.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 18),
         local_date = LocalDate.of(2023, Month.MAY, 18),
@@ -751,7 +752,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 27.80,
+        amount = Money(27.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 25),
         local_date = LocalDate.of(2023, Month.MAY, 25),
@@ -759,7 +760,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 16.75,
+        amount = Money(16.75),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 2),
         local_date = LocalDate.of(2023, Month.JUNE, 2),
@@ -767,7 +768,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 65.30,
+        amount = Money(65.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 8),
         local_date = LocalDate.of(2023, Month.JUNE, 8),
@@ -775,7 +776,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 80.00,
+        amount = Money(80.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 13),
         local_date = LocalDate.of(2023, Month.JUNE, 13),
@@ -783,7 +784,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend getaway",
-        amount = 320.00,
+        amount = Money(320.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.JUNE, 20),
         local_date = LocalDate.of(2023, Month.JUNE, 20),
@@ -791,7 +792,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["travel"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 70.80,
+        amount = Money(70.80),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 27),
         local_date = LocalDate.of(2023, Month.JUNE, 27),
@@ -799,7 +800,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 70.15,
+        amount = Money(70.15),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JULY, 2),
         local_date = LocalDate.of(2023, Month.JULY, 2),
@@ -807,7 +808,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircare products",
-        amount = 25.50,
+        amount = Money(25.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JULY, 9),
         local_date = LocalDate.of(2023, Month.JULY, 9),
@@ -815,7 +816,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 1),
         local_date = LocalDate.of(2023, Month.APRIL, 1),
@@ -823,7 +824,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 40.10,
+        amount = Money(40.10),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.APRIL, 7),
         local_date = LocalDate.of(2023, Month.APRIL, 7),
@@ -831,7 +832,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.APRIL, 15),
         local_date = LocalDate.of(2023, Month.APRIL, 15),
@@ -839,7 +840,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 35.50,
+        amount = Money(35.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.APRIL, 18),
         local_date = LocalDate.of(2023, Month.APRIL, 18),
@@ -847,7 +848,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 22.80,
+        amount = Money(22.80),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.APRIL, 25),
         local_date = LocalDate.of(2023, Month.APRIL, 25),
@@ -855,7 +856,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Lunch at a café",
-        amount = 18.75,
+        amount = Money(18.75),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 2),
         local_date = LocalDate.of(2023, Month.MAY, 2),
@@ -863,7 +864,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 60.30,
+        amount = Money(60.30),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MAY, 8),
         local_date = LocalDate.of(2023, Month.MAY, 8),
@@ -871,7 +872,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Utility bill",
-        amount = 85.00,
+        amount = Money(85.00),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MAY, 13),
         local_date = LocalDate.of(2023, Month.MAY, 13),
@@ -879,7 +880,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["bills"]!!)
     ), Transaction(
         title = "Weekend movie marathon",
-        amount = 20.00,
+        amount = Money(20.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MAY, 21),
         local_date = LocalDate.of(2023, Month.MAY, 21),
@@ -887,7 +888,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Dinner at a restaurant",
-        amount = 75.80,
+        amount = Money(75.80),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MAY, 27),
         local_date = LocalDate.of(2023, Month.MAY, 27),
@@ -895,7 +896,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 70.15,
+        amount = Money(70.15),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 2),
         local_date = LocalDate.of(2023, Month.JUNE, 2),
@@ -903,7 +904,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["groceries"]!!)
     ), Transaction(
         title = "Haircare products",
-        amount = 28.50,
+        amount = Money(28.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.JUNE, 9),
         local_date = LocalDate.of(2023, Month.JUNE, 9),
@@ -911,7 +912,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["personal care"]!!)
     ), Transaction(
         title = "Monthly rent",
-        amount = 1200.00,
+        amount = Money(1200.00),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 1),
         local_date = LocalDate.of(2023, Month.MARCH, 1),
@@ -919,7 +920,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["rent"]!!)
     ), Transaction(
         title = "Gasoline refill",
-        amount = 38.90,
+        amount = Money(38.90),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.MARCH, 3),
         local_date = LocalDate.of(2023, Month.MARCH, 3),
@@ -927,7 +928,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["gas"]!!)
     ), Transaction(
         title = "Gym membership",
-        amount = 50.00,
+        amount = Money(50.00),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.MARCH, 9),
         local_date = LocalDate.of(2023, Month.MARCH, 9),
@@ -935,7 +936,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["fitness"]!!)
     ), Transaction(
         title = "Movie tickets",
-        amount = 32.50,
+        amount = Money(32.50),
         user = userList[0],
         value_date = LocalDate.of(2023, Month.MARCH, 15),
         local_date = LocalDate.of(2023, Month.MARCH, 15),
@@ -943,7 +944,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["entertainment"]!!)
     ), Transaction(
         title = "Toiletries shopping",
-        amount = 23.70,
+        amount = Money(23.70),
         user = userList[2],
         value_date = LocalDate.of(2023, Month.MARCH, 21),
         local_date = LocalDate.of(2023, Month.MARCH, 21),
@@ -951,7 +952,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["toiletries"]!!)
     ), Transaction(
         title = "Dinner with friends",
-        amount = 65.50,
+        amount = Money(65.50),
         user = userList[1],
         value_date = LocalDate.of(2023, Month.JUNE, 27),
         local_date = LocalDate.of(2023, Month.JUNE, 27),
@@ -959,7 +960,7 @@ val itemList = mutableListOf(
         tags = mutableSetOf(tags["dining"]!!)
     ), Transaction(
         title = "Grocery shopping",
-        amount = 55.75,
+        amount = Money(55.75),
         user = userList[3],
         value_date = LocalDate.of(2023, Month.JUNE, 4),
         local_date = LocalDate.of(2023, Month.JUNE, 4),
