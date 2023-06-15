@@ -13,7 +13,8 @@ data class Transaction(
     val id: Int? = null,
     var title: String = "",
     val description: String = "",
-    var user: User,
+    val user: User,
+    val group: Group = Group(0, "Default")
     var amount: Money = Money(0),
     val recipient: String? = null,
     var value_date: LocalDate,
