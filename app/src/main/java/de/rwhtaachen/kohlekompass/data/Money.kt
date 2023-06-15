@@ -26,7 +26,11 @@ data class Money(
      */
     @JvmOverloads constructor(
         value: String, unit: Currency = Currency.getInstance(Locale.getDefault())
-    ) : this(value.toBigDecimal(), unit)
+    ) : this(value
+        .replace(Regex("[^[0-9]]*([0-9]+)[,.]?([0-9]+)?[^[0-9]]*"), "$1.$20")
+        .toBigDecimal(),
+        unit
+    )
 
     @JvmOverloads constructor(
         value: Double, unit: Currency = Currency.getInstance(Locale.getDefault())

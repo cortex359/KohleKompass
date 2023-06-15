@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass.addItem
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -348,10 +349,10 @@ fun AddItemPageContent(
                     if (textFieldState.value.text != "") {
                         val item = Transaction(
                             title = textFieldState.value.text,
-                            amount = Money(amountTextFieldState.value.toString()),
+                            amount = Money(amountTextFieldState.value.text.toString()),
                             value_date = date.value,
                             local_date = LocalDate.now(),
-                            sync_date = LocalDate.now(),
+                            sync_date = null,
                             user = selectedUser.value,
                             tags = tags.filter { it.value.selected }.map { it.value }
                                 .toMutableSet()
@@ -396,7 +397,7 @@ fun TagSelection(
         )
     ) {
         Column {
-            Row() {
+            Row {
                 Text(
                     context.getString(R.string.selected_tags_card_title),
                     textAlign = TextAlign.Center,
