@@ -6,14 +6,14 @@ package de.rwhtaachen.kohlekompass.data
  * The "selected" attribute is used in the UI. It is not to be used by the Model.
  */
 data class User(
-    val id: Int,
+    // val id: Int,
     val name: String,
     var selected: Boolean = false,
-    var groups: Collection<Group>,
+    //var groups: Collection<Group>,
 )
 
 data class Group(
     val id: Int,
     var name: String,
-    var admin: User = User(0, "root"),
+    var admin: User = User("root"),
 )
