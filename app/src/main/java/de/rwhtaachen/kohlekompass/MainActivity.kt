@@ -145,8 +145,8 @@ fun DrawerItem(
 
     Row(
         modifier = Modifier
-            .padding(vertical = 8.dp, horizontal = 16.dp)
             .clickable(onClick = onClick)
+            .padding(vertical = 8.dp, horizontal = 16.dp)
             .fillMaxWidth()
     ) {
         Icon(
