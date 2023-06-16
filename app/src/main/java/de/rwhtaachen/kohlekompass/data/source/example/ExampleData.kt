@@ -2,7 +2,6 @@ package de.rwhtaachen.kohlekompass.data.source.example
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import de.rwhtaachen.kohlekompass.KohleKompass
 import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.User
@@ -10,9 +9,6 @@ import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.Money
 import java.time.LocalDate
 import java.time.Month
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 val tags = mutableMapOf(
     Pair(
