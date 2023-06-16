@@ -148,7 +148,7 @@ fun ManageTags(
                             modifier = Modifier
                                 .padding(5.dp)
                                 .fillMaxWidth()
-                                .clickable() {
+                                .clickable {
                                     currentTag.value = tag.value
                                     showEditTagDialog.value = true
                                 },

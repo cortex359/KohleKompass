@@ -12,7 +12,7 @@ import de.rwhtaachen.kohlekompass.data.source.example.userList
 /**
  * Manages the users. Can add and remove users and provide a list of users to the UI.
  */
-class UserManager() {
+class UserManager {
 
     // todo in production the userList is private and can only be accessed through this class. In testing the list from example Data is used
     // private val userList = mutableListOf<Tag>()

@@ -139,7 +139,7 @@ fun SearchField(
 @Preview
 @Composable
 fun SearchFieldPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
         SearchField(searchBarState, modifier = Modifier, LocalFocusManager.current)
     }

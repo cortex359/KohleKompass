@@ -155,7 +155,7 @@ fun DatePickerCard(
 @Preview
 @Composable
 fun DatePickerCardPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         DatePickerCard(
             dateDescription = "From",
             defaultText = "DD/MM/YYYY",

@@ -20,8 +20,8 @@ data class Money(
     var unit: Currency
 ) {
     /*
-        It is recommended to use BigDecimal class while dealing with Currency or monetary values as
-        it provides better handling of floating point numbers and their operations.
+        > It is recommended to use BigDecimal class while dealing with Currency or monetary values
+        > as it provides better handling of floating point numbers and their operations.
         @see: https://developer.android.com/reference/java/util/Currency
      */
     @JvmOverloads constructor(
