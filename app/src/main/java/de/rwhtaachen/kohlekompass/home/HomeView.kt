@@ -403,12 +403,7 @@ fun EditItemDialog(
     val selectedUser = remember { mutableStateOf(item.user) }
     val textFieldState = remember { mutableStateOf(TextFieldValue(item.title)) }
     val amountTextFieldState = remember {
-        mutableStateOf(TextFieldValue(StringBuilder(item.amount.toString()).apply {
-            insert(
-                item.amount.toString().length - 2,
-                '.'
-            )
-        }.toString()))
+        mutableStateOf(TextFieldValue(item.amount.toString()))
     }
 
     val showSelectUserDialog = remember { mutableStateOf(false) }
