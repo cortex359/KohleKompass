@@ -79,7 +79,8 @@ fun KohleKompassTheme(
     val colors = if (!useDarkTheme) {
         LightColors
     } else {
-        DarkColors
+        LightColors
+        //DarkColors dark theme not yet implemented
     }
 
     MaterialTheme(
