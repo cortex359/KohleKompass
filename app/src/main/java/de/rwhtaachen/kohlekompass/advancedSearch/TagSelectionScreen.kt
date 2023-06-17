@@ -53,68 +53,6 @@ fun TagSelection(
     context: Context
 ) {
     val colors = MaterialTheme.colorScheme
-    Card(
-        modifier = Modifier
-            .padding(5.dp, 2.dp)
-            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
-    ) {
-        SearchField(
-            searchBarState = searchBarState, focusManager = focusManager,
-            modifier = Modifier
-                .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
-                .fillMaxWidth(),
-            shape = MaterialTheme.shapes.large,
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.White,
-                cursorColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                containerColor = colors.primaryContainer,
-                focusedLeadingIconColor = colors.onPrimaryContainer,
-                unfocusedLeadingIconColor = colors.onPrimaryContainer,
-                focusedTrailingIconColor = colors.onPrimaryContainer,
-                unfocusedTrailingIconColor = colors.onPrimaryContainer
-            )
-        )
-    }
-    val allSelected = remember { mutableStateOf(false) }
-    Card( // (un)select all tags
-        modifier = Modifier
-            .padding(5.dp, 2.dp)
-            .clickable {
-                allSelected.value = !allSelected.value
-                for (i in 0 until tags.size) {
-                    val tag = tags[i]
-                    val newTag = tag.value.copy(selected = allSelected.value)
-                    tags.remove(tag)
-                    tags.add(i, mutableStateOf(newTag))
-                }
-            }
-            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
-        colors = CardDefaults.cardColors(
-            containerColor = if (allSelected.value) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
-        )
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_checklist_24),
-                contentDescription = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(24.dp),
-                tint = colors.onPrimaryContainer
-            )
-            Text(
-                text = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
-                fontWeight = FontWeight.Bold,
-                color = colors.onPrimaryContainer
-            )
-        }
-    } // end (un)select all tags
     LazyColumn(
         modifier = Modifier
             .pointerInput(Unit) {
@@ -124,6 +62,70 @@ fun TagSelection(
             }
     ) {// todo: make it so selected tags are on top
         items(tags.size) { index ->
+            if( index == 0) {
+                Card(
+                    modifier = Modifier
+                        .padding(5.dp, 2.dp)
+                        .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
+                ) {
+                    SearchField(
+                        searchBarState = searchBarState, focusManager = focusManager,
+                        modifier = Modifier
+                            .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.large)
+                            .fillMaxWidth(),
+                        shape = MaterialTheme.shapes.large,
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color.White,
+                            cursorColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            containerColor = colors.primaryContainer,
+                            focusedLeadingIconColor = colors.onPrimaryContainer,
+                            unfocusedLeadingIconColor = colors.onPrimaryContainer,
+                            focusedTrailingIconColor = colors.onPrimaryContainer,
+                            unfocusedTrailingIconColor = colors.onPrimaryContainer
+                        )
+                    )
+                }
+                val allSelected = remember { mutableStateOf(false) }
+                Card( // (un)select all tags
+                    modifier = Modifier
+                        .padding(5.dp, 2.dp)
+                        .clickable {
+                            allSelected.value = !allSelected.value
+                            for (i in 0 until tags.size) {
+                                val tag = tags[i]
+                                val newTag = tag.value.copy(selected = allSelected.value)
+                                tags.remove(tag)
+                                tags.add(i, mutableStateOf(newTag))
+                            }
+                        }
+                        .border(1.dp, colors.onPrimaryContainer, MaterialTheme.shapes.medium),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (allSelected.value) cardSelectedColor(colors.primaryContainer) else colors.primaryContainer
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_checklist_24),
+                            contentDescription = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .size(24.dp),
+                            tint = colors.onPrimaryContainer
+                        )
+                        Text(
+                            text = context.getString(if (!allSelected.value) R.string.select_all_tags else R.string.unselect_all_tags),
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onPrimaryContainer
+                        )
+                    }
+                } // end (un)select all tags
+            }
             val tag = tags[index]
             if (searchBarState.value.text.isEmpty()
                 || tag.value.name.lowercase().contains(searchBarState.value.text.lowercase())

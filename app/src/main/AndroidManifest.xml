@@ -15,7 +15,8 @@
         <activity
             android:name="de.rwhtaachen.kohlekompass.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.KohleKompass">
+            android:theme="@style/Theme.KohleKompass"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

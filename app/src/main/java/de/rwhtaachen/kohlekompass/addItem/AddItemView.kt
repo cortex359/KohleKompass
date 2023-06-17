@@ -2,7 +2,6 @@ package de.rwhtaachen.kohlekompass.addItem
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -19,8 +18,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -70,12 +71,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.advancedSearch.DatePickerCard
-import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
 import de.rwhtaachen.kohlekompass.data.Money
-import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.home.ItemManager
 import de.rwhtaachen.kohlekompass.data.Tag
+import de.rwhtaachen.kohlekompass.data.Transaction
+import de.rwhtaachen.kohlekompass.data.User
+import de.rwhtaachen.kohlekompass.home.ItemManager
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -216,6 +217,7 @@ fun AddItemPageContent(
     amountTextFieldState: MutableState<TextFieldValue>
 ) {
     val colors = MaterialTheme.colorScheme
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .padding(padding)
@@ -276,72 +278,78 @@ fun AddItemPageContent(
                 }
             )
         }
-        Row(modifier = Modifier.height(100.dp)) {
-            Column(Modifier.weight(1f)) {
-                DatePickerCard(
-                    dateDescription = "",
-                    context = context,
-                    date = date,
-                    padding = PaddingValues(5.dp, 5.dp, 2.5.dp, 2.5.dp)
-                )
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showSelectUserDialog.value = true }
-                        .padding(5.dp, 2.5.dp, 2.5.dp, 5.dp)
-                        .border(
-                            1.dp,
-                            colors.onPrimaryContainer,
-                            MaterialTheme.shapes.medium
-                        ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = colors.primaryContainer
+        Column(
+            modifier = Modifier
+                .weight(1f, true)
+                .verticalScroll(scrollState)
+        ) {
+            Row(modifier = Modifier.height(100.dp)) {
+                Column(Modifier.weight(1f)) {
+                    DatePickerCard(
+                        dateDescription = "",
+                        context = context,
+                        date = date,
+                        padding = PaddingValues(5.dp, 5.dp, 2.5.dp, 2.5.dp)
                     )
-                ) {
-                    Row(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = selectedUser.value.name,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.onPrimaryContainer,
-                            modifier = Modifier.padding(5.dp)
+                            .clickable { showSelectUserDialog.value = true }
+                            .padding(5.dp, 2.5.dp, 2.5.dp, 5.dp)
+                            .border(
+                                1.dp,
+                                colors.onPrimaryContainer,
+                                MaterialTheme.shapes.medium
+                            ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = colors.primaryContainer
                         )
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_person_outline_24),
-                            contentDescription = context.getString(R.string.user_icon_description),
+                    ) {
+                        Row(
                             modifier = Modifier
-                                .padding(5.dp)
-                                .size(24.dp),
-                            tint = colors.onPrimaryContainer
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = selectedUser.value.name,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.onPrimaryContainer,
+                                modifier = Modifier.padding(5.dp)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_person_outline_24),
+                                contentDescription = context.getString(R.string.user_icon_description),
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .size(24.dp),
+                                tint = colors.onPrimaryContainer
+                            )
+                        }
+                    }
+                }
+                Column(Modifier.weight(1f)) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AmountTextField(
+                            amountTextFieldState = amountTextFieldState,
+                            context = context
                         )
                     }
                 }
             }
-            Column(Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AmountTextField(
-                        amountTextFieldState = amountTextFieldState,
-                        context = context
-                    )
-                }
+            Row {
+                TagSelection(
+                    context = context,
+                    searchFieldState = textFieldState,
+                    focusManager = focusManager,
+                    tags = tags,
+                    showAddTagDialog = showAddTagDialog
+                )
             }
-        }
-        Row {
-            TagSelection(
-                context = context,
-                searchFieldState = textFieldState,
-                focusManager = focusManager,
-                tags = tags,
-                showAddTagDialog = showAddTagDialog
-            )
         }
         Row {// submit button
             Button(
@@ -624,7 +632,7 @@ fun AddItemPreview() {
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             context = LocalContext.current,
             scope = rememberCoroutineScope(),
-            selectedPage = mutableStateOf(0)
+            selectedPage = remember { mutableStateOf(0) }
         )
     }
 }
