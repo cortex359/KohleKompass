@@ -357,7 +357,7 @@ fun AddItemPageContent(
                     if (textFieldState.value.text != "") {
                         val item = Transaction(
                             title = textFieldState.value.text,
-                            amount = Money(amountTextFieldState.value.text.toString()),
+                            amount = Money(amountTextFieldState.value.text),
                             value_date = date.value,
                             local_date = LocalDate.now(),
                             sync_date = null,
