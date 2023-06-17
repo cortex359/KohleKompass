@@ -3,50 +3,50 @@ package de.rwhtaachen.kohlekompass.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.data.source.example.itemList
+import de.rwhtaachen.kohlekompass.data.source.example.transactionList
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 
-class ItemManager {
+class TransactionManager {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        fun addItem(item: Transaction) {
-            itemList.add(item)
+        fun addTransaction(transaction: Transaction) {
+            transactionList.add(transaction)
             // todo
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun removeItem(item: Transaction) {
-            itemList.remove(item)
+        fun removeTransaction(transaction: Transaction) {
+            transactionList.remove(transaction)
             // todo
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun updateItem(oldItem: Transaction, newItem: Transaction) {
-            val item = itemList[itemList.indexOf(oldItem)]
-            item.title = newItem.title
-            item.user = newItem.user
-            item.amount = newItem.amount
-            item.value_date = newItem.value_date
+        fun updateTransaction(oldTransaction: Transaction, newTransaction: Transaction) {
+            val transaction = transactionList[transactionList.indexOf(oldTransaction)]
+            transaction.title = newTransaction.title
+            transaction.user = newTransaction.user
+            transaction.amount = newTransaction.amount
+            transaction.value_date = newTransaction.value_date
             TagManager.getTagList().forEach { tag ->
-                if (newItem.tags.any { tag.value.name == it.name }) {
-                    item.tags.add(tag.value)
+                if (newTransaction.tags.any { tag.value.name == it.name }) {
+                    transaction.tags.add(tag.value)
                 } else {
-                    item.tags.remove(tag.value)
+                    transaction.tags.remove(tag.value)
                 }
             }
         }
 
         /**
-         * fetches the items from the database
+         * fetches the transactions from the database
          * todo
          */
         @RequiresApi(Build.VERSION_CODES.O)
-        fun getItemList(): MutableList<MutableState<Transaction>> {
+        fun getTransactionList(): MutableList<MutableState<Transaction>> {
             // todo
-            return itemList.map { item -> mutableStateOf(item) }
+            return transactionList.map { transaction -> mutableStateOf(transaction) }
                 .toMutableStateList()
         }
     }

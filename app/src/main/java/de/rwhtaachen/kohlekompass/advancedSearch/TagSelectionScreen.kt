@@ -130,7 +130,7 @@ fun TagSelection(
             if (searchBarState.value.text.isEmpty()
                 || tag.value.name.lowercase().contains(searchBarState.value.text.lowercase())
             ) {
-                TagItem(tag, context)
+                TagTransaction(tag, context)
             }
         }
     }
@@ -140,7 +140,7 @@ fun TagSelection(
  * Selectable Card of a tag
  */
 @Composable
-fun TagItem(tag: MutableState<Tag>, context: Context) {
+fun TagTransaction(tag: MutableState<Tag>, context: Context) {
     val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier

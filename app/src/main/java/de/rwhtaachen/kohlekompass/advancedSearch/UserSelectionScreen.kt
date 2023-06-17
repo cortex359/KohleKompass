@@ -47,7 +47,7 @@ fun UserSelection(
     ) {
         items(users.size) { index ->
             val user = users[index]
-            UserItem(
+            UserTransaction(
                 user,
                 context
             )
@@ -59,7 +59,7 @@ fun UserSelection(
  * Selectable Card of a user
  */
 @Composable
-fun UserItem(user: MutableState<User>, context: Context) {
+fun UserTransaction(user: MutableState<User>, context: Context) {
     val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier

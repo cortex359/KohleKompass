@@ -133,7 +133,7 @@ val userList = mutableListOf(
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-val itemList = mutableListOf(
+val transactionList = mutableListOf(
     Transaction(
         title = "Grocery shopping",
         amount = Money(50.25),

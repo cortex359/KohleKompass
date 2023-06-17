@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.addItem
+package de.rwhtaachen.kohlekompass.addTransaction
 
 import android.content.Context
 import android.os.Build
@@ -76,7 +76,7 @@ import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.User
-import de.rwhtaachen.kohlekompass.home.ItemManager
+import de.rwhtaachen.kohlekompass.home.TransactionManager
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -88,7 +88,7 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItem(
+fun AddTransaction(
     focusManager: FocusManager,
     context: Context,
     drawerState: DrawerState,
@@ -141,7 +141,7 @@ fun AddItem(
                 title = {
                     Row {
                         Text(
-                            text = context.getString(R.string.add_item),
+                            text = context.getString(R.string.add_transaction),
                             color = colors.primary,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.weight(weight = 1f, fill = true),
@@ -183,7 +183,7 @@ fun AddItem(
                 )
         },
         content = { padding ->
-            AddItemPageContent(
+            AddTransactionPageContent(
                 padding = padding,
                 focusManager = focusManager,
                 context = context,
@@ -202,7 +202,7 @@ fun AddItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemPageContent(
+fun AddTransactionPageContent(
     padding: PaddingValues,
     focusManager: FocusManager,
     context: Context,
@@ -211,8 +211,8 @@ fun AddItemPageContent(
     showSelectUserDialog: MutableState<Boolean>,
     showAddTagDialog: MutableState<Boolean>,
     tags: MutableList<MutableState<Tag>>,
-    submitItem: (Transaction) -> Unit = { ItemManager.addItem(it) },
-    submitButtonText: String = context.getString(R.string.add_item_submit_button_text),
+    submitTransaction: (Transaction) -> Unit = { TransactionManager.addTransaction(it) },
+    submitButtonText: String = context.getString(R.string.add_transaction_submit_button_text),
     textFieldState: MutableState<TextFieldValue>,
     amountTextFieldState: MutableState<TextFieldValue>
 ) {
@@ -268,7 +268,7 @@ fun AddItemPageContent(
                 shape = RoundedCornerShape(50),
                 placeholder = {
                     Text(
-                        context.getString(R.string.item_description_text_field),
+                        context.getString(R.string.transaction_description_text_field),
                         color = colors.onPrimary
                     )
                 },
@@ -355,7 +355,7 @@ fun AddItemPageContent(
             Button(
                 onClick = {
                     if (textFieldState.value.text != "") {
-                        val item = Transaction(
+                        val transaction = Transaction(
                             title = textFieldState.value.text,
                             amount = Money(amountTextFieldState.value.text),
                             value_date = date.value,
@@ -365,7 +365,7 @@ fun AddItemPageContent(
                             tags = tags.filter { it.value.selected }.map { it.value }
                                 .toMutableSet()
                         )
-                        submitItem(item)
+                        submitTransaction(transaction)
                     }
                 },
                 modifier = Modifier
@@ -625,9 +625,9 @@ fun AmountTextField(
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemPreview() {
+fun AddTransactionPreview() {
     KohleKompassTheme {
-        AddItem(
+        AddTransaction(
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             context = LocalContext.current,

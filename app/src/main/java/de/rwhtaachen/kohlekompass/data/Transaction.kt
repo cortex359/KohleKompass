@@ -5,8 +5,8 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
 /**
- * An Item is a spending that a user took on a date with an amount.
- * Tags can be associated with an Item
+ * An Transaction is a spending that a user took on a date with an amount.
+ * Tags can be associated with an Transaction
  */
 @RequiresApi(Build.VERSION_CODES.O)
 data class Transaction(

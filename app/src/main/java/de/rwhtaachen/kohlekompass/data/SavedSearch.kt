@@ -4,7 +4,7 @@ package de.rwhtaachen.kohlekompass.data
 /**
  * A search configuration saved by the user to be reused later
  * Start delta and end delta are deltas from the current date. So a start delta of -7 and a end delta of 0
- * means all items in the last seven days are included
+ * means all transactions in the last seven days are included
  */
 data class SavedSearch(
     val title: String,
