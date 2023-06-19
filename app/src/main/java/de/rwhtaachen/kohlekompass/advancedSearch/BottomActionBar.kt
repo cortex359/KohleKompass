@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,7 +34,11 @@ import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
 
 @Composable
-fun BottomActionBar(context: Context, showDialogs: List<MutableState<Boolean>>) {
+fun BottomActionBar(
+    context: Context,
+    showDialogs: List<MutableState<Boolean>>,
+    showResults: MutableState<Boolean>
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +54,7 @@ fun BottomActionBar(context: Context, showDialogs: List<MutableState<Boolean>>) 
             CreateDistribution(context = context, showDialogs[2])
         }
         Column(modifier = Modifier.weight(1f)) {
-            SubmitSearch(context = context)
+            SubmitSearch(context = context, showResults = showResults)
         }
     }
 }
@@ -178,7 +183,7 @@ fun CreateDistribution(context: Context, showDialog: MutableState<Boolean>) {
 }
 
 @Composable
-fun SubmitSearch(context: Context) {
+fun SubmitSearch(context: Context, showResults: MutableState<Boolean>) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -189,7 +194,7 @@ fun SubmitSearch(context: Context) {
                 MaterialTheme.shapes.medium
             )
             .clickable {
-                //todo
+                showResults.value = !showResults.value
             },
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
     ) {
@@ -199,8 +204,8 @@ fun SubmitSearch(context: Context) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
-                Icons.Default.Search,
-                contentDescription = context.getString(R.string.submit_search_icon_description),
+                if (showResults.value) Icons.Default.ArrowBack else Icons.Default.Search,
+                contentDescription = context.getString(if (showResults.value) R.string.back_arrow_icon_description else R.string.submit_search_icon_description),
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth()
@@ -211,10 +216,9 @@ fun SubmitSearch(context: Context) {
                 contentAlignment = Alignment.Center,
             ) {
                 AutoScalingText(
-                    text = context.getString(R.string.submit_search_text),
+                    text = context.getString(if (showResults.value) R.string.go_back_text else R.string.submit_search_text),
                     modifier = Modifier.padding(5.dp),
                 )
-
             }
         }
     }
@@ -227,7 +231,8 @@ fun BottomActionBarPreview() {
     KohleKompassTheme {
         BottomActionBar(
             context = LocalContext.current,
-            listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false))
+            listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false)),
+            mutableStateOf(false)
         )
     }
 }

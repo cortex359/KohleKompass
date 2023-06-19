@@ -121,6 +121,7 @@ fun HomePage(
                 Row(Modifier.weight(1f, true)) {
                     ContentList(
                         state = searchBarState,
+                        transactions = TransactionManager.getTransactionList(),
                         focusManager = focusManager,
                         padding = padding,
                         context = context,
@@ -245,7 +246,8 @@ fun BottomBar(context: Context) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentList(
-    state: MutableState<TextFieldValue>,
+    state: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue("")) },
+    transactions: MutableList<MutableState<Transaction>>,
     focusManager: FocusManager,
     padding: PaddingValues,
     context: Context,
@@ -262,7 +264,6 @@ fun ContentList(
             },
         reverseLayout = true
     ) {
-        val transactions = TransactionManager.getTransactionList()
         items(transactions.size) { index ->
             val transaction = transactions[index]
             if (state.value.text.isEmpty()
