@@ -60,12 +60,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.addItem.AddItemPageContent
-import de.rwhtaachen.kohlekompass.addItem.AddTagDialog
-import de.rwhtaachen.kohlekompass.addItem.SelectUserDialog
+import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
+import de.rwhtaachen.kohlekompass.addTransaction.AddTagDialog
+import de.rwhtaachen.kohlekompass.addTransaction.SelectUserDialog
 import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.data.source.example.itemList
+import de.rwhtaachen.kohlekompass.data.source.example.transactionList
 import de.rwhtaachen.kohlekompass.data.source.example.tags
 import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
@@ -86,17 +86,17 @@ fun HomePage(
     selectedPage: MutableState<Int>
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
-    val showEditItemDialog = remember { mutableStateOf(false) }
-    val currentItem = remember { mutableStateOf<Transaction?>(null) }
+    val showEditTransactionDialog = remember { mutableStateOf(false) }
+    val currentTransaction = remember { mutableStateOf<Transaction?>(null) }
 
-    if (showEditItemDialog.value) {
-        EditItemDialog(
+    if (showEditTransactionDialog.value) {
+        EditTransactionDialog(
             context = context,
             focusManager = focusManager,
-            item = currentItem.value!!,
-            setShowDialog = { showEditItemDialog.value = it },
+            transaction = currentTransaction.value!!,
+            setShowDialog = { showEditTransactionDialog.value = it },
             setValue = {
-                ItemManager.updateItem(currentItem.value!!, it)
+                TransactionManager.updateTransaction(currentTransaction.value!!, it)
             })
     }
 
@@ -125,8 +125,8 @@ fun HomePage(
                         focusManager = focusManager,
                         padding = padding,
                         context = context,
-                        showEditItemDialog = showEditItemDialog,
-                        currentItem = currentItem
+                        showEditTransactionDialog = showEditTransactionDialog,
+                        currentTransaction = currentTransaction
                     )
                 }
                 BottomBar(context = context)
@@ -185,7 +185,7 @@ fun TopNavBarWithSearchBar(
             )
         }
 
-        // Add Item
+        // Add Transaction
         IconButton(
             onClick = {
                 scope.launch { drawerState.close() }
@@ -194,7 +194,7 @@ fun TopNavBarWithSearchBar(
         ) {
             Icon(
                 Icons.Default.Add,
-                contentDescription = context.getString(R.string.add_item),
+                contentDescription = context.getString(R.string.add_transaction),
                 tint = colors.primary
             )
         }
@@ -250,8 +250,8 @@ fun ContentList(
     focusManager: FocusManager,
     padding: PaddingValues,
     context: Context,
-    showEditItemDialog: MutableState<Boolean>,
-    currentItem: MutableState<Transaction?>
+    showEditTransactionDialog: MutableState<Boolean>,
+    currentTransaction: MutableState<Transaction?>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -262,18 +262,18 @@ fun ContentList(
                 })
             }
     ) {
-        val items = ItemManager.getItemList()
-        items(items.size) { index ->
-            val item = items[index]
+        val transactions = TransactionManager.getTransactionList()
+        items(transactions.size) { index ->
+            val transaction = transactions[index]
             if (state.value.text.isEmpty()
-                || item.value.title.lowercase().contains(state.value.text.lowercase())
-                || item.value.user.name.lowercase().contains(state.value.text.lowercase())
+                || transaction.value.title.lowercase().contains(state.value.text.lowercase())
+                || transaction.value.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
-                ContentItem(
-                    item,
+                ContentTransaction(
+                    transaction,
                     context = context,
-                    showEditItemDialog = showEditItemDialog,
-                    currentItem = currentItem
+                    showEditTransactionDialog = showEditTransactionDialog,
+                    currentTransaction = currentTransaction
                 )
             }
         }
@@ -282,15 +282,15 @@ fun ContentList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentItem(
-    item: MutableState<Transaction>,
+fun ContentTransaction(
+    transaction: MutableState<Transaction>,
     context: Context,
-    showEditItemDialog: MutableState<Boolean>,
-    currentItem: MutableState<Transaction?>
+    showEditTransactionDialog: MutableState<Boolean>,
+    currentTransaction: MutableState<Transaction?>
 ) {
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
-    val tags = item.value.tags.toList()
+    val tags = transaction.value.tags.toList()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -299,8 +299,8 @@ fun ContentItem(
             .border(1.dp, colors.onPrimaryContainer, shape)
             .padding(10.dp)
             .clickable {
-                currentItem.value = item.value
-                showEditItemDialog.value = true
+                currentTransaction.value = transaction.value
+                showEditTransactionDialog.value = true
             }
     ) {
         Row(
@@ -311,12 +311,12 @@ fun ContentItem(
         ) {
             Column {
                 Text(
-                    item.value.title,
+                    transaction.value.title,
                     color = colors.onPrimaryContainer,
                     fontWeight = FontWeight.Bold
                 )
-                Text(item.value.user.name, color = colors.onPrimaryContainer)
-                Text(item.value.value_date.toString(), color = colors.onPrimaryContainer)
+                Text(transaction.value.user.name, color = colors.onPrimaryContainer)
+                Text(transaction.value.value_date.toString(), color = colors.onPrimaryContainer)
             }
             Column(
                 Modifier
@@ -384,34 +384,34 @@ fun ContentItem(
                     }
                 }
             }
-            Text(item.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
+            Text(transaction.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EditItemDialog(
-    item: Transaction,
+fun EditTransactionDialog(
+    transaction: Transaction,
     focusManager: FocusManager,
     context: Context,
     setShowDialog: (Boolean) -> Unit,
     setValue: (Transaction) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    val date = remember { mutableStateOf(item.value_date) }
-    val selectedUser = remember { mutableStateOf(item.user) }
-    val textFieldState = remember { mutableStateOf(TextFieldValue(item.title)) }
+    val date = remember { mutableStateOf(transaction.value_date) }
+    val selectedUser = remember { mutableStateOf(transaction.user) }
+    val textFieldState = remember { mutableStateOf(TextFieldValue(transaction.title)) }
     val amountTextFieldState = remember {
-        mutableStateOf(TextFieldValue(item.amount.toString()))
+        mutableStateOf(TextFieldValue(transaction.amount.toString()))
     }
 
     val showSelectUserDialog = remember { mutableStateOf(false) }
     val showAddTagDialog = remember { mutableStateOf(false) }
 
-    val itemTags = TagManager.getMutableTagList()
-    itemTags.forEach { tag -> tag.value.selected = item.tags.contains(tag.value) }
-    val tags = remember { itemTags }
+    val transactionTags = TagManager.getMutableTagList()
+    transactionTags.forEach { tag -> tag.value.selected = transaction.tags.contains(tag.value) }
+    val tags = remember { transactionTags }
 
     if (showSelectUserDialog.value) {
         SelectUserDialog(
@@ -455,7 +455,7 @@ fun EditItemDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = context.getString(R.string.edit_item_dialog_title),
+                            text = context.getString(R.string.edit_transaction_dialog_title),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = colors.onPrimaryContainer,
@@ -470,7 +470,7 @@ fun EditItemDialog(
                                 .clickable { setShowDialog(false) }
                         )
                     }
-                    AddItemPageContent(
+                    AddTransactionPageContent(
                         padding = PaddingValues(5.dp),
                         focusManager = focusManager,
                         context = context,
@@ -479,9 +479,9 @@ fun EditItemDialog(
                         showSelectUserDialog = showSelectUserDialog,
                         showAddTagDialog = showAddTagDialog,
                         tags = tags,
-                        submitButtonText = context.getString(R.string.edit_item_dialog_submit_button_text),
-                        submitItem = { editedItem ->
-                            setValue(editedItem)
+                        submitButtonText = context.getString(R.string.edit_transaction_dialog_submit_button_text),
+                        submitTransaction = { editedTransaction ->
+                            setValue(editedTransaction)
                             setShowDialog(false)
                         },
                         textFieldState = textFieldState,
@@ -497,14 +497,14 @@ fun EditItemDialog(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun EditItemDialogPreview() {
+fun EditTransactionDialogPreview() {
     KohleKompassTheme {
-        EditItemDialog(
+        EditTransactionDialog(
             context = LocalContext.current,
             focusManager = LocalFocusManager.current,
             setShowDialog = {},
             setValue = {},
-            item = itemList[0]
+            transaction = transactionList[0]
         )
     }
 }
@@ -512,9 +512,9 @@ fun EditItemDialogPreview() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun ContentItemPreview() {
+fun ContentTransactionPreview() {
     KohleKompassTheme {
-        ContentItem(
+        ContentTransaction(
             remember {
                 mutableStateOf(
                     Transaction(
@@ -536,8 +536,8 @@ fun ContentItemPreview() {
                 )
             },
             context = LocalContext.current,
-            showEditItemDialog = remember { mutableStateOf(false) },
-            currentItem = remember { mutableStateOf(null) }
+            showEditTransactionDialog = remember { mutableStateOf(false) },
+            currentTransaction = remember { mutableStateOf(null) }
         )
     }
 }

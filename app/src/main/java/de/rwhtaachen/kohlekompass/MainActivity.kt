@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -33,7 +34,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import de.rwhtaachen.kohlekompass.addItem.AddItem
+import de.rwhtaachen.kohlekompass.addTransaction.AddTransaction
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
 import de.rwhtaachen.kohlekompass.home.HomePage
 import de.rwhtaachen.kohlekompass.manageTags.ManageTags
@@ -75,8 +76,8 @@ class MainActivity : ComponentActivity() {
                             selectedPage = selectedPage
                         )
                     },
-                    Page(getString(R.string.add_item), rememberVectorPainter(Icons.Default.Add)) {
-                        AddItem(
+                    Page(getString(R.string.add_transaction), rememberVectorPainter(Icons.Default.Add)) {
+                        AddTransaction(
                             focusManager = focusManager,
                             drawerState = drawerState,
                             context = this,
@@ -112,9 +113,10 @@ class MainActivity : ComponentActivity() {
                     drawerState = drawerState,
                     drawerContent = {
                         ModalDrawerSheet {
-                            Column {
+                            val maxWidth = (pages.maxOf { it.title.length } * 16).dp
+                            Column (Modifier.width(maxWidth)){
                                 pages.forEach { page ->
-                                    DrawerItem(
+                                    DrawerTransaction(
                                         text = page.title,
                                         icon = page.icon,
                                         isSelected = (page == pages[selectedPage.value]),
@@ -190,7 +192,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DrawerItem(
+fun DrawerTransaction(
     text: String,
     icon: Painter,
     isSelected: Boolean,
@@ -200,8 +202,8 @@ fun DrawerItem(
 
     Row(
         modifier = Modifier
-            .padding(vertical = 8.dp, horizontal = 16.dp)
             .clickable(onClick = onClick)
+            .padding(vertical = 8.dp, horizontal = 16.dp)
             .fillMaxWidth()
     ) {
         Icon(

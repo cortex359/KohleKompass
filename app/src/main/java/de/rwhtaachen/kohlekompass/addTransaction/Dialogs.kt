@@ -1,4 +1,4 @@
-package de.rwhtaachen.kohlekompass.addItem
+package de.rwhtaachen.kohlekompass.addTransaction
 
 import android.content.Context
 import androidx.compose.foundation.border

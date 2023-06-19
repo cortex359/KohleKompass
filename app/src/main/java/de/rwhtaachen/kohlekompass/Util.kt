@@ -67,7 +67,7 @@ fun AutoScalingText(
     )
 }
 
-class ItemNotEditableException(message: String) : Exception(message)
+class TransactionNotEditableException(message: String) : Exception(message)
 
 
 /**

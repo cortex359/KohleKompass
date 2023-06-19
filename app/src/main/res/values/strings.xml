@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">kohlekompass</string>
     <string name="home_page">Home</string>
-    <string name="add_item">Add Item</string>
+    <string name="add_transaction">Add Transaction</string>
     <string name="advanced_search">Advanced Search</string>
     <string name="open_menu">Open Menu</string>
     <string name="start_date">From</string>
@@ -29,7 +29,7 @@
     <string name="select_tag_dialog_title">Select tag</string>
     <string name="tag_suggestions_card_title">Suggested Tags:</string>
     <string name="selected_tags_card_title">Selected Tags:</string>
-    <string name="item_description_text_field">Enter description</string>
+    <string name="transaction_description_text_field">Enter description</string>
     <string name="no_users_selected_error">No users selected! Cannot distribute.</string>
     <string name="add_tag_card_title">Add tag</string>
     <string name="home_bottom_text">Amount due:</string>
@@ -46,7 +46,7 @@
     <string name="number_divider">,</string>
     <string name="currency_symbol">€</string>
     <string name="kohlekompass_icon_description">Icon showing coins and bills</string>
-    <string name="add_item_submit_button_text">Add Item</string>
-    <string name="edit_item_dialog_submit_button_text">Save changes</string>
-    <string name="edit_item_dialog_title">Edit Item</string>
+    <string name="add_transaction_submit_button_text">Add Transaction</string>
+    <string name="edit_transaction_dialog_submit_button_text">Save changes</string>
+    <string name="edit_transaction_dialog_title">Edit Transaction</string>
 </resources>
