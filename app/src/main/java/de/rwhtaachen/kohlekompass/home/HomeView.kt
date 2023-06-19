@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -84,8 +82,7 @@ fun HomePage(
     drawerState: DrawerState,
     scope: CoroutineScope,
     context: Context,
-    selectedPage: MutableState<Int>,
-    coroutineScope: CoroutineScope
+    selectedPage: MutableState<Int>
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val showEditTransactionDialog = remember { mutableStateOf(false) }
@@ -128,8 +125,7 @@ fun HomePage(
                         padding = padding,
                         context = context,
                         showEditTransactionDialog = showEditTransactionDialog,
-                        currentTransaction = currentTransaction,
-                        coroutineScope = coroutineScope
+                        currentTransaction = currentTransaction
                     )
                 }
                 BottomBar(context = context)
@@ -254,10 +250,8 @@ fun ContentList(
     padding: PaddingValues,
     context: Context,
     showEditTransactionDialog: MutableState<Boolean>,
-    currentTransaction: MutableState<Transaction?>,
-    coroutineScope: CoroutineScope
+    currentTransaction: MutableState<Transaction?>
 ) {
-    val lazyListState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier
             .padding(padding)
@@ -266,14 +260,9 @@ fun ContentList(
                     focusManager.clearFocus()
                 })
             },
-        state = lazyListState
+        reverseLayout = true
     ) {
         val transactions = TransactionManager.getTransactionList()
-        coroutineScope.launch {
-            if (transactions.size >= 10) {
-                lazyListState.scrollToItem(transactions.size - 1)
-            }
-        }
         items(transactions.size) { index ->
             val transaction = transactions[index]
             if (state.value.text.isEmpty()
@@ -291,7 +280,6 @@ fun ContentList(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionListElement(
     transaction: MutableState<Transaction>,
@@ -581,8 +569,7 @@ fun HomePageScreenPreview() {
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             scope = rememberCoroutineScope(),
             context = LocalContext.current,
-            selectedPage = remember { mutableStateOf(0) },
-            coroutineScope = rememberCoroutineScope()
+            selectedPage = remember { mutableStateOf(0) }
         )
     }
 }
