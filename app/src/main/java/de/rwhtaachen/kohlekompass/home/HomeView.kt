@@ -295,18 +295,19 @@ fun TransactionListElement(
             .padding(10.dp, 5.dp)
             .height(70.dp)
     ) {
-        if (transaction.value.user != getCurrentUser()) {
-            UserNameWithProfilePicture(
-                user = transaction.value.user,
-                context = context,
-                padding = PaddingValues(0.dp, 0.dp, 10.dp, 0.dp)
-            )
-        }
+        UserNameWithProfilePicture(
+            user = transaction.value.user,
+            context = context,
+            padding = PaddingValues(0.dp, 0.dp, 10.dp, 0.dp)
+        )
         Column(Modifier.weight(1f, true)) {
             Box(
                 modifier = Modifier
                     .background(colors.primaryContainer, shape)
-                    .border(1.dp, colors.onPrimaryContainer, shape)
+                    .border(
+                        if (transaction.value.user == getCurrentUser()) 3.dp else 1.dp,
+                        colors.onPrimaryContainer, shape
+                    )
                     .padding(10.dp)
                     .clickable {
                         currentTransaction.value = transaction.value
@@ -362,13 +363,6 @@ fun TransactionListElement(
                     }
                 }
             }
-        }
-        if (transaction.value.user == getCurrentUser()) {
-            UserNameWithProfilePicture(
-                user = transaction.value.user,
-                context = context,
-                padding = PaddingValues(10.dp, 0.dp, 0.dp, 0.dp)
-            )
         }
     }
 }
