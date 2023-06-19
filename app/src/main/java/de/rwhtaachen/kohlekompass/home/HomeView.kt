@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -83,7 +84,8 @@ fun HomePage(
     drawerState: DrawerState,
     scope: CoroutineScope,
     context: Context,
-    selectedPage: MutableState<Int>
+    selectedPage: MutableState<Int>,
+    coroutineScope: CoroutineScope
 ) {
     val searchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val showEditTransactionDialog = remember { mutableStateOf(false) }
@@ -126,7 +128,8 @@ fun HomePage(
                         padding = padding,
                         context = context,
                         showEditTransactionDialog = showEditTransactionDialog,
-                        currentTransaction = currentTransaction
+                        currentTransaction = currentTransaction,
+                        coroutineScope = coroutineScope
                     )
                 }
                 BottomBar(context = context)
@@ -251,8 +254,10 @@ fun ContentList(
     padding: PaddingValues,
     context: Context,
     showEditTransactionDialog: MutableState<Boolean>,
-    currentTransaction: MutableState<Transaction?>
+    currentTransaction: MutableState<Transaction?>,
+    coroutineScope: CoroutineScope
 ) {
+    val lazyListState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier
             .padding(padding)
@@ -260,9 +265,15 @@ fun ContentList(
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            }
+            },
+        state = lazyListState
     ) {
         val transactions = TransactionManager.getTransactionList()
+        coroutineScope.launch {
+            if (transactions.size >= 10) {
+                lazyListState.scrollToItem(transactions.size - 1)
+            }
+        }
         items(transactions.size) { index ->
             val transaction = transactions[index]
             if (state.value.text.isEmpty()
@@ -570,7 +581,8 @@ fun HomePageScreenPreview() {
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
             scope = rememberCoroutineScope(),
             context = LocalContext.current,
-            selectedPage = remember { mutableStateOf(0) }
+            selectedPage = remember { mutableStateOf(0) },
+            coroutineScope = rememberCoroutineScope()
         )
     }
 }

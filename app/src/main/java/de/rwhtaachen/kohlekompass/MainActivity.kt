@@ -71,7 +71,8 @@ class MainActivity : ComponentActivity() {
                             scope = scope,
                             focusManager = focusManager,
                             context = this,
-                            selectedPage = selectedPage
+                            selectedPage = selectedPage,
+                            coroutineScope = scope
                         )
                     },
                     Page(getString(R.string.add_transaction), rememberVectorPainter(Icons.Default.Add)) {
