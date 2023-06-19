@@ -362,8 +362,7 @@ fun AddTransactionPageContent(
                             local_date = LocalDate.now(),
                             sync_date = null,
                             user = selectedUser.value,
-                            tags = tags.filter { it.value.selected }.map { it.value }
-                                .toMutableSet()
+                            tags = tags.filter { it.value.selected }.map { it.value }.toMutableSet()
                         )
                         submitTransaction(transaction)
                     }

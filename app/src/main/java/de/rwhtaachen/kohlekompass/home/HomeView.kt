@@ -63,6 +63,7 @@ import de.rwhtaachen.kohlekompass.SearchField
 import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
 import de.rwhtaachen.kohlekompass.addTransaction.AddTagDialog
 import de.rwhtaachen.kohlekompass.addTransaction.SelectUserDialog
+import de.rwhtaachen.kohlekompass.advancedSearch.UserManager.Companion.getCurrentUser
 import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.source.example.transactionList
@@ -269,7 +270,7 @@ fun ContentList(
                 || transaction.value.title.lowercase().contains(state.value.text.lowercase())
                 || transaction.value.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
-                ContentTransaction(
+                TransactionListElement(
                     transaction,
                     context = context,
                     showEditTransactionDialog = showEditTransactionDialog,
@@ -282,7 +283,7 @@ fun ContentList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentTransaction(
+fun TransactionListElement(
     transaction: MutableState<Transaction>,
     context: Context,
     showEditTransactionDialog: MutableState<Boolean>,
@@ -291,100 +292,115 @@ fun ContentTransaction(
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     val tags = transaction.value.tags.toList()
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-            .background(colors.primaryContainer, shape)
-            .border(1.dp, colors.onPrimaryContainer, shape)
-            .padding(10.dp)
-            .clickable {
-                currentTransaction.value = transaction.value
-                showEditTransactionDialog.value = true
+    Row (){
+        if(transaction.value.user != getCurrentUser()) {
+
+        }
+        Column {
+            Row {
+                painterResource(id = transaction.value.user.profilePicture)
             }
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    transaction.value.title,
-                    color = colors.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(transaction.value.user.name, color = colors.onPrimaryContainer)
-                Text(transaction.value.value_date.toString(), color = colors.onPrimaryContainer)
+            Row {
+                Text(transaction.value.user.name)
             }
-            Column(
-                Modifier
-                    .weight(1f, true)
-                    .fillMaxHeight()
-                    .padding(10.dp, 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                if (tags.size == 1) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        Card(
-                            modifier = Modifier.padding(2.dp),
-                            colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
-                            border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                            shape = MaterialTheme.shapes.extraSmall
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .size(20.dp),
-                                    painter = painterResource(id = R.drawable.outline_sell_24),
-                                    contentDescription = context.getString(R.string.tag_icon_description)
-                                )
-                                Text(
-                                    tags[0].name.replaceFirstChar { it.uppercase() },
-                                    modifier = Modifier.padding(2.dp)
-                                )
-                            }
-                        }
+        }
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
+                    .background(colors.primaryContainer, shape)
+                    .border(1.dp, colors.onPrimaryContainer, shape)
+                    .padding(10.dp)
+                    .clickable {
+                        currentTransaction.value = transaction.value
+                        showEditTransactionDialog.value = true
                     }
-                } else {
-                    LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Adaptive(30.dp)) {
-                        items(tags.size) {
-                            Card(
-                                modifier = Modifier.padding(2.dp),
-                                colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
-                                border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                                shape = MaterialTheme.shapes.extraSmall
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(70.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            transaction.value.title,
+                            color = colors.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(transaction.value.user.name, color = colors.onPrimaryContainer)
+                        Text(transaction.value.value_date.toString(), color = colors.onPrimaryContainer)
+                    }
+                    Column(
+                        Modifier
+                            .weight(1f, true)
+                            .fillMaxHeight()
+                            .padding(10.dp, 0.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        if (tags.size == 1) {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceAround
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Card(
+                                    modifier = Modifier.padding(2.dp),
+                                    colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
+                                    border = BorderStroke(1.dp, colors.onSecondaryContainer),
+                                    shape = MaterialTheme.shapes.extraSmall
                                 ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(2.dp)
-                                            .size(20.dp),
-                                        painter = painterResource(id = R.drawable.outline_sell_24),
-                                        contentDescription = context.getString(R.string.tag_icon_description)
-                                    )
-                                    Text(
-                                        tags[it].name.replaceFirstChar { it.uppercase() },
-                                        modifier = Modifier.padding(2.dp)
-                                    )
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .padding(2.dp)
+                                                .size(20.dp),
+                                            painter = painterResource(id = R.drawable.outline_sell_24),
+                                            contentDescription = context.getString(R.string.tag_icon_description)
+                                        )
+                                        Text(
+                                            tags[0].name.replaceFirstChar { it.uppercase() },
+                                            modifier = Modifier.padding(2.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Adaptive(30.dp)) {
+                                items(tags.size) {
+                                    Card(
+                                        modifier = Modifier.padding(2.dp),
+                                        colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
+                                        border = BorderStroke(1.dp, colors.onSecondaryContainer),
+                                        shape = MaterialTheme.shapes.extraSmall
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxSize(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                modifier = Modifier
+                                                    .padding(2.dp)
+                                                    .size(20.dp),
+                                                painter = painterResource(id = R.drawable.outline_sell_24),
+                                                contentDescription = context.getString(R.string.tag_icon_description)
+                                            )
+                                            Text(
+                                                tags[it].name.replaceFirstChar { it.uppercase() },
+                                                modifier = Modifier.padding(2.dp)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                    Text(transaction.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
                 }
             }
-            Text(transaction.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -512,9 +528,9 @@ fun EditTransactionDialogPreview() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun ContentTransactionPreview() {
+fun TransactionListElementPreview() {
     KohleKompassTheme {
-        ContentTransaction(
+        TransactionListElement(
             remember {
                 mutableStateOf(
                     Transaction(

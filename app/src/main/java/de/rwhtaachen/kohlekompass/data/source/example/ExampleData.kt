@@ -7,6 +7,7 @@ import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.data.Money
+import de.rwthaachen.kohlekompass.R
 import java.time.LocalDate
 import java.time.Month
 
@@ -124,12 +125,10 @@ val tags = mutableMapOf(
 )
 
 val userList = mutableListOf(
-    User("Paul"),
-    User("Julia"),
-    User("Marie"),
-    User("Karl"),
-    User("Theo"),
-    User("Laura"),
+    User("Paul", profilePicture = R.mipmap.avatar04),
+    User("Julia", profilePicture = R.mipmap.avatar01),
+    User("Marie", profilePicture = R.mipmap.avatar02),
+    User("Karl", profilePicture = R.mipmap.avatar03)
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
