@@ -303,16 +303,16 @@ fun TransactionListElement(
         Column(Modifier.weight(1f, true)) {
             Box(
                 modifier = Modifier
+                    .clickable {
+                        currentTransaction.value = transaction.value
+                        showEditTransactionDialog.value = true
+                    }
                     .background(colors.primaryContainer, shape)
                     .border(
                         if (transaction.value.user == getCurrentUser()) 3.dp else 1.dp,
                         colors.onPrimaryContainer, shape
                     )
                     .padding(10.dp)
-                    .clickable {
-                        currentTransaction.value = transaction.value
-                        showEditTransactionDialog.value = true
-                    }
             ) {
                 Column {
                     Row(
