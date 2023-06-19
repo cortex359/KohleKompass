@@ -438,7 +438,9 @@ fun EditTransactionDialog(
     val showAddTagDialog = remember { mutableStateOf(false) }
 
     val transactionTags = TagManager.getMutableTagList()
-    transactionTags.forEach { tag -> tag.value.selected = transaction.tags.contains(tag.value) }
+    transactionTags.forEach { tag ->
+        tag.value.selected = transaction.tags.any { it.name == tag.value.name }
+    }
     val tags = remember { transactionTags }
 
     if (showSelectUserDialog.value) {
