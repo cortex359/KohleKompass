@@ -179,7 +179,7 @@ fun AdvancedSearch(
 @Preview
 @Composable
 fun AdvancedSearchPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         AdvancedSearch(
             focusManager = LocalFocusManager.current,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),

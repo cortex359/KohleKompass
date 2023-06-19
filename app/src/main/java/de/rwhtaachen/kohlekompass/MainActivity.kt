@@ -2,6 +2,7 @@ package de.rwhtaachen.kohlekompass
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -48,6 +49,7 @@ data class Page(
     val content: @Composable () -> Unit
 )
 
+private const val TAG = "MainActivity"
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -133,6 +135,59 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    // @TODO: Activity Lifecycle:
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG,"First.onStart")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG,"First.onResume")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.i(TAG,"First.onRestart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG,"First.onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i(TAG,"First.onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG,"First.onDestroy, ref $this")
+    }
+
+    // after onPause
+    override fun onSaveInstanceState(savedInstanceState: Bundle) { // Save something
+        val key = "save_key"
+        savedInstanceState.putString(key, "something")
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState)
+        Log.i(TAG,"First.onSaveInstanceState")
+    }
+
+    // is called after onStart(), whereas onCreate() is called before onStart()
+    // called only when recreating activity after it was killed
+    // same bundle as in onCreate
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) { // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.i(TAG,"First.onRestoreInstanceState")
+        // restore something
+        val key = "save_keys"
+        val value = savedInstanceState.getString(key)
+        Log.i(TAG,"First.onRestoreInstanceState: value='$value'")
     }
 }
 

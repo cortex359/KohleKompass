@@ -2,6 +2,8 @@ package de.rwhtaachen.kohlekompass.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDate
 
 /**
@@ -9,7 +11,9 @@ import java.time.LocalDate
  * Tags can be associated with an Transaction
  */
 @RequiresApi(Build.VERSION_CODES.O)
+@Entity(tableName = "transactions")
 data class Transaction(
+    @PrimaryKey
     val id: Int? = null,
     var title: String = "",
     val description: String = "",
@@ -22,12 +26,7 @@ data class Transaction(
     var tags: MutableSet<Tag>
 ) {
     init {
-        this.title = title
-        this.user = user
-        this.amount = amount
-        this.value_date = value_date
         this.sync_date = null
         this.local_date = LocalDate.now()
-        this.tags = tags
     }
 }

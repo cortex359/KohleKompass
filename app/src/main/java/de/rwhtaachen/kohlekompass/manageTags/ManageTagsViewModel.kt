@@ -9,7 +9,7 @@ import de.rwhtaachen.kohlekompass.data.source.example.tags
 /**
  * Manages the tag List. Hands out a fresh copy with all tags unselected to Views
  */
-class TagManager() {
+class TagManager {
     companion object { // equivalent to static from java
         // todo in production the tagList is private and fetched from a database and can only be accessed through this class.
         // todo In testing the list from example Data is used

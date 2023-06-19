@@ -224,7 +224,7 @@ fun SubmitSearch(context: Context) {
 @Preview
 @Composable
 fun BottomActionBarPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         BottomActionBar(
             context = LocalContext.current,
             listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false))

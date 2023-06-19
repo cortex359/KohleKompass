@@ -3,6 +3,7 @@ package de.rwhtaachen.kohlekompass.data.source.local
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
@@ -20,12 +21,13 @@ interface TransactionDao {
      *
      * @return all transactions.
      */
-    @Query("SELECT * FROM transactions")
-    fun observeAll(): Flow<List<Transaction>>
-    @Insert
-    fun insertTransaction(transaction: Transaction)
+    // WHERE group = group_id
+    @Query("SELECT * FROM transactions ORDER BY id DESC")
+    suspend fun observeAll(): Flow<List<Transaction>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(transaction: Transaction)
     @Update
-    fun updateTransaction(transaction: Transaction)
+    suspend fun update(transaction: Transaction)
     @Delete
-    fun deleteTransaction(transaction: Transaction)
+    suspend fun delete(transaction: Transaction)
 }

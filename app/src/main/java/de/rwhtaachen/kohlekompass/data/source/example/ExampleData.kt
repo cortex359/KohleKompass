@@ -974,3 +974,4 @@ val savedSearches = mutableListOf(
     SavedSearch("Sprit"),
     SavedSearch("Laufende Kosten Quartal")
 )
+

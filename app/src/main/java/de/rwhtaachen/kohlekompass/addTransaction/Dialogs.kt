@@ -236,7 +236,7 @@ fun AddTagDialog(
 @Composable
 @Preview
 fun SelectUserDialogPreview() {
-    KohleKompassTheme() {
+    KohleKompassTheme {
         SelectUserDialog(
             focusManager = LocalFocusManager.current,
             context = LocalContext.current,
