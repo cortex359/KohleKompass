@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,16 +15,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -60,14 +58,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
 import de.rwhtaachen.kohlekompass.addTransaction.AddTagDialog
+import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
 import de.rwhtaachen.kohlekompass.addTransaction.SelectUserDialog
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager.Companion.getCurrentUser
 import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.data.source.example.transactionList
+import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import de.rwhtaachen.kohlekompass.data.source.example.transactionList
 import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -292,23 +291,21 @@ fun TransactionListElement(
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     val tags = transaction.value.tags.toList()
-    Row (){
-        if(transaction.value.user != getCurrentUser()) {
-
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .padding(10.dp, 5.dp)
+            .height(70.dp)
+    ) {
+        if (transaction.value.user != getCurrentUser()) {
+            UserNameWithProfilePicture(
+                user = transaction.value.user,
+                context = context,
+                padding = PaddingValues(0.dp, 0.dp, 10.dp, 0.dp)
+            )
         }
-        Column {
-            Row {
-                painterResource(id = transaction.value.user.profilePicture)
-            }
-            Row {
-                Text(transaction.value.user.name)
-            }
-        }
-        Column {
+        Column(Modifier.weight(1f, true)) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
                     .background(colors.primaryContainer, shape)
                     .border(1.dp, colors.onPrimaryContainer, shape)
                     .padding(10.dp)
@@ -317,91 +314,95 @@ fun TransactionListElement(
                         showEditTransactionDialog.value = true
                     }
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(70.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Text(
                             transaction.value.title,
                             color = colors.onPrimaryContainer,
                             fontWeight = FontWeight.Bold
                         )
-                        Text(transaction.value.user.name, color = colors.onPrimaryContainer)
-                        Text(transaction.value.value_date.toString(), color = colors.onPrimaryContainer)
+                        Text(
+                            transaction.value.value_date.toString(),
+                            color = colors.onPrimaryContainer
+                        )
                     }
-                    Column(
-                        Modifier
-                            .weight(1f, true)
-                            .fillMaxHeight()
-                            .padding(10.dp, 0.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        if (tags.size == 1) {
-                            Row(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceAround
-                            ) {
+                        LazyRow(Modifier.weight(1f, true)) {
+                            items(tags.size) {
                                 Card(
-                                    modifier = Modifier.padding(2.dp),
+                                    modifier = Modifier.padding(0.dp, 0.dp, 2.dp, 0.dp),
                                     colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
                                     border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                                    shape = MaterialTheme.shapes.extraSmall
+                                    shape = MaterialTheme.shapes.extraSmall,
                                 ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            modifier = Modifier
-                                                .padding(2.dp)
-                                                .size(20.dp),
-                                            painter = painterResource(id = R.drawable.outline_sell_24),
-                                            contentDescription = context.getString(R.string.tag_icon_description)
-                                        )
-                                        Text(
-                                            tags[0].name.replaceFirstChar { it.uppercase() },
-                                            modifier = Modifier.padding(2.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        } else {
-                            LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Adaptive(30.dp)) {
-                                items(tags.size) {
-                                    Card(
-                                        modifier = Modifier.padding(2.dp),
-                                        colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
-                                        border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                                        shape = MaterialTheme.shapes.extraSmall
-                                    ) {
-                                        Row(
-                                            modifier = Modifier.fillMaxSize(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Icon(
-                                                modifier = Modifier
-                                                    .padding(2.dp)
-                                                    .size(20.dp),
-                                                painter = painterResource(id = R.drawable.outline_sell_24),
-                                                contentDescription = context.getString(R.string.tag_icon_description)
-                                            )
-                                            Text(
-                                                tags[it].name.replaceFirstChar { it.uppercase() },
-                                                modifier = Modifier.padding(2.dp)
-                                            )
-                                        }
-                                    }
+                                    Text(
+                                        tags[it].name.replaceFirstChar { it.uppercase() },
+                                        modifier = Modifier.padding(3.dp)
+                                    )
                                 }
                             }
                         }
+                        Text(
+                            transaction.value.amount.toString(),
+                            color = colors.onPrimaryContainer,
+                            modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+
                     }
-                    Text(transaction.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
                 }
             }
         }
+        if (transaction.value.user == getCurrentUser()) {
+            UserNameWithProfilePicture(
+                user = transaction.value.user,
+                context = context,
+                padding = PaddingValues(10.dp, 0.dp, 0.dp, 0.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun UserNameWithProfilePicture(user: User, context: Context, padding: PaddingValues) {
+    Column(
+        Modifier.padding(padding),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(id = user.profilePicture),
+            contentDescription = context.getString(R.string.profile_picture_description),
+            modifier = Modifier.weight(1f, true)
+        )
+        Text(
+            text = user.name,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+
+@Preview
+@Composable
+fun UserNameWithProfilePicturePreview() {
+    KohleKompassTheme {
+        UserNameWithProfilePicture(
+            user = userList[0],
+            context = LocalContext.current,
+            padding = PaddingValues(5.dp)
+        )
     }
 }
 
