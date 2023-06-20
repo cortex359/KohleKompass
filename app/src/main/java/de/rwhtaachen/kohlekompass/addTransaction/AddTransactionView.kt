@@ -101,6 +101,8 @@ fun AddTransaction(
     val showSelectUserDialog = remember { mutableStateOf(false) }
     val textFieldState = remember { mutableStateOf(TextFieldValue("")) }
     val amountTextFieldState = remember { mutableStateOf(TextFieldValue("")) }
+    val showAddTagDialog = remember { mutableStateOf(false) }
+    val tags = remember { TagManager.getMutableTagList() }
 
     if (showSelectUserDialog.value) {
         SelectUserDialog(
@@ -113,9 +115,6 @@ fun AddTransaction(
             }
         )
     }
-
-    val showAddTagDialog = remember { mutableStateOf(false) }
-    val tags = remember { TagManager.getMutableTagList() }
 
     if (showAddTagDialog.value) {
         AddTagDialog(
@@ -193,7 +192,19 @@ fun AddTransaction(
                 showAddTagDialog = showAddTagDialog,
                 tags = tags,
                 textFieldState = textFieldState,
-                amountTextFieldState = amountTextFieldState
+                amountTextFieldState = amountTextFieldState,
+                submitTransaction = {
+                    selectedDate.value = LocalDate.now()
+                    selectedUser.value = UserManager.getCurrentUser()
+                    showSelectUserDialog.value = false
+                    textFieldState.value = TextFieldValue("")
+                    amountTextFieldState.value = TextFieldValue("")
+                    showAddTagDialog.value = false
+                    tags.forEach { tag ->
+                        tag.value = tag.value.copy(selected = false)
+                    }
+                    TransactionManager.addTransaction(it)
+                }
             )
         }
     )
@@ -211,7 +222,7 @@ fun AddTransactionPageContent(
     showSelectUserDialog: MutableState<Boolean>,
     showAddTagDialog: MutableState<Boolean>,
     tags: MutableList<MutableState<Tag>>,
-    submitTransaction: (Transaction) -> Unit = { TransactionManager.addTransaction(it) },
+    submitTransaction: (Transaction) -> Unit,
     submitButtonText: String = context.getString(R.string.add_transaction_submit_button_text),
     textFieldState: MutableState<TextFieldValue>,
     amountTextFieldState: MutableState<TextFieldValue>
@@ -362,8 +373,7 @@ fun AddTransactionPageContent(
                             local_date = LocalDate.now(),
                             sync_date = null,
                             user = selectedUser.value,
-                            tags = tags.filter { it.value.selected }.map { it.value }
-                                .toMutableSet()
+                            tags = tags.filter { it.value.selected }.map { it.value }.toMutableSet()
                         )
                         submitTransaction(transaction)
                     }

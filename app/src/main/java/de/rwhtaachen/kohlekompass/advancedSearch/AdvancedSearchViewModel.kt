@@ -25,7 +25,7 @@ class UserManager {
 
         // todo in production, this should return the actual current unser
         fun getCurrentUser(): User {
-            return User("Paul")
+            return userList[0]
         }
     }
 }

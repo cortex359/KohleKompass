@@ -36,3 +36,4 @@ https://git.fh-aachen.de/cortex/kohlekompass
 # Lizenzhinweise
 
 - Projektavatar: CC BY 3.0 by Laura Reen aus dem _aami flat: New Year Resolutions! icon pack_.
+- Example User Avatars by <a href="https://www.freepik.com/free-vector/find-person-job-opportunity_8063764.htm#query=avatar&position=0&from_view=keyword&track=sph">studiogstock on Freepik</a> 

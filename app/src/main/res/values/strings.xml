@@ -49,4 +49,7 @@
     <string name="add_transaction_submit_button_text">Add Transaction</string>
     <string name="edit_transaction_dialog_submit_button_text">Save changes</string>
     <string name="edit_transaction_dialog_title">Edit Transaction</string>
+    <string name="profile_picture_description">A profile picture</string>
+    <string name="back_arrow_icon_description">back arrow icon</string>
+    <string name="go_back_text">Back</string>
 </resources>

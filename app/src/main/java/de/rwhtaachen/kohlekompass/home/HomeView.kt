@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,16 +14,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -60,13 +57,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import de.rwhtaachen.kohlekompass.SearchField
-import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
 import de.rwhtaachen.kohlekompass.addTransaction.AddTagDialog
+import de.rwhtaachen.kohlekompass.addTransaction.AddTransactionPageContent
 import de.rwhtaachen.kohlekompass.addTransaction.SelectUserDialog
+import de.rwhtaachen.kohlekompass.advancedSearch.UserManager.Companion.getCurrentUser
 import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Transaction
-import de.rwhtaachen.kohlekompass.data.source.example.transactionList
+import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import de.rwhtaachen.kohlekompass.data.source.example.transactionList
 import de.rwhtaachen.kohlekompass.data.source.example.userList
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -122,6 +121,7 @@ fun HomePage(
                 Row(Modifier.weight(1f, true)) {
                     ContentList(
                         state = searchBarState,
+                        transactions = TransactionManager.getTransactionList(),
                         focusManager = focusManager,
                         padding = padding,
                         context = context,
@@ -246,7 +246,8 @@ fun BottomBar(context: Context) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentList(
-    state: MutableState<TextFieldValue>,
+    state: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue("")) },
+    transactions: MutableList<MutableState<Transaction>>,
     focusManager: FocusManager,
     padding: PaddingValues,
     context: Context,
@@ -260,16 +261,16 @@ fun ContentList(
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            }
+            },
+        reverseLayout = true
     ) {
-        val transactions = TransactionManager.getTransactionList()
         items(transactions.size) { index ->
             val transaction = transactions[index]
             if (state.value.text.isEmpty()
                 || transaction.value.title.lowercase().contains(state.value.text.lowercase())
                 || transaction.value.user.name.lowercase().contains(state.value.text.lowercase())
             ) {
-                ContentTransaction(
+                TransactionListElement(
                     transaction,
                     context = context,
                     showEditTransactionDialog = showEditTransactionDialog,
@@ -280,9 +281,8 @@ fun ContentList(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContentTransaction(
+fun TransactionListElement(
     transaction: MutableState<Transaction>,
     context: Context,
     showEditTransactionDialog: MutableState<Boolean>,
@@ -291,101 +291,112 @@ fun ContentTransaction(
     val colors = MaterialTheme.colorScheme
     val shape = MaterialTheme.shapes.medium
     val tags = transaction.value.tags.toList()
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-            .background(colors.primaryContainer, shape)
-            .border(1.dp, colors.onPrimaryContainer, shape)
-            .padding(10.dp)
-            .clickable {
-                currentTransaction.value = transaction.value
-                showEditTransactionDialog.value = true
-            }
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .padding(10.dp, 5.dp)
+            .height(70.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    transaction.value.title,
-                    color = colors.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(transaction.value.user.name, color = colors.onPrimaryContainer)
-                Text(transaction.value.value_date.toString(), color = colors.onPrimaryContainer)
-            }
-            Column(
-                Modifier
-                    .weight(1f, true)
-                    .fillMaxHeight()
-                    .padding(10.dp, 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                if (tags.size == 1) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        Card(
-                            modifier = Modifier.padding(2.dp),
-                            colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
-                            border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                            shape = MaterialTheme.shapes.extraSmall
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .size(20.dp),
-                                    painter = painterResource(id = R.drawable.outline_sell_24),
-                                    contentDescription = context.getString(R.string.tag_icon_description)
-                                )
-                                Text(
-                                    tags[0].name.replaceFirstChar { it.uppercase() },
-                                    modifier = Modifier.padding(2.dp)
-                                )
-                            }
-                        }
+        UserNameWithProfilePicture(
+            user = transaction.value.user,
+            context = context,
+            padding = PaddingValues(0.dp, 0.dp, 10.dp, 0.dp)
+        )
+        Column(Modifier.weight(1f, true)) {
+            Box(
+                modifier = Modifier
+                    .clickable {
+                        currentTransaction.value = transaction.value
+                        showEditTransactionDialog.value = true
                     }
-                } else {
-                    LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Adaptive(30.dp)) {
-                        items(tags.size) {
-                            Card(
-                                modifier = Modifier.padding(2.dp),
-                                colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
-                                border = BorderStroke(1.dp, colors.onSecondaryContainer),
-                                shape = MaterialTheme.shapes.extraSmall
-                            ) {
-                                Row(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalAlignment = Alignment.CenterVertically
+                    .background(colors.primaryContainer, shape)
+                    .border(
+                        if (transaction.value.user == getCurrentUser()) 3.dp else 1.dp,
+                        colors.onPrimaryContainer, shape
+                    )
+                    .padding(10.dp)
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            transaction.value.title,
+                            color = colors.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            transaction.value.value_date.toString(),
+                            color = colors.onPrimaryContainer
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 5.dp, 0.dp, 0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        LazyRow(Modifier.weight(1f, true)) {
+                            items(tags.size) {
+                                Card(
+                                    modifier = Modifier.padding(0.dp, 0.dp, 2.dp, 0.dp),
+                                    colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
+                                    border = BorderStroke(1.dp, colors.onSecondaryContainer),
+                                    shape = MaterialTheme.shapes.extraSmall,
                                 ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(2.dp)
-                                            .size(20.dp),
-                                        painter = painterResource(id = R.drawable.outline_sell_24),
-                                        contentDescription = context.getString(R.string.tag_icon_description)
-                                    )
                                     Text(
                                         tags[it].name.replaceFirstChar { it.uppercase() },
-                                        modifier = Modifier.padding(2.dp)
+                                        modifier = Modifier.padding(3.dp)
                                     )
                                 }
                             }
                         }
+                        Text(
+                            transaction.value.amount.toString(),
+                            color = colors.onPrimaryContainer,
+                            modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+
                     }
                 }
             }
-            Text(transaction.value.amount.toString(), color = colors.onPrimaryContainer, fontWeight = FontWeight.Bold)
         }
+    }
+}
+
+@Composable
+fun UserNameWithProfilePicture(user: User, context: Context, padding: PaddingValues) {
+    Column(
+        Modifier.padding(padding),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(id = user.profilePicture),
+            contentDescription = context.getString(R.string.profile_picture_description),
+            modifier = Modifier.weight(1f, true)
+        )
+        Text(
+            text = user.name,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+
+@Preview
+@Composable
+fun UserNameWithProfilePicturePreview() {
+    KohleKompassTheme {
+        UserNameWithProfilePicture(
+            user = userList[0],
+            context = LocalContext.current,
+            padding = PaddingValues(5.dp)
+        )
     }
 }
 
@@ -410,7 +421,9 @@ fun EditTransactionDialog(
     val showAddTagDialog = remember { mutableStateOf(false) }
 
     val transactionTags = TagManager.getMutableTagList()
-    transactionTags.forEach { tag -> tag.value.selected = transaction.tags.contains(tag.value) }
+    transactionTags.forEach { tag ->
+        tag.value.selected = transaction.tags.any { it.name == tag.value.name }
+    }
     val tags = remember { transactionTags }
 
     if (showSelectUserDialog.value) {
@@ -512,9 +525,9 @@ fun EditTransactionDialogPreview() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun ContentTransactionPreview() {
+fun TransactionListElementPreview() {
     KohleKompassTheme {
-        ContentTransaction(
+        TransactionListElement(
             remember {
                 mutableStateOf(
                     Transaction(
