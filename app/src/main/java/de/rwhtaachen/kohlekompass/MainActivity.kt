@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import de.rwhtaachen.kohlekompass.addTransaction.AddTransaction
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
 import de.rwhtaachen.kohlekompass.home.HomePage
+import de.rwhtaachen.kohlekompass.manageSavedSearches.ManageSavedSearches
 import de.rwhtaachen.kohlekompass.manageTags.ManageTags
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -101,6 +102,17 @@ class MainActivity : ComponentActivity() {
                         icon = painterResource(R.drawable.outline_sell_24)
                     ) {
                         ManageTags(
+                            context = this,
+                            drawerState = drawerState,
+                            scope = scope,
+                            focusManager = focusManager
+                        )
+                    },
+                    Page(
+                        title = getString(R.string.savedSearches_page_title),
+                        icon = painterResource(R.drawable.baseline_saved_search_24)
+                    ) {
+                        ManageSavedSearches(
                             context = this,
                             drawerState = drawerState,
                             scope = scope,

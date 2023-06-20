@@ -52,4 +52,8 @@
     <string name="profile_picture_description">A profile picture</string>
     <string name="back_arrow_icon_description">back arrow icon</string>
     <string name="go_back_text">Back</string>
+    <string name="savedSearches_page_title">Saved Searches</string>
+    <string name="you_owe">you owe</string>
+    <string name="you_get">you get</string>
+    <string name="share_icon_description">share icon, three dots connected by lines</string>
 </resources>
