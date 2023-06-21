@@ -3,6 +3,7 @@ package de.rwhtaachen.kohlekompass.manageSavedSearches
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.rwhtaachen.kohlekompass.advancedSearch.SavedSearchManager
 import de.rwhtaachen.kohlekompass.advancedSearch.UserManager
+import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 import de.rwthaachen.kohlekompass.R
@@ -121,7 +123,7 @@ fun ManageSavedSearches(
                     items(savedSearches.value.size) { index ->
                         val savedSearch = savedSearches.value[index]
                         val users: List<User> =
-                            (if (savedSearch.value.users == null) UserManager.getUserList() else savedSearch.value.users!!)
+                            (if (savedSearch.value.users.isNullOrEmpty()) UserManager.getUserList() else savedSearch.value.users!!)
                                 .filter { it.name != UserManager.getCurrentUser().name }.toList()
                         Card(
                             modifier = Modifier
@@ -141,8 +143,12 @@ fun ManageSavedSearches(
                                     .padding(5.dp),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                val amounts =
-                                    SavedSearchManager.calculateAmounts(savedSearch.value)
+                                val amounts = mutableMapOf<String, Money>()
+                                SavedSearchManager.calculateAmounts(savedSearch.value)
+                                    .forEach() { // todo use id instead of name
+                                        amounts[it.key.name] = it.value
+                                    }
+
                                 for (user in users) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Image(
@@ -155,9 +161,10 @@ fun ManageSavedSearches(
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.onPrimaryContainer
                                         )
+                                        val amount = amounts.firstNotNullOf { }
                                         Text(
-                                            text = amounts[user].toString(),
-                                            color = if (amounts[user].toString()
+                                            text = amounts[user.name].toString(),
+                                            color = if (amounts[user.name].toString()
                                                     .startsWith('-') // todo implement comparators
                                             ) colors.error else colors.primary,
                                             modifier = Modifier.padding(5.dp, 0.dp),
@@ -171,24 +178,71 @@ fun ManageSavedSearches(
                                     .padding(5.dp),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                Card {
+                                Card(
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .border(
+                                            1.dp,
+                                            colors.onPrimaryContainer,
+                                            MaterialTheme.shapes.medium
+                                        ),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = colors.primaryContainer
+                                    )
+                                ) {
                                     Icon(
                                         Icons.Default.Share,
                                         contentDescription = context.getString(R.string.share_icon_description),
-                                        Modifier.padding(5.dp)
+                                        Modifier
+                                            .padding(5.dp)
+                                            .fillMaxSize(),
+                                        tint = colors.onPrimaryContainer
                                     )
                                 }
                                 Card(
-                                    modifier = Modifier.clickable {
-                                        SavedSearchManager.removeSavedSearch(savedSearch.value)
-                                        savedSearches.value =
-                                            SavedSearchManager.getMutableSavedSearchesList()
-                                    },
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .border(
+                                            1.dp,
+                                            colors.onPrimaryContainer,
+                                            MaterialTheme.shapes.medium
+                                        ),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = colors.primaryContainer
+                                    )
+                                ) {
+                                    Icon(
+                                        painterResource(id = R.drawable.outline_kohlekompass),
+                                        contentDescription = context.getString(R.string.kohlekompass_icon_description),
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .fillMaxSize(),
+                                        tint = colors.onPrimaryContainer
+                                    )
+                                }
+                                Card(
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .border(
+                                            1.dp,
+                                            colors.onPrimaryContainer,
+                                            MaterialTheme.shapes.medium
+                                        )
+                                        .clickable {
+                                            SavedSearchManager.removeSavedSearch(savedSearch.value)
+                                            savedSearches.value =
+                                                SavedSearchManager.getMutableSavedSearchesList()
+                                        },
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = colors.primaryContainer
+                                    )
                                 ) {
                                     Icon(
                                         Icons.Default.Delete,
                                         context.getString(R.string.delete_icon_description),
-                                        modifier = Modifier.padding(5.dp),
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .fillMaxSize(),
                                         tint = colors.error,
                                     )
                                 }
