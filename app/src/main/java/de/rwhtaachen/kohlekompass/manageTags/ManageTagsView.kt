@@ -135,11 +135,11 @@ fun ManageTags(
                 },
             )
         },
-        content = { _ ->
+        content = { padding ->
             Column {
                 LazyColumn(
                     Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .weight(1f, true)
                 ) {
                     items(tags.value.size) {
@@ -219,7 +219,7 @@ fun ManageTags(
                             modifier = Modifier
                                 .padding(5.dp)
                                 .clickable {
-                                    TagManager.addTag(addTagTextField.value.text)
+                                    TagManager.addTag(addTagTextField.value.text, context, scope)
                                     tags.value = TagManager.getTagList()
                                     addTagTextField.value = TextFieldValue("")
                                     focusManager.clearFocus()
