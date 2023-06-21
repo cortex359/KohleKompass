@@ -88,6 +88,6 @@ class TransactionManager {
  * The value returned by this is shown on the home screen in the bottom bar.
  * This could be e.g. the amount the current user is due to pay to the other users or something similar
  */
-fun getAmountDue(): String {
-    return "42.42€"
+fun getStatus(): String {
+    return "..."
 }

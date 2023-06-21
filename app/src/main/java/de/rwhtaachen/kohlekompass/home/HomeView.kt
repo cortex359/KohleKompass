@@ -208,7 +208,6 @@ fun BottomBar(context: Context) {
         modifier = Modifier
             .background(colors.secondary)
             .fillMaxWidth(),
-
         ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -233,7 +232,7 @@ fun BottomBar(context: Context) {
                 modifier = Modifier.padding(5.dp)
             ) {
                 Text(
-                    getAmountDue(), color = colors.onSecondaryContainer,
+                    getStatus(), color = colors.onSecondaryContainer,
                     fontSize = 30.sp,
                     modifier = Modifier.padding(5.dp)
                 )
