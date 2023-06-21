@@ -2,8 +2,10 @@ package de.rwhtaachen.kohlekompass.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import java.time.LocalDate
 
 /**
@@ -13,10 +15,11 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Entity(tableName = "transactions")
 data class Transaction(
-    @PrimaryKey
+    @PrimaryKey (autoGenerate = true)
     val id: Int? = null,
     var title: String = "",
     val description: String = "",
+    @Embedded
     var user: User,
     var amount: Money = Money(0),
     val recipient: String? = null,

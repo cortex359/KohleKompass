@@ -34,8 +34,12 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.room.Room
 import de.rwhtaachen.kohlekompass.addTransaction.AddTransaction
 import de.rwhtaachen.kohlekompass.advancedSearch.AdvancedSearch
+import de.rwhtaachen.kohlekompass.data.TransactionRepository
+import de.rwhtaachen.kohlekompass.data.source.local.KohleKompassDatabase
+import de.rwhtaachen.kohlekompass.data.source.local.LocalTransaction
 import de.rwhtaachen.kohlekompass.home.HomePage
 import de.rwhtaachen.kohlekompass.manageSavedSearches.ManageSavedSearches
 import de.rwhtaachen.kohlekompass.manageTags.ManageTags
@@ -53,6 +57,10 @@ data class Page(
 private const val TAG = "MainActivity"
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        lateinit var db: KohleKompassDatabase
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,6 +155,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            KohleKompassDatabase::class.java, "KohleKompassDatabase"
+        ).build()
+        val repository = LocalTransaction(
+            (application as KohleKompassApplication)
+                .database
+                .transactionDao()
+        )
     }
 
     // @TODO: Activity Lifecycle:

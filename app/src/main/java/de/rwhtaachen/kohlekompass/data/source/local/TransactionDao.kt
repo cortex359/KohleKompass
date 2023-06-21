@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Upsert
+import de.rwhtaachen.kohlekompass.data.Group
 import de.rwhtaachen.kohlekompass.data.Transaction
 import kotlinx.coroutines.flow.Flow
 
@@ -30,4 +30,8 @@ interface TransactionDao {
     suspend fun update(transaction: Transaction)
     @Delete
     suspend fun delete(transaction: Transaction)
+
+    @androidx.room.Transaction
+    @Query("SELECT * FROM transactions WHERE group LIKE :id")
+    fun getTransactions(group: Group): List<Transaction>
 }
