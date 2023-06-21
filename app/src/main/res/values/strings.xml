@@ -56,4 +56,6 @@
     <string name="you_owe">you owe</string>
     <string name="you_get">you get</string>
     <string name="share_icon_description">share icon, three dots connected by lines</string>
+    <string name="noEmptyTagName">Name of tag can not be empty</string>
+    <string name="keyword_empty">Keyword empty</string>
 </resources>

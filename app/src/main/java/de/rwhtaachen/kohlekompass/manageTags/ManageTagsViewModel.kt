@@ -1,8 +1,11 @@
 package de.rwhtaachen.kohlekompass.manageTags
 
+import android.widget.Toast
+import androidx.compose.material3.Snackbar
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
+import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.source.example.tags
 
@@ -30,16 +33,17 @@ class TagManager {
         }
 
         fun addTag(name: String) {
-            tags[name] = Tag(name, mutableSetOf())
+            val newTag = Tag(name)
+            tags[newTag.name] = newTag
             // todo generate keywords automatically
         }
-
+        
         fun addKeyword(tag: Tag, keyword: String) {
-            tag.keywords.add(keyword)
+            tag.addKeyword(keyword)
         }
 
         fun removeKeyword(tag: Tag, keyword: String) {
-            tag.keywords.remove(keyword)
+            tag.removeKeyword(keyword)
         }
 
         fun updateTagName(tag: Tag, newName: String) {
