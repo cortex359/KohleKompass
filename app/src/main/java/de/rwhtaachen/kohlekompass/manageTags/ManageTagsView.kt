@@ -1,6 +1,7 @@
 package de.rwhtaachen.kohlekompass.manageTags
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -69,6 +70,7 @@ import de.rwthaachen.kohlekompass.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.properties.Delegates
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,11 +137,11 @@ fun ManageTags(
                 },
             )
         },
-        content = { _ ->
+        content = { padding ->
             Column {
                 LazyColumn(
                     Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .weight(1f, true)
                 ) {
                     items(tags.value.size) {
@@ -219,10 +221,23 @@ fun ManageTags(
                             modifier = Modifier
                                 .padding(5.dp)
                                 .clickable {
-                                    TagManager.addTag(addTagTextField.value.text)
-                                    tags.value = TagManager.getTagList()
-                                    addTagTextField.value = TextFieldValue("")
-                                    focusManager.clearFocus()
+                                    try {
+                                        TagManager.addTag(addTagTextField.value.text, context,
+                                            refreshKeywords = {
+                                                tags.value = TagManager.getTagList()
+                                            })
+                                        tags.value = TagManager.getTagList()
+                                        addTagTextField.value = TextFieldValue("")
+                                        focusManager.clearFocus()
+                                    } catch (e: IllegalArgumentException) {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                context.getString(R.string.noEmptyTagName),
+                                                Toast.LENGTH_LONG
+                                            )
+                                            .show()
+                                    }
                                 },
                             tint = colors.onSecondaryContainer,
                         )
@@ -253,7 +268,11 @@ fun EditTagDialog(
     val colors = MaterialTheme.colorScheme
     val tagNameField = remember { mutableStateOf(TextFieldValue(tag.name)) }
     val addKeywordField = remember { mutableStateOf(TextFieldValue("")) }
-    val keywords = remember { tag.keywords.toMutableStateList() }
+    //val keywords = remember { tag.keywords.toMutableStateList() }
+    val keywords by Delegates.observable(tag.keywords.toMutableStateList()) {
+        _, _, _ ->
+            println("Observed")
+    }
 
     Dialog(onDismissRequest = { setShowDialog(false) }) {
         Surface(
@@ -380,9 +399,15 @@ fun EditTagDialog(
                                     modifier = Modifier
                                         .padding(5.dp)
                                         .clickable {
-                                            TagManager.addKeyword(tag, addKeywordField.value.text)
-                                            keywords.add(addKeywordField.value.text)
-                                            addKeywordField.value = TextFieldValue("")
+                                            try {
+                                                tag.addKeyword(addKeywordField.value.text)
+                                                keywords.add(addKeywordField.value.text)
+                                                addKeywordField.value = TextFieldValue("")
+                                            } catch (e: IllegalArgumentException) {
+                                                Toast.makeText(context,
+                                                    context.getString(R.string.keyword_empty),
+                                                    Toast.LENGTH_LONG).show()
+                                            }
                                         },
                                     tint = colors.onSecondaryContainer,
                                 )
@@ -403,8 +428,14 @@ fun EditTagDialog(
                     Row {
                         Button(
                             onClick = {
-                                TagManager.updateTagName(tag, tagNameField.value.text)
-                                setShowDialog(false)
+                                try {
+                                    TagManager.updateTagName(tag, tagNameField.value.text)
+                                    setShowDialog(false)
+                                } catch (e: IllegalArgumentException) {
+                                    Toast.makeText(context,
+                                        context.getString(R.string.noEmptyTagName),
+                                        Toast.LENGTH_LONG).show()
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()

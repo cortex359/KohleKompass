@@ -69,8 +69,8 @@ class SavedSearchManager {
          */
         fun calculateAmounts(search: SavedSearch): Map<User, Money> {
             val result = mutableMapOf<User, Money>()
-            (search.users
-                ?: UserManager.getUserList()).filter { it.name != UserManager.getCurrentUser().name }
+            (if (search.users.isNullOrEmpty()) UserManager.getUserList() else search.users)
+                .filter { it.name != UserManager.getCurrentUser().name }
                 .forEach {
                     result[it] = Money(if (Random.nextBoolean()) 4200 else -4200)
                 }

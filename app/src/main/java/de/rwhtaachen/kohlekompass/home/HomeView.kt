@@ -333,7 +333,7 @@ fun TransactionListElement(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            transaction.value.value_date.toString(),
+                            transaction.value.valueDate.toString(),
                             color = colors.onPrimaryContainer
                         )
                     }
@@ -415,7 +415,7 @@ fun EditTransactionDialog(
     setValue: (Transaction) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    val date = remember { mutableStateOf(transaction.value_date) }
+    val date = remember { mutableStateOf(transaction.valueDate) }
     val selectedUser = remember { mutableStateOf(transaction.user) }
     val textFieldState = remember { mutableStateOf(TextFieldValue(transaction.title)) }
     val amountTextFieldState = remember {
@@ -539,9 +539,9 @@ fun TransactionListElementPreview() {
                         title = "Grocery shopping",
                         amount = Money(50.25),
                         user = userList[0],
-                        value_date = LocalDate.now(),
-                        local_date = LocalDate.now(),
-                        sync_date = LocalDate.now(),
+                        valueDate = LocalDate.now(),
+                        localDate = LocalDate.now(),
+                        syncDate = LocalDate.now(),
                         tags = mutableSetOf(
                             tags["groceries"]!!,
                             tags["travel"]!!,

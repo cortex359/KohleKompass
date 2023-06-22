@@ -8,8 +8,6 @@ import androidx.room.Query
 import androidx.room.Update
 import de.rwhtaachen.kohlekompass.data.Group
 import de.rwhtaachen.kohlekompass.data.Transaction
-import kotlinx.coroutines.flow.Flow
-
 
 /**
  * Data Access Object for the transaction table.
@@ -23,7 +21,7 @@ interface TransactionDao {
      */
     // WHERE group = group_id
     @Query("SELECT * FROM transactions ORDER BY id DESC")
-    suspend fun observeAll(): Flow<List<Transaction>>
+    suspend fun getAllTransactions(): List<Transaction>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(transaction: Transaction)
     @Update

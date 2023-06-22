@@ -67,7 +67,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KohleKompassTheme {
-                val colors = MaterialTheme.colorScheme
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
                 val focusManager = LocalFocusManager.current
