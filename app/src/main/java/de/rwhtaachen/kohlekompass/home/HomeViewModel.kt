@@ -20,7 +20,6 @@ class TransactionManager {
         @RequiresApi(Build.VERSION_CODES.O)
         fun addTransaction(transaction: Transaction) {
             transactionList.add(transaction)
-            // todo
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
