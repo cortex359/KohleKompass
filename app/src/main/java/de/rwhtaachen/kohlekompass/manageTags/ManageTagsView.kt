@@ -54,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,7 +63,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.AutoScalingText
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -139,11 +137,11 @@ fun ManageTags(
                 },
             )
         },
-        content = { _ ->
+        content = { padding ->
             Column {
                 LazyColumn(
                     Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .weight(1f, true)
                 ) {
                     items(tags.value.size) {
@@ -224,14 +222,21 @@ fun ManageTags(
                                 .padding(5.dp)
                                 .clickable {
                                     try {
-                                        TagManager.addTag(addTagTextField.value.text)
+                                        TagManager.addTag(addTagTextField.value.text, context,
+                                            refreshKeywords = {
+                                                tags.value = TagManager.getTagList()
+                                            })
                                         tags.value = TagManager.getTagList()
                                         addTagTextField.value = TextFieldValue("")
                                         focusManager.clearFocus()
                                     } catch (e: IllegalArgumentException) {
-                                        Toast.makeText(context,
-                                            context.getString(R.string.noEmptyTagName),
-                                            Toast.LENGTH_LONG).show()
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                context.getString(R.string.noEmptyTagName),
+                                                Toast.LENGTH_LONG
+                                            )
+                                            .show()
                                     }
                                 },
                             tint = colors.onSecondaryContainer,
