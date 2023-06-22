@@ -137,11 +137,11 @@ fun ManageTags(
                 },
             )
         },
-        content = { _ ->
+        content = { padding ->
             Column {
                 LazyColumn(
                     Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .weight(1f, true)
                 ) {
                     items(tags.value.size) {
@@ -222,14 +222,21 @@ fun ManageTags(
                                 .padding(5.dp)
                                 .clickable {
                                     try {
-                                        TagManager.addTag(addTagTextField.value.text)
+                                        TagManager.addTag(addTagTextField.value.text, context,
+                                            refreshKeywords = {
+                                                tags.value = TagManager.getTagList()
+                                            })
                                         tags.value = TagManager.getTagList()
                                         addTagTextField.value = TextFieldValue("")
                                         focusManager.clearFocus()
                                     } catch (e: IllegalArgumentException) {
-                                        Toast.makeText(context,
-                                            context.getString(R.string.noEmptyTagName),
-                                            Toast.LENGTH_LONG).show()
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                context.getString(R.string.noEmptyTagName),
+                                                Toast.LENGTH_LONG
+                                            )
+                                            .show()
                                     }
                                 },
                             tint = colors.onSecondaryContainer,

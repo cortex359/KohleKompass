@@ -1,13 +1,18 @@
 package de.rwhtaachen.kohlekompass.manageTags
 
-import android.widget.Toast
-import androidx.compose.material3.Snackbar
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 
 /**
  * Manages the tag List. Hands out a fresh copy with all tags unselected to Views
@@ -32,12 +37,17 @@ class TagManager {
             tags.remove(tag.name)
         }
 
-        fun addTag(name: String) {
-            val newTag = Tag(name)
+        @OptIn(DelicateCoroutinesApi::class)
+        fun addTag(name: String, context: Context, refreshKeywords: () -> Unit) {
+            val newTag = Tag(name, mutableSetOf())
             tags[newTag.name] = newTag
-            // todo generate keywords automatically
+            GlobalScope.launch(Dispatchers.Default) {
+                val genKeywords = getKeywordsFromChatGPT(tagTitle = name, context = context)
+                tags[newTag.name]!!.keywords.addAll(genKeywords)
+                refreshKeywords()
+            }
         }
-        
+
         fun addKeyword(tag: Tag, keyword: String) {
             tag.addKeyword(keyword)
         }
@@ -51,5 +61,36 @@ class TagManager {
             tags.remove(tag.name)
             tags[newName] = newTag
         }
+    }
+}
+
+fun getKeywordsFromChatGPT(tagTitle: String, context: Context): MutableSet<String> {
+    val azFunURL = context.resources.getIdentifier(
+        "az_fun_url",
+        "string",
+        context.packageName
+    )
+    val azFunKey = context.resources.getIdentifier(
+        "az_fun_key",
+        "string",
+        context.packageName
+    )
+    if (azFunURL == 0 || azFunKey == 0) {
+        return mutableSetOf()
+    }
+    try {
+        val url =
+            URL("${context.getString(azFunURL)}code=${context.getString(azFunKey)}&name=${tagTitle}")
+        val connection = url.openConnection()
+        var response = ""
+        BufferedReader(InputStreamReader(connection.getInputStream())).use { inp ->
+            var line: String?
+            while (inp.readLine().also { line = it } != null) {
+                response += line
+            }
+        }
+        return response.split(",").toMutableSet()
+    } catch (e: Exception) {
+        return mutableSetOf()
     }
 }
