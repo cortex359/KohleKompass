@@ -64,7 +64,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.AutoScalingText
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
@@ -139,11 +138,11 @@ fun ManageTags(
                 },
             )
         },
-        content = { _ ->
+        content = { padding ->
             Column {
                 LazyColumn(
                     Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .weight(1f, true)
                 ) {
                     items(tags.value.size) {
