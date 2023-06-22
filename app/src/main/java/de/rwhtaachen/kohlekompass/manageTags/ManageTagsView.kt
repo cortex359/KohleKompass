@@ -219,7 +219,13 @@ fun ManageTags(
                             modifier = Modifier
                                 .padding(5.dp)
                                 .clickable {
-                                    TagManager.addTag(addTagTextField.value.text, context, scope)
+                                    TagManager.addTag(
+                                        addTagTextField.value.text,
+                                        context,
+                                        refreshKeywords = {
+                                            tags.value = TagManager.getTagList()
+                                        }
+                                    )
                                     tags.value = TagManager.getTagList()
                                     addTagTextField.value = TextFieldValue("")
                                     focusManager.clearFocus()

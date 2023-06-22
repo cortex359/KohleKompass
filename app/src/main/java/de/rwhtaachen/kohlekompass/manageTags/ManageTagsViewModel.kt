@@ -4,18 +4,14 @@ import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import com.azure.ai.openai.OpenAIClient
-import com.azure.ai.openai.OpenAIClientBuilder
-import com.azure.ai.openai.models.ChatCompletions
-import com.azure.ai.openai.models.ChatCompletionsOptions
-import com.azure.ai.openai.models.ChatMessage
-import com.azure.ai.openai.models.ChatRole
-import com.azure.core.credential.AzureKeyCredential
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.source.example.tags
-import de.rwthaachen.kohlekompass.R
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 
 /**
  * Manages the tag List. Hands out a fresh copy with all tags unselected to Views
@@ -40,10 +36,12 @@ class TagManager {
             tags.remove(tag.name)
         }
 
-        fun addTag(name: String, context: Context, scope: CoroutineScope) {
+        fun addTag(name: String, context: Context, refreshKeywords: () -> Unit) {
             tags[name] = Tag(name, mutableSetOf())
-            scope.launch {
-                tags[name]!!.keywords.addAll(getKeywordsFromChatGPT(name, context = context))
+            GlobalScope.launch(Dispatchers.Default) {
+                val genKeywords = getKeywordsFromChatGPT(tagTitle = name, context = context)
+                tags[name]!!.keywords.addAll(genKeywords)
+                refreshKeywords()
             }
         }
 
@@ -64,47 +62,32 @@ class TagManager {
 }
 
 fun getKeywordsFromChatGPT(tagTitle: String, context: Context): MutableSet<String> {
-    val oaiApiKey = context.resources.getIdentifier(
-        "oai_api_key",
+    val azFunURL = context.resources.getIdentifier(
+        "az_fun_url",
         "string",
         context.packageName
     )
-    val oaiApiEndpoint = context.resources.getIdentifier(
-        "oai_endpoint",
+    val azFunKey = context.resources.getIdentifier(
+        "az_fun_key",
         "string",
         context.packageName
     )
-    if (oaiApiKey == 0 || oaiApiEndpoint == 0) {
+    if (azFunURL == 0 || azFunKey == 0) {
         return mutableSetOf()
     }
     try {
-        val client: OpenAIClient = OpenAIClientBuilder()
-            .credential(AzureKeyCredential(context.getString(oaiApiKey)))
-            .endpoint(context.getString(oaiApiEndpoint))
-            .buildClient()
-
-        val chatMessages: MutableList<ChatMessage> = ArrayList()
-        chatMessages.add(ChatMessage(ChatRole.SYSTEM).setContent(context.getString(R.string.system_message)))
-        chatMessages.add(ChatMessage(ChatRole.USER).setContent(context.getString(R.string.example_user_1)))
-        chatMessages.add(ChatMessage(ChatRole.ASSISTANT).setContent(context.getString(R.string.example_assistant_1)))
-        chatMessages.add(ChatMessage(ChatRole.USER).setContent(context.getString(R.string.example_user_2)))
-        chatMessages.add(ChatMessage(ChatRole.ASSISTANT).setContent(context.getString(R.string.example_assistant_2)))
-        chatMessages.add(ChatMessage(ChatRole.USER).setContent(context.getString(R.string.example_user_3)))
-        chatMessages.add(ChatMessage(ChatRole.ASSISTANT).setContent(context.getString(R.string.example_assistant_3)))
-        chatMessages.add(ChatMessage(ChatRole.USER).setContent(context.getString(R.string.example_user_4)))
-        chatMessages.add(ChatMessage(ChatRole.ASSISTANT).setContent(context.getString(R.string.example_assistant_4)))
-        chatMessages.add(ChatMessage(ChatRole.USER).setContent(tagTitle))
-
-        val chatCompletions: ChatCompletions = client.getChatCompletions(
-            context.getString(R.string.oai_chat_model),
-            ChatCompletionsOptions(chatMessages)
-        )
-        val response = chatCompletions.choices[0].message.content
+        val url =
+            URL("${context.getString(azFunURL)}code=${context.getString(azFunKey)}&name=${tagTitle}")
+        val connection = url.openConnection()
+        var response = ""
+        BufferedReader(InputStreamReader(connection.getInputStream())).use { inp ->
+            var line: String?
+            while (inp.readLine().also { line = it } != null) {
+                response += line
+            }
+        }
         return response.split(",").toMutableSet()
-    } catch (HttpResponseException: Exception) { // vpn not connected
-        return mutableSetOf()
-    } catch (e: ExceptionInInitializerError) {
-        // todo azure oai api does not work on android although it does in standard kotlin
+    } catch (e: Exception) {
         return mutableSetOf()
     }
 }
