@@ -347,9 +347,9 @@ val transactionList = mutableListOf(
         title = "Grocery shopping",
         amount = Money(60.40),
         user = userList[1],
-        valueDate = LocalDate.of(2023, Month.JUNE, 29),
-        localDate = LocalDate.of(2023, Month.JUNE, 29),
-        syncDate = LocalDate.of(2023, Month.JUNE, 29),
+        valueDate = LocalDate.of(2023, Month.JUNE, 22),
+        localDate = LocalDate.of(2023, Month.JUNE, 22),
+        syncDate = LocalDate.of(2023, Month.JUNE, 22),
         tags = mutableSetOf(tags["groceries"]!!)
     ),
     Transaction(
@@ -374,9 +374,9 @@ val transactionList = mutableListOf(
         title = "Electricity bill",
         amount = Money(120.00),
         user = userList[2],
-        valueDate = LocalDate.of(2023, Month.JUNE, 30),
-        localDate = LocalDate.of(2023, Month.JUNE, 30),
-        syncDate = LocalDate.of(2023, Month.JUNE, 30),
+        valueDate = LocalDate.of(2023, Month.JUNE, 22),
+        localDate = LocalDate.of(2023, Month.JUNE, 22),
+        syncDate = LocalDate.of(2023, Month.JUNE, 22),
         tags = mutableSetOf(tags["bills"]!!)
     ),
     Transaction(
