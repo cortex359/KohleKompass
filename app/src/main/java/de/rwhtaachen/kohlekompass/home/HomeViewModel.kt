@@ -7,6 +7,7 @@ import de.rwhtaachen.kohlekompass.data.source.example.transactionList
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
+import de.rwhtaachen.kohlekompass.data.Money
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.User
 import de.rwhtaachen.kohlekompass.manageTags.TagManager
@@ -14,15 +15,11 @@ import java.time.LocalDate
 
 class TransactionManager {
     companion object {
+        var sum = Money(42.21)
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun addTransaction(transaction: Transaction) {
             transactionList.add(transaction)
-            // todo
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun removeTransaction(transaction: Transaction) {
-            transactionList.remove(transaction)
             // todo
         }
 
@@ -79,17 +76,16 @@ class TransactionManager {
                 })
                         && (users.all { user -> !user.value.selected } || users.any { user -> user.value.selected && transaction.value.user.name == user.value.name }) // todo replace name with id
             }.toMutableStateList()
+            filteredTransactions.forEach{ sum + it.value.amount }
             return filteredTransactions
+        }
 
-            // todo
+        /**
+         * The value returned by this is shown on the home screen in the bottom bar.
+         * This could be e.g. the amount the current user is due to pay to the other users or something similar
+         */
+        fun getStatus(): String {
+            return sum.toString()
         }
     }
-}
-
-/**
- * The value returned by this is shown on the home screen in the bottom bar.
- * This could be e.g. the amount the current user is due to pay to the other users or something similar
- */
-fun getStatus(): String {
-    return "..."
 }

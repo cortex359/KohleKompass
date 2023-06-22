@@ -232,7 +232,7 @@ fun BottomBar(context: Context) {
                 modifier = Modifier.padding(5.dp)
             ) {
                 Text(
-                    getStatus(), color = colors.onSecondaryContainer,
+                    TransactionManager.getStatus(), color = colors.onSecondaryContainer,
                     fontSize = 30.sp,
                     modifier = Modifier.padding(5.dp)
                 )

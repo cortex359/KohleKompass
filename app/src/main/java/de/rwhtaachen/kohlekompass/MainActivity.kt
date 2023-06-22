@@ -155,6 +155,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        /* @FIXME:
         db = Room.databaseBuilder(
             applicationContext,
             KohleKompassDatabase::class.java, "KohleKompassDatabase"
@@ -164,6 +165,7 @@ class MainActivity : ComponentActivity() {
                 .database
                 .transactionDao()
         )
+        */
     }
 
     // @TODO: Activity Lifecycle:
