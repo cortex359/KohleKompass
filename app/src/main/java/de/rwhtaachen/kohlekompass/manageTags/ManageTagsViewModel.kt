@@ -1,14 +1,12 @@
 package de.rwhtaachen.kohlekompass.manageTags
 
 import android.content.Context
-import android.widget.Toast
-import androidx.compose.material3.Snackbar
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
-import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.data.Tag
 import de.rwhtaachen.kohlekompass.data.source.example.tags
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,12 +37,13 @@ class TagManager {
             tags.remove(tag.name)
         }
 
-        fun addTag(name: String) {
+        @OptIn(DelicateCoroutinesApi::class)
+        fun addTag(name: String, context: Context, refreshKeywords: () -> Unit) {
             val newTag = Tag(name, mutableSetOf())
             tags[newTag.name] = newTag
             GlobalScope.launch(Dispatchers.Default) {
                 val genKeywords = getKeywordsFromChatGPT(tagTitle = name, context = context)
-                tags[name]!!.keywords.addAll(genKeywords)
+                tags[newTag.name]!!.keywords.addAll(genKeywords)
                 refreshKeywords()
             }
         }
