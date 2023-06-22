@@ -269,7 +269,7 @@ fun EditTagDialog(
     val tagNameField = remember { mutableStateOf(TextFieldValue(tag.name)) }
     val addKeywordField = remember { mutableStateOf(TextFieldValue("")) }
     //val keywords = remember { tag.keywords.toMutableStateList() }
-    var keywords by Delegates.observable(tag.keywords.toMutableStateList()) {
+    val keywords by Delegates.observable(tag.keywords.toMutableStateList()) {
         _, _, _ ->
             println("Observed")
     }

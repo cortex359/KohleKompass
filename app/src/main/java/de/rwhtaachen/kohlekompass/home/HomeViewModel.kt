@@ -49,7 +49,9 @@ class TransactionManager {
         @RequiresApi(Build.VERSION_CODES.O)
         fun getTransactionList(): MutableList<MutableState<Transaction>> {
             // todo
-            return transactionList.map { transaction -> mutableStateOf(transaction) }
+            return transactionList
+                .sortedByDescending { it.valueDate }
+                .map { transaction -> mutableStateOf(transaction) }
                 .toMutableStateList()
         }
 

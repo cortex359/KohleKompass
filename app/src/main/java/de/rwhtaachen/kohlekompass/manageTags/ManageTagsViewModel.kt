@@ -78,7 +78,7 @@ fun getKeywordsFromChatGPT(tagTitle: String, context: Context): MutableSet<Strin
     if (azFunURL == 0 || azFunKey == 0) {
         return mutableSetOf()
     }
-    try {
+    return try {
         val url =
             URL("${context.getString(azFunURL)}code=${context.getString(azFunKey)}&name=${tagTitle}")
         val connection = url.openConnection()
@@ -89,8 +89,8 @@ fun getKeywordsFromChatGPT(tagTitle: String, context: Context): MutableSet<Strin
                 response += line
             }
         }
-        return response.split(",").toMutableSet()
+        response.split(",").toMutableSet()
     } catch (e: Exception) {
-        return mutableSetOf()
+        mutableSetOf()
     }
 }
