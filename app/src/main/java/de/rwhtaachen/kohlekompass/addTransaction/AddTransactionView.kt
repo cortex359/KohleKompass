@@ -369,9 +369,9 @@ fun AddTransactionPageContent(
                         val transaction = Transaction(
                             title = textFieldState.value.text,
                             amount = Money(amountTextFieldState.value.text),
-                            value_date = date.value,
-                            local_date = LocalDate.now(),
-                            sync_date = null,
+                            valueDate = date.value,
+                            localDate = LocalDate.now(),
+                            syncDate = null,
                             user = selectedUser.value,
                             tags = tags.filter { it.value.selected }.map { it.value }.toMutableSet()
                         )

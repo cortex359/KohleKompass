@@ -1,8 +1,5 @@
 package de.rwhtaachen.kohlekompass.data
 
-import androidx.compose.ui.text.toLowerCase
-import de.rwthaachen.kohlekompass.R
-
 /**
  * Stores a tag with a name, a list of keywords
  * The selected attribute is used in the UI. It is not to be used by the Model.
@@ -20,17 +17,13 @@ data class Tag constructor (
     @Throws(IllegalArgumentException::class)
     @Override
     fun changeName(name: String) {
-        if (name.trim().isEmpty())
-            throw IllegalArgumentException()
-        else
-            this.name = name.lowercase()
+        require(name.trim().isNotEmpty()) // throws IllegalArgumentException if false
+        this.name = name.lowercase()
     }
 
     fun addKeyword(keyword: String) {
-        if (keyword.trim().isEmpty())
-            throw IllegalArgumentException()
-        else
-            this.keywords.add(keyword.lowercase())
+        require(keyword.trim().isNotEmpty()) // throws IllegalArgumentException if false
+        this.keywords.add(keyword.lowercase())
     }
 
     fun removeKeyword(keyword: String) {

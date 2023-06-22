@@ -20,13 +20,13 @@ data class Transaction(
     var user: User,
     var amount: Money = Money(0),
     val recipient: String? = null,
-    var value_date: LocalDate,
-    var local_date: LocalDate,
-    var sync_date: LocalDate?,
+    var valueDate: LocalDate,
+    var localDate: LocalDate,
+    var syncDate: LocalDate?,
     var tags: MutableSet<Tag>
 ) {
     init {
-        this.sync_date = null
-        this.local_date = LocalDate.now()
+        this.syncDate = null
+        this.localDate = LocalDate.now()
     }
 }

@@ -32,7 +32,7 @@ class TransactionManager {
             transaction.title = newTransaction.title
             transaction.user = newTransaction.user
             transaction.amount = newTransaction.amount
-            transaction.value_date = newTransaction.value_date
+            transaction.valueDate = newTransaction.valueDate
             TagManager.getTagList().forEach { tag ->
                 if (newTransaction.tags.any { tag.value.name == it.name }) {
                     transaction.tags.add(tag.value)
@@ -70,8 +70,8 @@ class TransactionManager {
                     .contains(textQuery.lowercase())
                         || transaction.value.user.name.lowercase()
                     .contains(textQuery.lowercase()))
-                        && (startDate == null || transaction.value.value_date >= startDate)
-                        && (endDate == null || transaction.value.value_date <= endDate)
+                        && (startDate == null || transaction.value.valueDate >= startDate)
+                        && (endDate == null || transaction.value.valueDate <= endDate)
                         && (tags.all { tag -> !tag.value.selected } || tags.any { tag ->
                     tag.value.selected && transaction.value.tags.any { it.name == tag.value.name} // todo replace with id
                 })
