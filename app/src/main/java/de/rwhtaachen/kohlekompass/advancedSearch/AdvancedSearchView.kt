@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import de.rwhtaachen.kohlekompass.advancedSearch.SavedAdvancedSearchManager.Companion.addSavedSearch
+import de.rwhtaachen.kohlekompass.advancedSearch.SavedSearchManager.Companion.addSavedSearch
 import de.rwhtaachen.kohlekompass.data.SavedSearch
 import de.rwhtaachen.kohlekompass.data.Transaction
 import de.rwhtaachen.kohlekompass.home.ContentList
@@ -53,7 +53,7 @@ fun AdvancedSearch(
     val tagSearchBarState = remember { mutableStateOf(TextFieldValue("")) }
     val startDate = remember { mutableStateOf<LocalDate?>(null) }
     val endDate = remember { mutableStateOf<LocalDate?>(null) }
-    val users = remember { UserManager.getUserList() }
+    val users = remember { UserManager.getMutableStateUserList() }
     val tags = remember { TagManager.getMutableTagList() }
     val showResults = remember { mutableStateOf(false) }
     val showEditTransactionDialog = remember { mutableStateOf(false) }
@@ -82,10 +82,8 @@ fun AdvancedSearch(
                 SavedSearch(
                     title = it["Title"]!!,
                     query = mainSearchBarState.value.text,
-                    startDelta = if (startDate.value == null) null else (LocalDate.now()
-                        .toEpochDay() - (startDate.value as LocalDate).toEpochDay()).toInt(),
-                    endDelta = if (endDate.value == null) null else (LocalDate.now()
-                        .toEpochDay() - (endDate.value as LocalDate).toEpochDay()).toInt(),
+                    startDate = if (startDate.value == null) null else LocalDate.now(),
+                    endDate = if (endDate.value == null) null else LocalDate.now(),
                     tags = if (tags.all { tag -> tag.value.selected }) null
                     else tags.filter { tag -> tag.value.selected }.map { it.value }.toSet(),
                     users = if (users.all { user -> user.value.selected }) null
@@ -102,10 +100,8 @@ fun AdvancedSearch(
             setShowDialog = { showLoadSearchDialog.value = it }) { search ->
             showLoadSearchDialog.value = false
             mainSearchBarState.value = TextFieldValue(search.query ?: "")
-            startDate.value = if (search.startDelta != null) LocalDate.now()
-                .plusDays(search.startDelta.toLong()) else null
-            endDate.value = if (search.endDelta != null) LocalDate.now()
-                .plusDays(search.endDelta.toLong()) else null
+            startDate.value = search.startDate
+            endDate.value = search.endDate
             if (search.tags != null) tags.forEach { tag ->
                 tag.value = tag.value.copy(selected = search.tags.any { it.name == tag.value.name })
             }

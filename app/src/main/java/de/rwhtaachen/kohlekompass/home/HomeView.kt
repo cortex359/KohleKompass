@@ -308,9 +308,15 @@ fun TransactionListElement(
                         currentTransaction.value = transaction.value
                         showEditTransactionDialog.value = true
                     }
-                    .background(colors.primaryContainer, shape)
+                    .background(
+                        if (transaction.value.user == getCurrentUser()) {
+                            colors.surfaceVariant
+                        } else {
+                            colors.primaryContainer
+                        },
+                        shape)
                     .border(
-                        if (transaction.value.user == getCurrentUser()) 3.dp else 1.dp,
+                        if (transaction.value.user == getCurrentUser()) 2.dp else 1.dp,
                         colors.onPrimaryContainer, shape
                     )
                     .padding(10.dp)

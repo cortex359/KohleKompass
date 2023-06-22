@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import com.google.android.material.snackbar.Snackbar
 import de.rwhtaachen.kohlekompass.ui.theme.KohleKompassTheme
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f

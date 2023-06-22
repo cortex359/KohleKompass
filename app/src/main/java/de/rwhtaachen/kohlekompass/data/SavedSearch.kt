@@ -1,5 +1,7 @@
 package de.rwhtaachen.kohlekompass.data
 
+import java.time.LocalDate
+
 
 /**
  * A search configuration saved by the user to be reused later
@@ -9,8 +11,8 @@ package de.rwhtaachen.kohlekompass.data
 data class SavedSearch(
     val title: String,
     val query: String? = null,
-    val startDelta: Int? = null,
-    val endDelta: Int? = null,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
     val tags: Set<Tag>? = null,
     val users: Set<User>? = null
 )
