@@ -53,7 +53,7 @@ fun DatePickerCard(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             date.value = LocalDate.of(mYear, mMonth, mDayOfMonth)
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        }, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]
     )
     Card(
         modifier = Modifier
@@ -110,7 +110,7 @@ fun DatePickerCard(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             date.value = LocalDate.of(mYear, mMonth, mDayOfMonth)
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        }, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]
     )
     Card(
         modifier = Modifier
